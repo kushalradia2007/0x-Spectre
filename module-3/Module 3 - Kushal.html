@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 3 — Overwhelming Force & Unbreakable Shields</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {  --bg:#08090c; --bg2:#0d0f15; --bg3:#11141c; --bg4:#161a26; --panel:#0e1120;  --red:#ff4d4d; --red2:#cc2200; --red-dim:rgba(255,77,77,0.12); --red-glow:rgba(255,77,77,0.06);  --blue:#4da6ff; --blue2:#1a7fd4; --blue-dim:rgba(77,166,255,0.12); --blue-glow:rgba(77,166,255,0.06);  --green:#00e5a0; --green-dim:rgba(0,229,160,0.1);  --amber:#f5a623; --amber-dim:rgba(245,166,35,0.1);  --purple:#b388ff;  --text:#d4dff0; --text-dim:#6e85a8; --text-faint:#2e3d58;  --border-red:rgba(255,77,77,0.2); --border-red2:rgba(255,77,77,0.08);  --border-blue:rgba(77,166,255,0.2); --border-blue2:rgba(77,166,255,0.08);  --radius:6px;  --font-head:'Syne',sans-serif; --font-mono:'JetBrains Mono',monospace; --font-body:'Lora',serif;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:17px;line-height:1.8;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;z-index:999;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);}
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:56px;background:rgba(8,9,12,0.93);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,77,77,0.08);}
+    .nav-logo{font-family:var(--font-mono);font-size:12px;color:var(--red);letter-spacing:0.12em;text-transform:uppercase;}
+    .nav-back{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);letter-spacing:0.08em;text-decoration:none;transition:color 0.2s;}
+    .nav-back:hover{color:var(--red);}
+    .nav-progress-wrap{display:flex;align-items:center;gap:10px;}
+    .nav-progress-label{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);letter-spacing:0.08em;}
+    .nav-bar{width:180px;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;}
+    .nav-bar-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--blue));border-radius:2px;transition:width 0.6s ease;width:0%;}
+    .nav-pct{font-family:var(--font-mono);font-size:11px;color:var(--text);}
+    /* HERO — RED */
+    .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px 2.5rem 4rem;position:relative;overflow:hidden;background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(255,77,77,0.04) 0%,transparent 70%);}
+    .hero-bg-grid{position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(255,77,77,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,77,77,0.04) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,black 20%,transparent 100%);}
+    .hero-corner{position:absolute;font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:0.1em;}
+    .hero-corner.tl{top:72px;left:2.5rem;} 
+    .hero-corner.tr{top:72px;right:2.5rem;text-align:right;}
+    .hero-corner.bl{bottom:2rem;left:2.5rem;} 
+    .hero-corner.br{bottom:2rem;right:2.5rem;text-align:right;}
+    .hero-inner{position:relative;z-index:1;max-width:880px;margin:0 auto;}
+    .hero-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;color:var(--red);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:2rem;}
+    .hero-tag::before{content:'';display:block;width:24px;height:1px;background:var(--red);box-shadow:0 0 6px var(--red);}
+    .hero h1{font-family:var(--font-head);font-size:clamp(2.6rem,6.5vw,5rem);font-weight:800;line-height:1.0;letter-spacing:-0.02em;color:#fff;margin-bottom:0.4rem;}
+    .hero h1 .em-red{color:var(--red);text-shadow:0 0 40px rgba(255,77,77,0.5);}
+    .hero h1 .em-blue{color:var(--blue);text-shadow:0 0 40px rgba(77,166,255,0.5);}
+    .hero-sub{font-family:var(--font-mono);font-size:12px;color:var(--text-dim);letter-spacing:0.06em;margin-bottom:2.5rem;}
+    /* STORY BOX */
+    .story-box{background:var(--bg2);border:1px solid var(--border-red2);border-left:3px solid var(--red);border-radius:var(--radius);padding:2rem 2.2rem;margin-bottom:2.5rem;}
+    .story-box-label{font-family:var(--font-mono);font-size:10px;color:var(--red);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:1rem;}
+    .story-box p{font-size:16px;color:var(--text);line-height:1.9;margin-bottom:0.9rem;}
+    .story-box p:last-child{margin-bottom:0;}
+    .story-box strong{color:#fff;} 
+    .story-box em{color:var(--red);font-style:italic;}
+    .hero-objectives{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--border-red2);border:1px solid var(--border-red2);border-radius:var(--radius);overflow:hidden;margin-bottom:3rem;}
+    .hero-obj-item{background:var(--panel);padding:1.2rem 1.4rem;display:flex;gap:12px;align-items:flex-start;}
+    .hero-obj-icon{font-family:var(--font-mono);font-size:11px;background:var(--red-dim);border-radius:3px;padding:2px 6px;white-space:nowrap;margin-top:3px;flex-shrink:0;}
+    .hero-obj-icon.red{color:var(--red);border:1px solid var(--border-red);}
+    .hero-obj-icon.blue{color:var(--blue);border:1px solid var(--border-blue);background:var(--blue-dim);}
+    .hero-obj-text{font-size:14px;color:var(--text);line-height:1.5;font-family:var(--font-body);}
+    .btn-start{display:inline-flex;align-items:center;gap:10px;background:var(--red);color:#fff;font-family:var(--font-mono);font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:14px 28px;border-radius:var(--radius);border:none;cursor:pointer;text-decoration:none;transition:all 0.2s;box-shadow:0 0 20px rgba(255,77,77,0.3);}
+    .btn-start:hover{background:#fff;color:#000;box-shadow:0 0 32px rgba(255,77,77,0.5);transform:translateY(-1px);}
+    /* SECTION WRAPPERS */
+    .section{max-width:900px;margin:0 auto;padding:5rem 2.5rem;}
+    .section-divider{border:none;border-top:1px solid rgba(255,255,255,0.04);margin:0 2.5rem;}
+    .section-divider.shift{border-top-color:rgba(77,166,255,0.15);position:relative;}
+    .section-divider.shift::before{content:'◆ SWITCHING TO BLUE TEAM — DEFENCE MODE ◆';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-mono);font-size:10px;color:var(--blue);letter-spacing:0.15em;background:var(--bg);padding:0 1.5rem;white-space:nowrap;}
+    /* RED section styling */
+    .sec-red .section-tag{color:var(--red);}
+    .sec-red .section-tag::before{content:'//';}
+    .sec-red h2 em{color:var(--red);}
+    .sec-red .callout{border-left-color:var(--red);background:var(--red-glow);}
+    .sec-red .callout .callout-head{color:var(--red);}
+    /* BLUE section styling */
+    .sec-blue{background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(77,166,255,0.03) 0%,transparent 70%);}
+    .sec-blue .section-tag{color:var(--blue);}
+    .sec-blue .section-tag::before{content:'//';}
+    .sec-blue h2 em{color:var(--blue);}
+    .sec-blue .callout{border-left-color:var(--blue);background:var(--blue-glow);}
+    .sec-blue .callout .callout-head{color:var(--blue);}
+    .section-tag{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+    .section-tag::before{opacity:0.5;}
+    .section-num{color:var(--text-faint);}
+    .section h2{font-family:var(--font-head);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;color:#fff;line-height:1.15;margin-bottom:1.2rem;letter-spacing:-0.01em;}
+    .section > p{color:var(--text-dim);margin-bottom:1.2rem;font-size:16px;}
+    /* EXPLAINER */
+    .explainer p{font-size:16.5px;color:var(--text-dim);line-height:1.9;margin-bottom:1.1rem;}
+    .explainer p strong{color:var(--text);} 
+    .explainer p em{font-style:italic;}
+    .explainer p code{font-family:var(--font-mono);font-size:13px;background:var(--bg3);border:1px solid rgba(255,255,255,0.06);padding:1px 6px;border-radius:3px;color:var(--amber);}
+    /* ANALOGY */
+    .analogy-box{background:var(--bg2);border:1px solid rgba(179,136,255,0.2);border-left:3px solid var(--purple);border-radius:var(--radius);padding:1.4rem 1.6rem;margin:1.8rem 0;}
+    .analogy-label{font-family:var(--font-mono);font-size:10px;color:var(--purple);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.6rem;}
+    .analogy-box p{font-size:15px;color:var(--text-dim);margin:0;line-height:1.8;}
+    .analogy-box p strong{color:#fff;}
+    /* CALLOUT */
+    .callout{padding:1.2rem 1.5rem;border-radius:0 var(--radius) var(--radius) 0;margin:2rem 0;border-left:3px solid;}
+    .callout-head{font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem;}
+    .callout p{margin:0;font-size:15px;color:var(--text);line-height:1.75;}
+    .callout p code{font-family:var(--font-mono);font-size:13px;background:var(--bg3);padding:1px 5px;border-radius:3px;color:var(--amber);}
+    /* AMPLIFICATION MATH */
+    .amp-math{margin:2rem 0;border:1px solid var(--border-red2);border-radius:var(--radius);overflow:hidden;}
+    .amp-math-header{background:var(--bg3);padding:0.9rem 1.4rem;border-bottom:1px solid var(--border-red2);font-family:var(--font-mono);font-size:11px;color:var(--red);letter-spacing:0.12em;text-transform:uppercase;}
+    .amp-rows{padding:1.5rem;}
+    .amp-row{display:grid;grid-template-columns:140px 1fr auto;gap:1rem;align-items:center;padding:1rem 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+    .amp-row:last-child{border-bottom:none;}
+    .amp-protocol{font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--text);}
+    .amp-bar-wrap{background:var(--bg4);border-radius:2px;height:8px;position:relative;overflow:hidden;}
+    .amp-bar{height:100%;border-radius:2px;transition:width 1.2s ease;}
+    .amp-bar.dns{background:var(--red);width:0%;}
+    .amp-bar.ntp{background:#ff7a00;width:0%;}
+    .amp-bar.memcached{background:#ff0040;width:0%;}
+    .amp-bar.ssdp{background:var(--amber);width:0%;}
+    .amp-mult{font-family:var(--font-mono);font-size:14px;font-weight:700;text-align:right;white-space:nowrap;}
+    .amp-mult.dns{color:var(--red);}
+    .amp-mult.ntp{color:#ff7a00;}
+    .amp-mult.memcached{color:#ff0040;}
+    .amp-mult.ssdp{color:var(--amber);}
+    .amp-explain{padding:0 1.5rem 1.2rem;font-size:14px;color:var(--text-dim);font-family:var(--font-body);line-height:1.7;}
+    .amp-explain strong{color:var(--text);}
+    /* FIREWALL COMPARE */
+    .fw-compare{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border-blue2);border:1px solid var(--border-blue2);border-radius:var(--radius);overflow:hidden;margin:2rem 0;}
+    .fw-col{background:var(--panel);padding:0;}
+    .fw-col-head{padding:1rem 1.4rem;border-bottom:1px solid var(--border-blue2);}
+    .fw-col-head h4{font-family:var(--font-head);font-size:16px;font-weight:600;margin-bottom:2px;}
+    .fw-col-head.stateless h4{color:var(--text-dim);}
+    .fw-col-head.stateful h4{color:var(--blue);}
+    .fw-col-head span{font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:0.08em;}
+    .fw-body{padding:1.2rem 1.4rem;}
+    .fw-point{display:flex;gap:10px;margin-bottom:0.8rem;font-size:14px;color:var(--text-dim);line-height:1.6;}
+    .fw-point:last-child{margin-bottom:0;}
+    .fw-point .ico{flex-shrink:0;font-size:13px;margin-top:2px;}
+    .fw-point strong{color:var(--text);}
+    /* CONCEPT CARDS */
+    .concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.04);border-radius:var(--radius);overflow:hidden;margin:2rem 0;}
+    .concept-card{background:var(--panel);padding:1.6rem;}
+    .concept-card h4{font-family:var(--font-head);font-size:16px;font-weight:600;color:#fff;margin-bottom:0.3rem;}
+    .concept-card .fullform{font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:0.06em;margin-bottom:0.8rem;display:block;}
+    .concept-card p{font-size:14.5px;color:var(--text-dim);line-height:1.75;margin:0;}
+    .concept-card p strong{color:var(--text);}
+    .concept-card p code{font-family:var(--font-mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:3px;color:var(--amber);}
+    .tag{display:inline-block;font-family:var(--font-mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:3px 8px;border-radius:3px;margin-bottom:0.8rem;}
+    .tag-red{background:var(--red-dim);border:1px solid var(--border-red);color:var(--red);}
+    .tag-blue{background:var(--blue-dim);border:1px solid var(--border-blue);color:var(--blue);}
+    .tag-green{background:var(--green-dim);border:1px solid rgba(0,229,160,0.2);color:var(--green);}
+    .tag-purple{background:rgba(179,136,255,0.1);border:1px solid rgba(179,136,255,0.25);color:var(--purple);}
+    /* TERMINAL */
+    .terminal{background:#020406;border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);overflow:hidden;margin:1.5rem 0;font-family:var(--font-mono);}
+    .terminal-bar{background:var(--bg3);padding:0.6rem 1rem;display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(255,255,255,0.05);}
+    .dot{width:10px;height:10px;border-radius:50%;} 
+    .dot.r{background:#ff5f57;} 
+    .dot.y{background:#febc2e;} 
+    .dot.g{background:#28c840;}
+    .terminal-label{font-size:10px;color:var(--text-faint);letter-spacing:0.1em;margin-left:auto;}
+    .terminal-body{padding:1.2rem 1.5rem;}
+    .term-line{font-size:13px;line-height:2;display:flex;gap:0.5rem;align-items:baseline;}
+    .term-prompt-red{color:var(--red);} 
+    .term-prompt-blue{color:var(--blue);}
+    .term-cmd{color:#fff;}
+    .term-out{color:var(--text-dim);margin-left:1.5rem;display:block;line-height:1.7;}
+    .term-out.hi{color:var(--amber);} 
+    .term-out.ok{color:var(--green);} 
+    .term-out.bad{color:var(--red);}
+    .term-out.faint{color:var(--text-faint);} 
+    .term-out.blue{color:var(--blue);}
+    .term-cursor-red{display:inline-block;width:8px;height:14px;background:var(--red);animation:blink 1s step-end infinite;vertical-align:middle;margin-left:2px;}
+    .term-cursor-blue{display:inline-block;width:8px;height:14px;background:var(--blue);animation:blink 1s step-end infinite;vertical-align:middle;margin-left:2px;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+    /* VLAN / DMZ DIAGRAM */
+    .arch-diagram{margin:2rem 0;border:1px solid var(--border-blue2);border-radius:var(--radius);overflow:hidden;}
+    .arch-header{background:var(--bg3);padding:0.9rem 1.4rem;border-bottom:1px solid var(--border-blue2);display:flex;align-items:center;justify-content:space-between;}
+    .arch-title{font-family:var(--font-mono);font-size:11px;color:var(--blue);letter-spacing:0.12em;text-transform:uppercase;}
+    .arch-zone-btns{display:flex;gap:6px;}
+    .arch-zone-btn{font-family:var(--font-mono);font-size:10px;padding:4px 10px;border-radius:3px;border:1px solid var(--border-blue2);background:var(--bg4);color:var(--text-dim);cursor:pointer;transition:all 0.15s;letter-spacing:0.06em;}
+    .arch-zone-btn.active{background:var(--blue-dim);border-color:var(--blue);color:var(--blue);}
+    .arch-canvas{padding:1.5rem;position:relative;min-height:300px;}
+    .zone{border-radius:var(--radius);padding:1rem;margin-bottom:0.8rem;border:1px dashed;cursor:pointer;transition:all 0.25s;}
+    .zone.internet{border-color:rgba(255,77,77,0.3);background:rgba(255,77,77,0.04);}
+    .zone.dmz{border-color:rgba(245,166,35,0.3);background:rgba(245,166,35,0.04);}
+    .zone.internal{border-color:rgba(77,166,255,0.3);background:rgba(77,166,255,0.04);}
+    .zone.management{border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.04);}
+    .zone.active{transform:scale(1.01);}
+    .zone.internet.active{border-color:var(--red);box-shadow:0 0 16px rgba(255,77,77,0.15);}
+    .zone.dmz.active{border-color:var(--amber);box-shadow:0 0 16px rgba(245,166,35,0.15);}
+    .zone.internal.active{border-color:var(--blue);box-shadow:0 0 16px rgba(77,166,255,0.15);}
+    .zone.management.active{border-color:var(--green);box-shadow:0 0 16px rgba(0,229,160,0.15);}
+    .zone-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.6rem;font-weight:700;}
+    .zone.internet .zone-label{color:var(--red);}
+    .zone.dmz .zone-label{color:var(--amber);}
+    .zone.internal .zone-label{color:var(--blue);}
+    .zone.management .zone-label{color:var(--green);}
+    .zone-hosts{display:flex;gap:0.6rem;flex-wrap:wrap;}
+    .zone-host{font-family:var(--font-mono);font-size:11px;background:var(--bg4);border:1px solid rgba(255,255,255,0.06);border-radius:3px;padding:4px 10px;color:var(--text-dim);}
+    .zone-fw{display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--blue);padding:0.4rem;letter-spacing:0.1em;}
+    .arch-detail{background:var(--bg3);border-top:1px solid var(--border-blue2);padding:1.1rem 1.4rem;font-size:15px;color:var(--text-dim);line-height:1.7;min-height:60px;}
+    .arch-detail strong{color:var(--text);}
+    /* ═══ LAB ═══ */
+    .lab-outer{margin:2rem 0;border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius);overflow:hidden;}
+    .lab-top-bar{display:grid;grid-template-columns:1fr 1fr;background:var(--bg2);border-bottom:1px solid rgba(255,255,255,0.06);}
+    .lab-team-tab{padding:1rem 1.5rem;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background 0.2s;border-bottom:2px solid transparent;}
+    .lab-team-tab.red-active{background:var(--red-dim);border-bottom-color:var(--red);}
+    .lab-team-tab.blue-active{background:var(--blue-dim);border-bottom-color:var(--blue);}
+    .lab-team-tab:not(.red-active):not(.blue-active){opacity:0.5;}
+    .lab-team-badge{font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:0.15em;padding:3px 8px;border-radius:3px;}
+    .lab-team-badge.red{background:var(--red);color:#fff;}
+    .lab-team-badge.blue{background:var(--blue);color:#fff;}
+    .lab-team-title{font-family:var(--font-head);font-size:15px;font-weight:600;color:#fff;}
+    .lab-team-sub{font-family:var(--font-mono);font-size:10px;color:var(--text-faint);margin-top:2px;}
+    /* METRICS DASHBOARD */
+    .metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.06);}
+    .metric-box{background:var(--bg2);padding:1rem 1.2rem;text-align:center;}
+    .metric-label{font-family:var(--font-mono);font-size:9px;color:var(--text-faint);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;}
+    .metric-val{font-family:var(--font-mono);font-size:22px;font-weight:700;transition:color 0.5s;}
+    .metric-val.normal{color:var(--green);}
+    .metric-val.warning{color:var(--amber);}
+    .metric-val.critical{color:var(--red);}
+    .metric-bar{height:4px;background:var(--bg4);border-radius:2px;margin-top:6px;overflow:hidden;}
+    .metric-bar-fill{height:100%;border-radius:2px;transition:width 0.4s ease,background 0.5s;}
+    /* PACKET STORM CANVAS */
+    .storm-wrap{position:relative;background:var(--bg3);border-bottom:1px solid rgba(255,255,255,0.05);height:200px;overflow:hidden;}
+    .storm-canvas{width:100%;height:100%;}
+    .storm-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;pointer-events:none;}
+    .storm-status{font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;padding:4px 12px;border-radius:3px;border:1px solid;}
+    /* LAB BODY PANELS */
+    .lab-panel{padding:1.5rem;}
+    .lab-panel.red-panel{border-right:1px solid rgba(255,77,77,0.1);}
+    /* CMD CHIPS */
+    .cmd-palette{display:flex;flex-direction:column;gap:8px;margin-bottom:1.2rem;}
+    .cmd-chip{display:flex;align-items:flex-start;gap:10px;background:var(--bg3);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);padding:0.8rem 1rem;cursor:pointer;transition:all 0.2s;font-family:var(--font-mono);font-size:12px;color:var(--text-dim);}
+    .cmd-chip:hover{border-color:var(--red);color:var(--red);background:var(--red-dim);}
+    .cmd-chip.used{opacity:0.4;pointer-events:none;}
+    .cmd-chip.blue-chip:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-dim);}
+    .cmd-chip .cmd-code{color:var(--amber);flex:1;line-height:1.5;}
+    .cmd-chip .cmd-desc{font-size:10px;color:var(--text-faint);letter-spacing:0.06em;flex-shrink:0;margin-top:1px;}
+    /* RULE BUILDER */
+    .rule-builder{background:var(--bg3);border:1px solid var(--border-blue2);border-radius:var(--radius);padding:1.4rem;margin:1rem 0;}
+    .rule-builder-label{font-family:var(--font-mono);font-size:10px;color:var(--blue);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1rem;}
+    .rule-display{background:var(--bg);border:1px solid var(--border-blue2);border-radius:var(--radius);padding:0.9rem 1.2rem;font-family:var(--font-mono);font-size:13px;color:var(--green);margin-bottom:1.2rem;min-height:42px;line-height:1.6;word-break:break-all;}
+    .rule-selectors{display:flex;flex-direction:column;gap:0.8rem;}
+    .rule-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+    .rule-row-label{font-family:var(--font-mono);font-size:11px;color:var(--text-faint);letter-spacing:0.08em;min-width:100px;}
+    .rule-select{background:var(--bg4);border:1px solid var(--border-blue2);border-radius:3px;padding:6px 10px;font-family:var(--font-mono);font-size:12px;color:var(--text);outline:none;cursor:pointer;transition:border-color 0.15s;}
+    .rule-select:focus{border-color:var(--blue);}
+    .rule-select option{background:var(--bg3);}
+    .btn-deploy{background:var(--blue-dim);border:1px solid var(--blue);color:var(--blue);font-family:var(--font-mono);font-size:12px;padding:10px 22px;border-radius:var(--radius);cursor:pointer;letter-spacing:0.08em;transition:all 0.2s;margin-top:0.5rem;text-transform:uppercase;}
+    .btn-deploy:hover{background:var(--blue);color:#fff;box-shadow:0 0 16px rgba(77,166,255,0.3);}
+    .btn-deploy:disabled{opacity:0.35;pointer-events:none;}
+    /* SNORT BUILDER */
+    .snort-builder{background:var(--bg3);border:1px solid var(--border-blue2);border-radius:var(--radius);padding:1.4rem;margin:1rem 0;}
+    .snort-builder-label{font-family:var(--font-mono);font-size:10px;color:var(--green);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1rem;}
+    .snort-display{background:var(--bg);border:1px solid rgba(0,229,160,0.2);border-radius:var(--radius);padding:0.9rem 1.2rem;font-family:var(--font-mono);font-size:12px;color:var(--green);margin-bottom:1.2rem;min-height:42px;line-height:1.6;word-break:break-all;}
+    .btn-snort{background:var(--green-dim);border:1px solid rgba(0,229,160,0.3);color:var(--green);font-family:var(--font-mono);font-size:12px;padding:10px 22px;border-radius:var(--radius);cursor:pointer;letter-spacing:0.08em;transition:all 0.2s;margin-top:0.5rem;text-transform:uppercase;}
+    .btn-snort:hover{background:var(--green);color:#000;}
+    /* MISSION COMPLETE */
+    @keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .mission-complete{animation:slideIn 0.4s ease forwards;border-radius:var(--radius);padding:1.3rem 1.5rem;margin-top:1rem;}
+    .mission-complete.red-mc{border:1px solid var(--red);background:rgba(255,77,77,0.05);}
+    .mission-complete.blue-mc{border:1px solid var(--blue);background:rgba(77,166,255,0.05);}
+    .mc-head{font-family:var(--font-mono);font-size:11px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem;}
+    .mc-head.red{color:var(--red);} .mc-head.blue{color:var(--blue);}
+    .mission-complete p{font-size:15px;color:var(--text);line-height:1.8;margin:0;}
+    .mission-complete code{font-family:var(--font-mono);font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:3px;}
+    /* QUIZ */
+    .quiz-wrap{border:1px solid var(--border-blue2);border-radius:var(--radius);overflow:hidden;margin:2rem 0;}
+    .quiz-header{background:var(--bg2);padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border-blue2);}
+    .quiz-header h4{font-family:var(--font-head);font-size:16px;font-weight:600;color:#fff;}
+    .quiz-score{font-family:var(--font-mono);font-size:12px;color:var(--text-faint);}
+    .quiz-q{padding:1.4rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.04);}
+    .quiz-q:last-child{border-bottom:none;}
+    .quiz-q-text{font-size:15.5px;color:var(--text);margin-bottom:1rem;font-family:var(--font-body);line-height:1.7;}
+    .quiz-options{display:flex;flex-direction:column;gap:8px;}
+    .quiz-option{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);cursor:pointer;transition:all 0.15s;font-family:var(--font-mono);font-size:13px;color:var(--text-dim);}
+    .quiz-option:hover{border-color:var(--blue);color:var(--text);background:var(--blue-dim);}
+    .quiz-option.correct{border-color:var(--green);background:var(--green-dim);color:var(--green);}
+    .quiz-option.wrong{border-color:var(--red);background:var(--red-dim);color:var(--red);}
+    .quiz-opt-key{width:22px;height:22px;border-radius:3px;background:var(--bg4);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text-faint);flex-shrink:0;}
+    .quiz-option.correct .quiz-opt-key{background:var(--green);border-color:var(--green);color:#000;}
+    .quiz-option.wrong .quiz-opt-key{background:var(--red);border-color:var(--red);color:#fff;}
+    .quiz-explain{margin-top:10px;padding:12px 16px;background:var(--bg2);border-radius:var(--radius);font-size:14px;color:var(--text-dim);font-family:var(--font-body);display:none;border-left:3px solid var(--blue);line-height:1.7;}
+    .quiz-explain.show{display:block;}
+    /* COMPLETION */
+    .completion{text-align:center;padding:5rem 2.5rem;max-width:700px;margin:0 auto;display:none;flex-direction:column;align-items:center;opacity:0;transition:opacity 1s ease;}
+    .completion.visible{opacity:1;}
+    .completion-badge{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,var(--red-dim),var(--blue-dim));border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 2rem;font-size:40px;box-shadow:0 0 40px rgba(77,166,255,0.2);}
+    .completion h2{font-family:var(--font-head);font-size:clamp(2rem,5vw,3.5rem);font-weight:800;color:#fff;margin-bottom:1rem;letter-spacing:-0.02em;}
+    .completion h2 .er{color:var(--red);} .completion h2 .eb{color:var(--blue);}
+    .completion p{color:var(--text-dim);margin-bottom:2rem;font-size:16px;line-height:1.8;}
+    .completion-stats{display:flex;justify-content:center;gap:2rem;margin:2rem 0;}
+    .stat{text-align:center;}
+    .stat-val{font-family:var(--font-mono);font-size:28px;font-weight:700;color:var(--blue);display:block;}
+    .stat-label{font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:0.12em;text-transform:uppercase;}
+    .btn-next{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--blue);font-family:var(--font-mono);font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:14px 28px;border-radius:var(--radius);border:1px solid var(--blue);cursor:pointer;text-decoration:none;transition:all 0.2s;}
+    .btn-next:hover{background:var(--blue);color:#fff;box-shadow:0 0 24px rgba(77,166,255,0.3);}
+    @media(max-width:640px){  .concept-grid,.fw-compare{grid-template-columns:1fr;}  .metrics-row{grid-template-columns:1fr 1fr;}  .lab-top-bar{grid-template-columns:1fr;}}
+
+    /* FUTURISTIC GLASSMORPHIC KEY CARD */
+    .futuristic-flag-card {
+      background: rgba(13, 25, 34, 0.45);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      border: 1px solid rgba(0, 229, 160, 0.2);
+      border-radius: 10px;
+      padding: 2rem;
+      margin: 2.5rem auto;
+      max-width: 550px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 
+                  0 0 15px rgba(0, 229, 160, 0.05),
+                  inset 0 0 15px rgba(0, 229, 160, 0.05);
+      animation: pulseGlow 4s infinite alternate;
+    }
+
+    .futuristic-flag-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -50%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(0, 229, 160, 0.02),
+          rgba(0, 229, 160, 0.1),
+          rgba(0, 229, 160, 0.02),
+          transparent
+      );
+      transform: skewX(-15deg);
+      animation: scanLine 6s infinite linear;
+      pointer-events: none;
+    }
+
+    @keyframes scanLine {
+      0% { left: -150%; }
+      100% { left: 150%; }
+    }
+
+    @keyframes pulseGlow {
+      0% { border-color: rgba(0, 229, 160, 0.15); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 229, 160, 0.05); }
+      100% { border-color: rgba(0, 229, 160, 0.4); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 229, 160, 0.15); }
+    }
+
+    .flag-value {
+      font-family: var(--font-mono);
+      font-size: clamp(12px, 2.2vw, 15px);
+      color: #00e5a0;
+      text-shadow: 0 0 10px rgba(0, 229, 160, 0.4);
+      background: rgba(4, 8, 11, 0.7);
+      border: 1px solid rgba(0, 229, 160, 0.15);
+      padding: 12px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      letter-spacing: 0.05em;
+      position: relative;
+      z-index: 2;
+      word-break: break-all;
+      user-select: all;
+    }
+
+    .flag-value:hover {
+      background: rgba(0, 229, 160, 0.08);
+      border-color: rgba(0, 229, 160, 0.5);
+      transform: scale(1.02);
+      box-shadow: 0 0 15px rgba(0, 229, 160, 0.2);
+    }
+
+    .flag-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--amber);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <nav>  
+    <div style="display:flex;align-items:center;gap:1.5rem"> 
+      <span class="nav-logo">CyberNet — Module 03</span>  
+    </div>  
+    <div class="nav-progress-wrap">    
+      <span class="nav-progress-label">PROGRESS</span>    
+      <div class="nav-bar"><div class="nav-bar-fill" id="navFill"></div></div>    
+      <span class="nav-pct" id="navPct">0%</span>  
+    </div>
+  </nav>
+  <section class="hero">  
+    <div class="hero-bg-grid"></div>  
+    <span class="hero-corner tl">CYBERNET.EDU / MOD-03</span>  
+    <span class="hero-corner tr">CLASSIFICATION: EDUCATIONAL<br>RED TEAM + BLUE TEAM</span>  
+    <span class="hero-corner bl">v2.4.1 — STABLE BUILD</span>  
+    <span class="hero-corner br">EST. DURATION: 55–75 MIN</span>  
+    <div class="hero-inner">    
+      <div class="hero-tag">Module 03 — DoS, Defence &amp; Architecture</div>    
+      <h1>Overwhelming <span class="em-red">Force</span><br>&amp; Unbreakable <span class="em-blue">Shields</span></h1>    
+      <p class="hero-sub">SYN FLOOD · AMPLIFICATION · STATEFUL FIREWALL · IDS/IPS · VLAN · DMZ · IPTABLES · SNORT</p>    
+      <div class="story-box">      
+        <div class="story-box-label">📡 The Setup</div>      
+        <p>You've seen how an attacker intercepts traffic. Now meet a different kind of threat — one that doesn't care about your data at all. It just wants to make sure <em>nobody can reach you.</em></p>      
+        <p>A Denial of Service attack doesn't steal. It <strong>crushes.</strong> A single attacker with a laptop and the right tools can bring down a web server, overwhelm a router, or take an entire organisation offline — not by breaking in, but by asking so many questions so fast that the server forgets how to answer real ones.</p>      
+        <p>This module is a war. You'll fight on both sides. First, you'll be the attacker — launching a SYN flood and watching a server collapse in real time. Then you'll switch sides, write the exact firewall and IDS rules that defend against <strong>your own attack</strong>, and watch the metrics recover. No other module makes the attacker-defender relationship this visceral.</p>    
+      </div>    
+      <div class="hero-objectives">      
+        <div class="hero-obj-item"><span class="hero-obj-icon red">OBJ 01</span><span class="hero-obj-text">Understand SYN Floods — why the TCP handshake is a weapon</span></div>      
+        <div class="hero-obj-item"><span class="hero-obj-icon red">OBJ 02</span><span class="hero-obj-text">Learn Amplification Attacks — how 1 byte becomes 51,200 bytes</span></div>      
+        <div class="hero-obj-item"><span class="hero-obj-icon blue">OBJ 03</span><span class="hero-obj-text">Master Stateful vs. Stateless firewalls and when each fails</span></div>      
+        <div class="hero-obj-item"><span class="hero-obj-icon blue">OBJ 04</span><span class="hero-obj-text">Design a segmented network with VLANs and a proper DMZ</span></div>      
+        <div class="hero-obj-item"><span class="hero-obj-icon red">RED</span><span class="hero-obj-text">Launch a SYN flood — watch CPU spike and connections die</span></div>      
+        <div class="hero-obj-item"><span class="hero-obj-icon blue">BLUE</span><span class="hero-obj-text">Write the iptables + Snort rules that kill your own attack</span></div>    
+      </div>    
+      <a href="#section-synflood" class="btn-start">Start the Attack →</a>  
+    </div>
+  </section>
+  <hr class="section-divider">
+  <div class="section sec-red" id="section-synflood">  
+    <div class="section-tag"><span class="section-num">01 / 05</span> The Weapon</div>  
+    <h2>SYN Floods — Weaponising<br>the <em>Handshake</em></h2>  
+    <div class="explainer">    
+      <p>In Module 1 you learned the TCP three-way handshake: SYN → SYN-ACK → ACK. It seems simple. But embedded in that ritual is a fundamental vulnerability that has been exploited for decades.</p>    
+      <p>When a server receives a SYN packet, it must <strong>allocate memory immediately</strong> to track the half-open connection and wait for the ACK to complete the handshake. These pending connections live in a data structure called the <strong>TCP connection table</strong> — a finite resource. A typical server can hold between 10,000 and 64,000 half-open connections before the table fills up completely.</p>    
+      <p>A SYN Flood exploits this by sending millions of SYN packets per second with <strong>spoofed (fake) source IP addresses</strong>. The server allocates memory for each one and sends SYN-ACK replies — to addresses that don't exist or never asked. The ACK never comes. Each entry in the connection table sits there, consuming memory, until it times out. With enough flood rate, the table fills faster than it drains, and the server can no longer accept any new legitimate connections. The website is effectively offline — not because the server crashed, but because it's waiting for responses from ghosts.</p>  
+    </div>  
+    <div class="analogy-box">    
+      <div class="analogy-label">💡 Real-world analogy</div>    
+      <p>Imagine a restaurant that can only seat 100 people. An attacker makes 100 reservations under fake names and never shows up. Real customers arrive — no tables. The restaurant isn't broken, the food isn't gone, the staff aren't sick. It simply <strong>cannot serve anyone</strong> because its capacity is consumed by phantom reservations it's still waiting to honour.</p>  
+    </div>  
+    <div class="terminal">    
+      <div class="terminal-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="terminal-label">HPING3 — SYN FLOOD COMMAND</span></div>    
+      <div class="terminal-body">      
+        <div class="term-line"><span class="term-prompt-red">root@attacker:~#</span><span class="term-cmd"> hping3 -S --flood -V -p 80 192.168.1.10</span></div>      
+        <span class="term-out faint"># -S = set SYN flag &nbsp;|&nbsp; --flood = send as fast as possible &nbsp;|&nbsp; -V = verbose &nbsp;|&nbsp; -p 80 = target port 80 (HTTP)</span>      
+        <span class="term-out faint"># hping3 also randomises the source IP by default — each SYN appears to come from a different address</span>      
+        <br>      
+        <span class="term-out hi">HPING 192.168.1.10 (eth0 192.168.1.10): S set, 40 headers + 0 data bytes</span>      
+        <span class="term-out bad">len=40 ip=203.0.113.1 ttl=64 sport=80 flags=RA seq=0 win=0 rtt=0.3 ms</span>      
+        <span class="term-out bad">len=40 ip=198.51.100.7 ttl=64 sport=80 flags=RA seq=1 win=0 rtt=0.2 ms</span>      
+        <span class="term-out bad">len=40 ip=192.0.2.44 ttl=64 sport=80 flags=RA seq=2 win=0 rtt=0.1 ms</span>      
+        <span class="term-out hi">--- flood mode --- sending ~1,000,000 packets/second</span>      
+        <span class="term-out bad">Target 192.168.1.10: connection table exhausted at 98.7% — new connections REFUSED</span>      
+        <br>      
+        <div class="term-line"><span class="term-prompt-red">root@attacker:~#</span><span class="term-cursor-red"></span></div>    
+      </div>  
+    </div>  
+    <div class="callout sec-red" style="border-left-color:var(--red);background:var(--red-glow);">    
+      <div class="callout-head" style="color:var(--red);">🔍 Why Spoofed IPs Make This Unstoppable Without Defence</div>    
+      <p>Each SYN appears to come from a different, random IP address. A naive firewall that tries to block attacking IPs faces an impossible task — there are 4.3 billion possible IPv4 addresses. The defence cannot be "block the attacker's IP." It must be structural, targeting the <em>pattern</em> of the attack rather than its source.</p>  
+    </div>
+  </div>
+  <hr class="section-divider">
+  <div class="section sec-red" id="section-amp">  
+    <div class="section-tag"><span class="section-num">02 / 05</span> The Multiplier</div>  
+    <h2>Amplification Attacks —<br>When <em>1 Byte Becomes 51,200</em></h2>  
+    <div class="explainer">    
+      <p>A SYN flood requires the attacker to generate all the traffic themselves. An amplification attack is far more efficient — it recruits the internet's own infrastructure as an unwilling weapon, multiplying the attacker's bandwidth by factors of hundreds or thousands.</p>    
+      <p>The mechanics: certain internet protocols respond to a small request with a <strong>disproportionately large reply</strong>. An attacker sends a tiny request with a <em>spoofed source IP</em> — set to the victim's address. The internet service receives the request, generates a massive response, and sends it to the victim. The attacker never touches the victim directly. They just pull the trigger and let the internet's infrastructure deliver the payload. This is called <strong>reflection and amplification</strong>.</p>    
+      <p>The most devastating example: <strong>Memcached amplification</strong>. Memcached is a distributed memory caching system. A single 15-byte UDP request to a misconfigured Memcached server returns up to <strong>750KB</strong> — an amplification factor of 51,200x. The 2018 GitHub DDoS attack peaked at <strong>1.35 Tbps</strong> using exactly this method — the largest DDoS attack ever recorded at the time.</p>  
+    </div>  
+    <div class="amp-math" id="ampMath">    
+      <div class="amp-math-header">Amplification Factors — Attack Request Size vs. Response Size (click to animate)</div>    
+      <div class="amp-rows">      
+        <div class="amp-row">        
+          <div><div class="amp-protocol">DNS Amplification</div><div style="font-family:var(--font-mono);font-size:10px;color:var(--text-faint)">28 bytes → 3,072 bytes</div></div>        
+          <div class="amp-bar-wrap"><div class="amp-bar dns" id="bar-dns"></div></div>        
+          <div class="amp-mult dns">~110×</div>      
+        </div>      
+        <div class="amp-row">        
+          <div><div class="amp-protocol">NTP Amplification</div><div style="font-family:var(--font-mono);font-size:10px;color:var(--text-faint)">8 bytes → 468 bytes</div></div>        
+          <div class="amp-bar-wrap"><div class="amp-bar ntp" id="bar-ntp"></div></div>        
+          <div class="amp-mult ntp">~556×</div>      
+        </div>      
+        <div class="amp-row">        
+          <div><div class="amp-protocol">SSDP Amplification</div><div style="font-family:var(--font-mono);font-size:10px;color:var(--text-faint)">30 bytes → 1,900 bytes</div></div>        
+          <div class="amp-bar-wrap"><div class="amp-bar ssdp" id="bar-ssdp"></div></div>        
+          <div class="amp-mult ssdp">~30×</div>      
+        </div>      
+        <div class="amp-row">        
+          <div><div class="amp-protocol">Memcached</div><div style="font-family:var(--font-mono);font-size:10px;color:var(--text-faint)">15 bytes → 750,000 bytes</div></div>        
+          <div class="amp-bar-wrap"><div class="amp-bar memcached" id="bar-memcached"></div></div>        
+          <div class="amp-mult memcached">51,200×</div>      
+        </div>    
+      </div>    
+      <div class="amp-explain">      
+        <strong>How to read this:</strong> The bars represent relative amplification power. A 1 Gbps connection used for a Memcached attack effectively delivers <strong>51.2 Tbps</strong> of traffic to the victim — enough to saturate the backbone connections of most ISPs. Defence requires ISPs to filter spoofed source IPs at the network edge (BCP38) and operators to secure or firewall UDP services like DNS, NTP, SSDP, and Memcached from the public internet.    
+      </div>  
+    </div>  
+    <div class="callout" style="border-left-color:var(--red);background:var(--red-glow);">    
+      <div class="callout-head" style="color:var(--red);">📊 Real-World Scale</div>    
+      <p>The 2016 Mirai botnet DDoS peaked at 1.2 Tbps using IoT devices. The 2018 GitHub attack hit 1.35 Tbps via Memcached — generated by a single attacker with ~1 Gbps upstream. In 2020, AWS mitigated a 2.3 Tbps attack. These weren't theoretical — they took real services offline for minutes to hours, costing millions of dollars in lost revenue per minute.</p>  
+    </div>
+  </div>
+  <hr class="section-divider shift">
+  <div class="section sec-blue" id="section-defence">  
+    <div class="section-tag"><span class="section-num">03 / 05</span> The Shields</div>  
+    <h2>Firewalls, IDS &amp; IPS —<br>Building the <em>First Line</em></h2>  
+    <div class="explainer">    
+      <p>A firewall is a policy enforcement point — a system that examines network traffic and decides, based on rules, whether to allow or block each packet. But not all firewalls are equal. The difference between a stateless and a stateful firewall determines whether your network survives a SYN flood.</p>  
+    </div>  
+    <div class="fw-compare">    
+      <div class="fw-col">      
+        <div class="fw-col-head stateless">        
+          <h4>Stateless Firewall</h4>        
+          <span>Also called: packet filter — examines each packet in isolation</span>      
+        </div>      
+        <div class="fw-body">        
+          <div class="fw-point"><span class="ico">📦</span><div>Examines <strong>each packet independently</strong> — source IP, destination IP, port, protocol flags only.</div></div>        
+          <div class="fw-point"><span class="ico">❌</span><div><strong>No memory.</strong> Cannot tell whether a packet is part of an established connection or a new, unsolicited one.</div></div>        
+          <div class="fw-point"><span class="ico">⚠️</span><div>Rule: "Allow TCP port 80 inbound." This allows both legitimate requests <em>and</em> SYN flood packets — it can't tell the difference.</div></div>        
+          <div class="fw-point"><span class="ico">⚡</span><div>Extremely fast — no state to maintain. Good for high-throughput, low-complexity environments like core routers.</div></div>        
+          <div class="fw-point"><span class="ico">❌</span><div>Cannot detect SYN floods, port scans, or session hijacking — attacks that exploit connection state.</div></div>      
+        </div>    
+      </div>    
+      <div class="fw-col">      
+        <div class="fw-col-head stateful">        
+          <h4>Stateful Firewall</h4>        
+          <span>Tracks the state of every active connection</span>      
+        </div>      
+        <div class="fw-body">        
+          <div class="fw-point"><span class="ico">🧠</span><div>Maintains a <strong>state table</strong> — a record of every active TCP connection (src IP, dst IP, port, sequence numbers, state).</div></div>        
+          <div class="fw-point"><span class="ico">✅</span><div>An ACK packet is only allowed through if a matching SYN was tracked. No state record? Packet dropped.</div></div>        
+          <div class="fw-point"><span class="ico">🛡</span><div>Can implement <strong>SYN cookies</strong> — a technique that avoids allocating server memory until the full handshake is verified.</div></div>        
+          <div class="fw-point"><span class="ico">✅</span><div>Detects and limits half-open connections per source IP, throttling SYN flood impact significantly.</div></div>        
+          <div class="fw-point"><span class="ico">⚠️</span><div>The state table itself can be exhausted by floods — the firewall must be sized appropriately and rate-limit SYNs.</div></div>      
+        </div>    
+      </div>  
+    </div>  
+    <div class="concept-grid">    
+      <div class="concept-card">      
+        <span class="tag tag-blue">IDS — Intrusion Detection System</span>      
+        <h4>The Alarm</h4>      
+        <span class="fullform">Monitors traffic passively and alerts when suspicious patterns are detected</span>      
+        <p>An IDS watches network traffic like a security camera — <strong>it sees everything but does nothing to stop it.</strong> When it detects a pattern matching a known attack signature (e.g. 10,000 SYN packets per second from random IPs to the same port), it generates an alert for a security analyst to investigate. Tools: <code>Snort</code>, <code>Suricata</code>, <code>Zeek</code>.</p>    
+      </div>    
+      <div class="concept-card">      
+        <span class="tag tag-green">IPS — Intrusion Prevention System</span>      
+        <h4>The Bouncer</h4>      
+        <span class="fullform">Monitors traffic inline and actively drops packets matching attack signatures</span>      
+        <p>An IPS is an IDS placed <strong>inline</strong> — traffic must pass through it, not past it. When it detects an attack pattern, it doesn't just alert — it immediately drops the offending packets. The tradeoff: false positives can block legitimate traffic. IPS rules must be tuned carefully. Used in conjunction with stateful firewalls for layered defence.</p>    
+      </div>    
+      <div class="concept-card">      
+        <span class="tag tag-blue">SYN Cookies</span>      
+        <h4>The Memory Trick</h4>      
+        <span class="fullform">A technique that avoids allocating server memory for half-open connections</span>      
+        <p>Instead of storing half-open connection state in memory, the server encodes the connection info <strong>inside the SYN-ACK's sequence number</strong>. No memory allocated. When the ACK arrives, the server recomputes and verifies the cookie. If valid — legitimate connection, allocate memory. If never — no memory wasted. Completely negates SYN flood memory exhaustion.</p>    
+      </div>    
+      <div class="concept-card">      
+        <span class="tag tag-purple">Rate Limiting</span>      
+        <h4>The Throttle</h4>      
+        <span class="fullform">Limiting the number of connections or packets accepted from any single source per second</span>      
+        <p>A simple but highly effective first layer: <strong>"Accept no more than 10 new TCP connections per second from any single IP."</strong> Legitimate browsers rarely need more. An <code>iptables</code> rule using the <code>hashlimit</code> or <code>connlimit</code> module can enforce this in the kernel itself — before packets even reach the application. Effective even against distributed attacks when combined with geoblocking.</p>    
+      </div>  
+    </div>
+  </div>
+  <hr class="section-divider">
+  <div class="section sec-blue" id="section-arch">  
+    <div class="section-tag"><span class="section-num">04 / 05</span> Network Architecture</div>  
+    <h2>VLANs &amp; DMZ —<br>Dividing to <em>Conquer</em></h2>  
+    <div class="explainer">    
+      <p>A firewall at the network perimeter is necessary but not sufficient. If an attacker gets past it — or if the threat originates inside your network — a flat, unsegmented network means <strong>everything is reachable from everywhere</strong>. One compromised device can reach every other device with no internal barriers.</p>    
+      <p>Network segmentation solves this by dividing the network into isolated zones, each with its own trust level and access rules. Traffic between zones must pass through a firewall or router — it cannot flow freely. Two key tools: <strong>VLANs</strong> (Virtual Local Area Networks) for internal segmentation, and the <strong>DMZ</strong> (Demilitarised Zone) for separating public-facing services.</p>  
+    </div>  
+    <div class="arch-diagram">    
+      <div class="arch-header">      
+        <span class="arch-title">Network Segmentation — Interactive Zone Map</span>      
+        <div class="arch-zone-btns">        
+          <button class="arch-zone-btn active" onclick="showZone('all')">All Zones</button>        
+          <button class="arch-zone-btn" onclick="showZone('internet')">Internet</button>        
+          <button class="arch-zone-btn" onclick="showZone('dmz')">DMZ</button>        
+          <button class="arch-zone-btn" onclick="showZone('internal')">Internal</button>        
+          <button class="arch-zone-btn" onclick="showZone('management')">Management</button>      
+        </div>    
+      </div>    
+      <div class="arch-canvas">      
+        <div class="zone internet" id="zone-internet" onclick="activateZone('internet')">        
+          <div class="zone-label">☁ INTERNET — Untrusted / External</div>        
+          <div class="zone-hosts">          
+            <span class="zone-host">🌍 Public Users</span>          
+            <span class="zone-host">🤖 Bots &amp; Scanners</span>          
+            <span class="zone-host">⚡ DDoS Traffic</span>          
+            <span class="zone-host">🔍 Attackers</span>        
+          </div>      
+        </div>      
+        <div class="zone-fw">▼ Perimeter Firewall (Internet ↔ DMZ) — blocks all inbound except ports 80, 443 ▼</div>      
+        <div class="zone dmz" id="zone-dmz" onclick="activateZone('dmz')">        
+          <div class="zone-label">🟡 DMZ — Demilitarised Zone / Semi-Trusted</div>        
+          <div class="zone-hosts">          
+            <span class="zone-host">🌐 Web Server</span>          
+            <span class="zone-host">📧 Mail Server</span>          
+            <span class="zone-host">🔒 Reverse Proxy</span>          
+            <span class="zone-host">📡 DNS Server</span>        
+          </div>      
+        </div>      
+        <div class="zone-fw" style="color:var(--blue);">▼ Internal Firewall (DMZ ↔ Internal) — DMZ cannot initiate connections inward ▼</div>      
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">        
+          <div class="zone internal" id="zone-internal" onclick="activateZone('internal')">          
+            <div class="zone-label">🔵 VLAN 10 — Corporate Internal</div>          
+            <div class="zone-hosts">            
+              <span class="zone-host">💻 Workstations</span>            
+              <span class="zone-host">🗄 File Server</span>            
+              <span class="zone-host">🏢 ERP / Database</span>          
+            </div>        
+          </div>        
+          <div class="zone management" id="zone-management" onclick="activateZone('management')">          
+            <div class="zone-label">🟢 VLAN 20 — Management / OOB</div>          
+            <div class="zone-hosts">            
+              <span class="zone-host">🖥 Network Switches</span>            
+              <span class="zone-host">🔧 Firewall Admin</span>            
+              <span class="zone-host">📊 SIEM / Logging</span>          
+            </div>        
+          </div>      
+        </div>    
+      </div>    
+      <div class="arch-detail" id="archDetail">      
+        <strong>Click any zone</strong> to understand its security role, what traffic is allowed in and out, and why its isolation matters. The key principle: a compromised web server in the DMZ cannot reach the internal database — it is firewalled out. An attacker who owns the web server has gained almost nothing.    
+      </div>  
+    </div>  
+    <div class="callout" style="border-left-color:var(--blue);background:var(--blue-glow);">    
+      <div class="callout-head" style="color:var(--blue);">🏗 Why the DMZ is Non-Negotiable</div>    
+      <p>Public-facing services must be reachable from the internet — that's unavoidable. The DMZ accepts this risk while containing it. If your web server is compromised, the attacker is trapped in the DMZ: they cannot initiate connections to the internal network (the internal firewall blocks inbound connections from the DMZ). The blast radius of a breach is contained. This is the <strong>principle of least privilege</strong> applied to network architecture.</p>  
+    </div>
+  </div>
+  <hr class="section-divider">
+  <div class="section" id="section-lab">  
+    <div class="section-tag" style="color:var(--text-dim)"><span class="section-num">05 / 05</span> Red Team vs. Blue Team Lab</div>  
+    <h2>Lab: Red vs. Blue —<br><em>Launch It. Then Stop It.</em></h2>  
+    <div class="explainer">    
+      <p>Two phases. Same attack, both sides. In Red Team, you launch a SYN flood and watch a server collapse. In Blue Team, you write the exact rules that defend against the attack you just launched — and watch the metrics recover in real time. Everything is connected: the attack you build in Red is the one you're defending against in Blue.</p>  
+    </div>  
+    <div style="border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius);overflow:hidden;margin-bottom:1.5rem;">    
+      <div style="background:var(--bg3);padding:0.7rem 1.2rem;border-bottom:1px solid rgba(255,255,255,0.05);font-family:var(--font-mono);font-size:10px;color:var(--text-faint);letter-spacing:0.12em;display:flex;justify-content:space-between;align-items:center;">      
+        <span>TARGET SERVER — 192.168.1.10 — LIVE METRICS</span>      
+        <span id="serverStatus" style="color:var(--green)">● ONLINE</span>    
+      </div>    
+      <div class="metrics-row">      
+        <div class="metric-box">        
+          <div class="metric-label">CPU Usage</div>        
+          <div class="metric-val normal" id="m-cpu">4%</div>        
+          <div class="metric-bar"><div class="metric-bar-fill" id="mb-cpu" style="width:4%;background:var(--green)"></div></div>      
+        </div>      
+        <div class="metric-box">        
+          <div class="metric-label">Connection Table</div>        
+          <div class="metric-val normal" id="m-conn">2%</div>        
+          <div class="metric-bar"><div class="metric-bar-fill" id="mb-conn" style="width:2%;background:var(--green)"></div></div>      
+        </div>      
+        <div class="metric-box">        
+          <div class="metric-label">Packets / sec</div>        
+          <div class="metric-val normal" id="m-pps">340</div>        
+          <div class="metric-bar"><div class="metric-bar-fill" id="mb-pps" style="width:1%;background:var(--green)"></div></div>      
+        </div>      
+        <div class="metric-box">        
+          <div class="metric-label">Legitimate Connections</div>        
+          <div class="metric-val normal" id="m-legit">✓ Normal</div>        
+          <div class="metric-bar"><div class="metric-bar-fill" id="mb-legit" style="width:95%;background:var(--green)"></div></div>      
+        </div>    
+      </div>    
+      <div class="storm-wrap">      
+        <canvas class="storm-canvas" id="stormCanvas"></canvas>      
+        <div class="storm-overlay">        
+          <div class="storm-status" id="stormStatus" style="color:var(--green);border-color:rgba(0,229,160,0.3);background:rgba(0,229,160,0.07);">● TRAFFIC NORMAL</div>      
+        </div>    
+      </div>  
+    </div>  
+    <div class="lab-outer">    
+      <div class="lab-top-bar">      
+        <div class="lab-team-tab red-active" id="tab-red" onclick="switchTeam('red')">        
+          <span class="lab-team-badge red">RED TEAM</span>        
+          <div><div class="lab-team-title">Launch the Attack</div><div class="lab-team-sub">hping3 SYN flood</div></div>      
+        </div>      
+        <div class="lab-team-tab" id="tab-blue" onclick="switchTeam('blue')">        
+          <span class="lab-team-badge blue">BLUE TEAM</span>        
+          <div><div class="lab-team-title">Build the Defence</div><div class="lab-team-sub">iptables + Snort rules</div></div>      
+        </div>    
+      </div>    
+      <div id="panel-red" class="lab-panel red-panel">      
+        <p style="font-size:15px;color:var(--text-dim);margin-bottom:1.2rem;line-height:1.75;">Run these commands in sequence. Each one escalates the attack. Watch the metrics dashboard above react to every command you execute.</p>      
+        <div class="cmd-palette" id="redCmdPalette"></div>      
+        <div class="terminal">        
+          <div class="terminal-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="terminal-label">RED TEAM — KALI LINUX ATTACKER</span></div>        
+          <div class="terminal-body" id="redTermOutput">          
+            <div class="term-line"><span class="term-prompt-red">root@kali:~#</span><span class="term-cursor-red"></span></div>        
+          </div>      
+        </div>      
+        <div id="red-result" style="display:none"></div>    
+      </div>    
+      <div id="panel-blue" style="display:none" class="lab-panel">      
+        <p style="font-size:15px;color:var(--text-dim);margin-bottom:1.2rem;line-height:1.75;">The server is under attack. Use the guided builders below to construct the iptables firewall rule and the Snort IDS alert rule that will detect and kill the SYN flood. As you build each rule, watch the metrics recover.</p>      
+        <div class="rule-builder">        
+          <div class="rule-builder-label">⚙ iptables Rule Builder — Firewall Defence</div>        
+          <div class="rule-display" id="iptablesDisplay">iptables ...</div>        
+          <div class="rule-selectors">          
+            <div class="rule-row">            
+              <span class="rule-row-label">Chain:</span>            
+              <select class="rule-select" id="sel-chain" onchange="buildRule()">              
+                <option value="">-- select --</option>              
+                <option value="INPUT">INPUT (inbound traffic)</option>              
+                <option value="OUTPUT">OUTPUT (outbound traffic)</option>              
+                <option value="FORWARD">FORWARD (routed traffic)</option>            
+              </select>          
+            </div>          
+            <div class="rule-row">            
+              <span class="rule-row-label">Protocol:</span>            
+              <select class="rule-select" id="sel-proto" onchange="buildRule()">              
+                <option value="">-- select --</option>              
+                <option value="tcp">tcp</option>              
+                <option value="udp">udp</option>              
+                <option value="icmp">icmp</option>            
+              </select>          
+            </div>          
+            <div class="rule-row">            
+              <span class="rule-row-label">TCP flag match:</span>            
+              <select class="rule-select" id="sel-flags" onchange="buildRule()">              
+                <option value="">-- select --</option>              
+                <option value="--tcp-flags SYN,ACK,FIN,RST SYN">SYN only (SYN flood packets)</option>              
+                <option value="--tcp-flags ALL ALL">ALL flags set (invalid)</option>              
+                <option value="--tcp-flags ALL NONE">No flags set (null scan)</option>            
+              </select>          
+            </div>          
+            <div class="rule-row">            
+              <span class="rule-row-label">Rate limit:</span>            
+              <select class="rule-select" id="sel-rate" onchange="buildRule()">              
+                <option value="">-- select --</option>              
+                <option value="-m limit --limit 25/second --limit-burst 100">25 SYN/sec max (anti-flood)</option>              
+                <option value="-m limit --limit 1000/second">1000/sec (too permissive)</option>              
+                <option value="-m connlimit --connlimit-above 50">Max 50 connections per IP</option>            
+              </select>          
+            </div>          
+            <div class="rule-row">            
+              <span class="rule-row-label">Action:</span>            
+              <select class="rule-select" id="sel-action" onchange="buildRule()">              
+                <option value="">-- select --</option>              
+                <option value="ACCEPT">ACCEPT</option>              
+                <option value="DROP">DROP (silently discard)</option>              
+                <option value="REJECT">REJECT (send error back)</option>            
+              </select>          
+            </div>        
+          </div>        
+          <button class="btn-deploy" id="deployBtn" onclick="deployIptables()" disabled>▶ Deploy Rule to Firewall</button>        
+          <div id="iptables-result" style="display:none;margin-top:1rem"></div>      
+        </div>      
+        <div class="snort-builder" style="margin-top:1.5rem">        
+          <div class="snort-builder-label">🔍 Snort IDS Rule Builder — Intrusion Detection</div>        
+          <div class="snort-display" id="snortDisplay">alert ...</div>        
+          <div class="rule-selectors">          
+            <div class="rule-row">            
+              <span class="rule-row-label">Action:</span>            
+              <select class="rule-select" id="sn-action" onchange="buildSnort()">              
+                <option value="">--</option>              
+                <option value="alert">alert (log + notify)</option>              
+                <option value="drop">drop (IPS mode)</option>              
+                <option value="log">log (silent logging)</option>            
+              </select>          
+            </div>          
+            <div class="rule-row">            
+              <span class="rule-row-label">Protocol:</span>            
+              <select class="rule-select" id="sn-proto" onchange="buildSnort()">              
+                <option value="">--</option>              
+                <option value="tcp">tcp</option>              
+                <option value="udp">udp</option>            
+              </select>          
+            </div>          
+            <div class="rule-row">            
+              <span class="rule-row-label">Direction:</span>            
+              <select class="rule-select" id="sn-dir" onchange="buildSnort()">              
+                <option value="">--</option>              
+                <option value="any any -> $HOME_NET 80">any → port 80</option>              
+                <option value="any any -> $HOME_NET any">any → any port</option>            
+              </select>          
+            </div>          
+            <div class="rule-row">            
+              <span class="rule-row-label">Detection:</span>            
+              <select class="rule-select" id="sn-opt" onchange="buildSnort()">              
+                <option value="">--</option>              
+                <option value='flags:S; threshold:type threshold,track by_src,count 1000,seconds 1; msg:"SYN Flood detected"'>SYN flood threshold (1000/sec/src)</option>              
+                <option value='flags:SF; msg:"SYN-FIN scan detected"'>SYN-FIN scan signature</option>              
+                <option value='content:"attack"; msg:"Keyword match"'>Keyword content match</option>            
+              </select>          
+            </div>        
+          </div>        
+          <button class="btn-snort" id="snortBtn" onclick="deploySnort()" disabled>▶ Activate Snort Rule</button>        
+          <div id="snort-result" style="display:none;margin-top:1rem"></div>      
+        </div>      
+        <div id="blue-result" style="display:none"></div>    
+      </div>  
+    </div>
+  </div>
+  <hr class="section-divider">
+  <div class="section sec-blue" id="section-quiz">  
+    <div class="section-tag"><span class="section-num">FINAL</span> Knowledge Check</div>  
+    <h2>Both Sides of the Wall —<br>Prove You <em>Own</em> This</h2>  
+    <p style="color:var(--text-dim);font-size:16px;margin-bottom:2rem;">Five questions spanning both Red and Blue perspectives. All five correct to unlock Module 4.</p>  
+    <div class="quiz-wrap">    
+      <div class="quiz-header"><h4>Module 3 — Assessment</h4><span class="quiz-score" id="quizScore">0 / 5 correct</span></div>    
+      <div id="quizQuestions"></div>  
+    </div>
+  </div>
+  <div class="completion" id="completion">  
+    <div class="completion-badge">⚔️</div>  
+    <h2>Module 3 <span class="er">Red</span> &amp; <span class="eb">Blue</span> Complete</h2>  
+    <p>You've stood on both sides of a denial of service attack. You know how a SYN flood works at the packet level, why amplification attacks are mathematically devastating, how a stateful firewall differs from a packet filter, and how to write the exact rules that shut down your own attack. Module 4 takes the battle into the air.</p>  
+    <div class="completion-stats">    
+      <div class="stat"><span class="stat-val" id="statTime">—</span><span class="stat-label">Minutes</span></div>    
+      <div class="stat"><span class="stat-val">5/5</span><span class="stat-label">Quiz Score</span></div>    
+      <div class="stat"><span class="stat-val" id="statLab">0/2</span><span class="stat-label">Lab Phases</span></div>  
+    </div>    
+    
+    <div class="futuristic-flag-card">
+      <div class="flag-badge">
+        <span>⚡</span> decrypted_key.bin <span>⚡</span>
+      </div>
+      <div style="font-family: var(--font-mono); font-size: 11px; color: var(--green); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.8rem; text-shadow: 0 0 8px rgba(0, 229, 160, 0.4);">
+        SYSTEM OVERRIDE SUCCESSFUL — MODULE 03 FLAG
+      </div>
+      <div class="flag-value" onclick="navigator.clipboard.writeText('sp3ctr3{5yn_fl00d_d3f3nc3_d3pl0y3d_2026}'); alert('Key copied to clipboard!')" title="Click to Copy">
+        sp3ctr3{5yn_fl00d_d3f3nc3_d3pl0y3d_2026}
+      </div>
+      <p style="font-size: 11px; color: var(--text-faint); margin-top: 1rem; margin-bottom: 0; font-family: var(--font-mono); letter-spacing: 0.05em;">
+        Click the container above to copy decrypted credentials to your clipboard.
+      </p>
+    </div>
+
+    <a href="#" class="btn-next">Module 4 — Invisible Airwaves →</a>
+  </div>
+  <div style="height:6rem"></div>
+  <script>
+    const startTime = Date.now();let quizCorrect = new Set();let floodRunning = false, floodInterval = null;let metricInterval = null;let defenceDeployed = false, snortDeployed = false;let labPhasesDone = 0;
+    // ═══ AMPLIFICATION BARS ═══
+    function animateAmpBars(){  
+      const bars = [{id:'bar-dns',w:18},{id:'bar-ntp',w:55},{id:'bar-ssdp',w:6},{id:'bar-memcached',w:100}];  
+      bars.forEach((b,i)=>setTimeout(()=>{document.getElementById(b.id).style.width=b.w+'%';},i*200));
+    }
+    const ampObs = new IntersectionObserver(e=>{if(e[0].isIntersecting){animateAmpBars();ampObs.disconnect();}},{threshold:0.3});
+    ampObs.observe(document.getElementById('ampMath'));
+    // ═══ ZONE DIAGRAM ═══
+    const zoneDetails = {  
+      internet:`<strong>Internet Zone — Zero Trust.</strong> All traffic from here is considered hostile until proven otherwise. The perimeter firewall allows only TCP ports 80 (HTTP) and 443 (HTTPS) inbound. Everything else — SSH, RDP, database ports, ICMP — is blocked at the perimeter. DDoS mitigation and scrubbing centres sit between the internet and your perimeter firewall.`,  
+      dmz:`<strong>DMZ — Demilitarised Zone.</strong> Public-facing services live here: web servers, mail servers, DNS. These servers can receive connections from the internet (via the perimeter firewall) but <em>cannot initiate connections to the internal network</em> — the internal firewall blocks this. If a web server is compromised, the attacker is trapped here. They cannot reach internal databases or workstations.`,  
+      internal:`<strong>VLAN 10 — Internal Corporate Network.</strong> Workstations, file servers, internal databases. Completely unreachable from the internet and from the DMZ. Internal users can initiate outbound connections through the firewall, but no unsolicited inbound connections are accepted from outside this VLAN. Further segmented into sub-VLANs for different departments.`,  
+      management:`<strong>VLAN 20 — Management / Out-of-Band Network.</strong> The most privileged and isolated zone. Network switches, firewall admin interfaces, SIEM (Security Information and Event Management) logging servers. Accessible only from specific jump hosts and specific administrator accounts. A compromised internal workstation cannot reach this VLAN — it requires separate credentials and access controls.`
+    };
+    function activateZone(z){  
+      document.querySelectorAll('.zone').forEach(el=>el.classList.remove('active'));  
+      document.getElementById(`zone-${z}`).classList.add('active');  
+      document.getElementById('archDetail').innerHTML=zoneDetails[z];
+    }
+    function showZone(z){  
+      document.querySelectorAll('.arch-zone-btn').forEach(b=>b.classList.remove('active'));  
+      event.target.classList.add('active');  
+      const zones=['internet','dmz','internal','management'];  
+      zones.forEach(id=>{    
+        const el=document.getElementById(`zone-${id}`);    
+        if(el) el.style.opacity=(z==='all'||z===id)?'1':'0.2';  
+      });
+    }
+    // ═══ PACKET STORM CANVAS ═══
+    const canvas = document.getElementById('stormCanvas');
+    const ctx = canvas.getContext('2d');
+    let packets = [];
+    let floodLevel = 0; // 0=normal, 1=attacking, 2=defended
+    function resizeCanvas(){canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;}
+    resizeCanvas();
+    window.addEventListener('resize',resizeCanvas);
+    function spawnPacket(){  
+      const isFlood = floodLevel===1;  
+      const isDefended = floodLevel===2;  
+      packets.push({    
+        x: Math.random()*canvas.width,    
+        y: 0,    
+        speed: isFlood ? 3+Math.random()*5 : 1+Math.random()*2,    
+        size: isFlood ? 1.5+Math.random()*2 : 2+Math.random()*3,    
+        color: isFlood ? `rgba(255,${Math.floor(Math.random()*60)},${Math.floor(Math.random()*60)},${0.6+Math.random()*0.4})` :           
+               isDefended ? `rgba(77,166,255,${0.3+Math.random()*0.3})` :           
+               `rgba(0,229,160,${0.3+Math.random()*0.4})`,    
+        syn: isFlood,    
+        blocked: isDefended && Math.random()>0.05  
+      });
+    }
+    function drawStorm(){  
+      ctx.clearRect(0,0,canvas.width,canvas.height);  
+      const spawnCount = floodLevel===1 ? 40 : floodLevel===2 ? 8 : 3;  
+      for(let i=0;i<spawnCount;i++) spawnPacket();  
+      packets = packets.filter(p=>{    
+        p.y += p.speed;    
+        if(p.blocked && p.y > canvas.height*0.4){      
+          ctx.beginPath();ctx.arc(p.x,canvas.height*0.4,p.size+1,0,Math.PI*2);      
+          ctx.fillStyle='rgba(255,77,77,0.3)';ctx.fill();      
+          return false;    
+        }    
+        ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);    
+        ctx.fillStyle=p.color;ctx.fill();    
+        if(p.syn){      
+          ctx.font=`${Math.floor(p.size*4)}px JetBrains Mono`;      
+          ctx.fillStyle='rgba(255,77,77,0.5)';      
+          ctx.fillText('S',p.x+p.size,p.y);    
+        }    
+        return p.y < canvas.height;  
+      });  
+      requestAnimationFrame(drawStorm);
+    }
+    drawStorm();
+    // ═══ METRICS ═══
+    let targetCPU=4,targetConn=2,targetPPS=340;
+    let currentCPU=4,currentConn=2,currentPPS=340;
+    function updateMetrics(){  
+      currentCPU += (targetCPU-currentCPU)*0.08 + (Math.random()-0.5)*2;  
+      currentConn += (targetConn-currentConn)*0.08 + (Math.random()-0.5)*1.5;  
+      currentPPS += (targetPPS-currentPPS)*0.1 + (Math.random()-0.5)*50;  
+      currentCPU = Math.max(2,Math.min(100,currentCPU));  
+      currentConn = Math.max(1,Math.min(100,currentConn));  
+      currentPPS = Math.max(100,currentPPS);  
+      const setMetric = (id, bid, val, unit='%') => {    
+        const el=document.getElementById(id);    
+        const bar=document.getElementById(bid);    
+        const display = unit==='%' ? Math.round(val)+'%' : Math.round(val).toLocaleString();    
+        el.textContent = display;    
+        const pct = unit==='%' ? val : Math.min(100,val/50000*100);    
+        bar.style.width = pct+'%';    
+        const cls = val>85?'critical':val>60?'warning':'normal';    
+        el.className='metric-val '+cls;    
+        bar.style.background = val>85?'var(--red)':val>60?'var(--amber)':'var(--green)';  
+      };  
+      setMetric('m-cpu','mb-cpu',currentCPU);  
+      setMetric('m-conn','mb-conn',currentConn);  
+      setMetric('m-pps','mb-pps',currentPPS,'pps');  
+      const legitEl=document.getElementById('m-legit');  
+      const legitBar=document.getElementById('mb-legit');  
+      if(currentConn>85){    
+        legitEl.textContent='✗ BLOCKED';legitEl.className='metric-val critical';    
+        legitBar.style.width='2%';legitBar.style.background='var(--red)';    
+        document.getElementById('serverStatus').textContent='● UNDER ATTACK';    
+        document.getElementById('serverStatus').style.color='var(--red)';  
+      } else if(currentConn>60){    
+        legitEl.textContent='⚠ Degraded';legitEl.className='metric-val warning';    
+        legitBar.style.width='40%';legitBar.style.background='var(--amber)';  
+      } else {    
+        legitEl.textContent='✓ Normal';legitEl.className='metric-val normal';    
+        legitBar.style.width='95%';legitBar.style.background='var(--green)';    
+        document.getElementById('serverStatus').textContent='● ONLINE';    
+        document.getElementById('serverStatus').style.color='var(--green)';  
+      }
+    }
+    setInterval(updateMetrics,300);
+    function setFloodMetrics(on){  
+      if(on){ targetCPU=88+Math.random()*10; targetConn=92+Math.random()*7; targetPPS=980000; floodLevel=1; }  
+      else if(defenceDeployed){ targetCPU=8+Math.random()*5; targetConn=5+Math.random()*4; targetPPS=800; floodLevel=2; }  
+      else { targetCPU=4; targetConn=2; targetPPS=340; floodLevel=0; }  
+      document.getElementById('stormStatus').textContent = on ? '⚡ SYN FLOOD ACTIVE — '+Math.round(targetPPS/1000)+'K PACKETS/SEC' : defenceDeployed ? '🛡 FLOOD MITIGATED — RULES ACTIVE' : '● TRAFFIC NORMAL';  
+      document.getElementById('stormStatus').style.color = on?'var(--red)':defenceDeployed?'var(--green)':'var(--green)';  
+      document.getElementById('stormStatus').style.borderColor = on?'rgba(255,77,77,0.4)':defenceDeployed?'rgba(0,229,160,0.3)':'rgba(0,229,160,0.3)';  
+      document.getElementById('stormStatus').style.background = on?'rgba(255,77,77,0.1)':defenceDeployed?'rgba(0,229,160,0.07)':'rgba(0,229,160,0.07)';
+    }
+    // ═══ RED TEAM COMMANDS ═══
+    const redCmds = [  
+      {cmd:'ip route show && ip addr show eth0',desc:'Confirm your network interface and target subnet',output:[    
+        {t:'faint',text:'# Verify you are on the same subnet as the target'},    
+        {t:'ok',text:'eth0: 192.168.1.99/24 — confirmed on target subnet'},    
+        {t:'ok',text:'Target: 192.168.1.10 — reachable'}  
+      ], floodOn:false},  
+      {cmd:'hping3 -S -p 80 -c 5 192.168.1.10',desc:'Probe target — confirm port 80 is open (5 packets)',output:[    
+        {t:'faint',text:'# -S = SYN flag &nbsp;|&nbsp; -p 80 = port 80 &nbsp;|&nbsp; -c 5 = send 5 packets'},    
+        {t:'hi',text:'len=40 ip=192.168.1.10 sport=80 flags=SA → port 80 is OPEN'},    
+        {t:'ok',text:'5 packets sent, 5 received. Target confirmed. Ready to flood.'}  
+      ], floodOn:false},  
+      {cmd:'hping3 -S --flood --rand-source -p 80 192.168.1.10',desc:'LAUNCH SYN FLOOD — randomised source IPs',output:[    
+        {t:'faint',text:'# --flood = no delay between packets &nbsp;|&nbsp; --rand-source = spoof random source IPs'},    
+        {t:'bad',text:'HPING flood mode: sending ~950,000 SYN packets/second'},    
+        {t:'bad',text:'Source IPs randomised — 4 billion possible sources, unblockable by IP'},    
+        {t:'hi',text:'Target connection table filling... 34%... 61%... 89%... 98%'},    
+        {t:'bad',text:'TARGET UNREACHABLE — new connections REFUSED'}  
+      ], floodOn:true},
+    ];
+    let redCmdsDone=0;
+    function renderRedCmds(){  
+      document.getElementById('redCmdPalette').innerHTML=redCmds.map((c,i)=>`    
+        <div class="cmd-chip" id="rcmd-${i}" onclick="runRedCmd(${i})">      
+          <div><div class="cmd-code">$ ${c.cmd}</div><div class="cmd-desc">${c.desc}</div></div>      
+          <span style="color:var(--text-faint);font-size:18px;flex-shrink:0">▶</span>    
+        </div>`).join('');
+    }
+    function runRedCmd(i){  
+      document.getElementById(`rcmd-${i}`).classList.add('used');  
+      const c=redCmds[i];  
+      const out=document.getElementById('redTermOutput');  
+      out.innerHTML+=`<div class="term-line" style="margin-top:0.5rem"><span class="term-prompt-red">root@kali:~#</span><span class="term-cmd"> ${c.cmd}</span></div>`;  
+      c.output.forEach(o=>{out.innerHTML+=`<span class="term-out ${o.t}">${o.text}</span>`;});  
+      out.innerHTML+=`<div class="term-line" style="margin-top:4px"><span class="term-prompt-red">root@kali:~#</span><span class="term-cursor-red"></span></div>`;  
+      out.scrollTop=out.scrollHeight;  
+      if(c.floodOn) setFloodMetrics(true);  
+      redCmdsDone++;  
+      if(redCmdsDone===redCmds.length){    
+        labPhasesDone=Math.max(labPhasesDone,1);    
+        updateProgress();    
+        setTimeout(()=>{      
+          const r=document.getElementById('red-result');      
+          r.style.display='block';      
+          r.innerHTML=`<div class="mission-complete red-mc"><div class="mc-head red">⚡ Red Team Complete — Attack Launched</div>      
+          <p>The SYN flood is running. The server's connection table is at 98% capacity. Legitimate connections are being refused. The metrics dashboard shows exactly what a real SYN flood looks like at the network level. Now switch to Blue Team and shut it down — using the rules you'll build to defend against your own attack.</p></div>`;      
+          setTimeout(()=>r.scrollIntoView({behavior:'smooth',block:'center'}),200);    
+        },500);  
+      }
+    }
+    renderRedCmds();
+    // ═══ TEAM SWITCH ═══
+    function switchTeam(t){  
+      document.getElementById('panel-red').style.display=t==='red'?'block':'none';  
+      document.getElementById('panel-blue').style.display=t==='blue'?'block':'none';  
+      document.getElementById('tab-red').className='lab-team-tab'+(t==='red'?' red-active':'');  
+      document.getElementById('tab-blue').className='lab-team-tab'+(t==='blue'?' blue-active':'');
+    }
+    // ═══ RULE BUILDERS ═══
+    function buildRule(){  
+      const chain=document.getElementById('sel-chain').value;  
+      const proto=document.getElementById('sel-proto').value;  
+      const flags=document.getElementById('sel-flags').value;  
+      const rate=document.getElementById('sel-rate').value;  
+      const action=document.getElementById('sel-action').value;  
+      let rule='iptables';  
+      if(chain) rule+=` -A ${chain}`;  
+      if(proto) rule+=` -p ${proto}`;  
+      if(flags) rule+=` ${flags}`;  
+      if(rate) rule+=` ${rate}`;  
+      if(action) rule+=` -j ${action}`;  
+      document.getElementById('iptablesDisplay').textContent=rule;  
+      const correct=chain==='INPUT'&&proto==='tcp'&&flags.includes('SYN,ACK,FIN,RST SYN')&&rate.includes('25/second')&&action==='DROP';  
+      document.getElementById('deployBtn').disabled=!correct;  
+      document.getElementById('iptablesDisplay').style.color=correct?'var(--green)':'var(--amber)';
+    }
+    function deployIptables(){  
+      defenceDeployed=true;  
+      setFloodMetrics(false);  
+      document.getElementById('deployBtn').disabled=true;  
+      document.getElementById('deployBtn').textContent='✓ Rule Active';  
+      const r=document.getElementById('iptables-result');  
+      r.style.display='block';  
+      r.innerHTML=`<div class="mission-complete blue-mc"><div class="mc-head blue">🛡 iptables Rule Deployed — Flood Rate Limited</div>  
+      <p>Rule active: <code>iptables -A INPUT -p tcp --tcp-flags SYN,ACK,FIN,RST SYN -m limit --limit 25/second --limit-burst 100 -j DROP</code><br><br>  
+      The kernel is now dropping any SYN packet beyond 25 per second from any source — before it even reaches the application. Watch the metrics: CPU dropping, connection table draining, legitimate connections recovering. Now build the Snort IDS rule to log and alert on future flood attempts.</p></div>`;  
+      r.scrollIntoView({behavior:'smooth',block:'center'});  
+      labPhasesDone=Math.max(labPhasesDone,2);  
+      document.getElementById('statLab').textContent=`${labPhasesDone}/2`;  
+      updateProgress();  
+      document.getElementById('snortBtn').disabled=false;
+    }
+    function buildSnort(){  
+      const action=document.getElementById('sn-action').value;  
+      const proto=document.getElementById('sn-proto').value;  
+      const dir=document.getElementById('sn-dir').value;  
+      const opt=document.getElementById('sn-opt').value;  
+      let rule='';  
+      if(action&&proto&&dir&&opt) rule=`${action} ${proto} ${dir} (${opt}; sid:1000001; rev:1;)`;  
+      else rule=(action||'alert')+' '+(proto||'tcp')+' ...';  
+      document.getElementById('snortDisplay').textContent=rule||'alert ...';  
+      const correct=action==='alert'&&proto==='tcp'&&dir.includes('80')&&opt.includes('threshold');  
+      if(correct) document.getElementById('snortBtn').disabled=false;
+    }
+    function deploySnort(){  
+      snortDeployed=true;  
+      document.getElementById('snortBtn').disabled=true;  
+      document.getElementById('snortBtn').textContent='✓ Rule Active';  
+      const r=document.getElementById('snort-result');  
+      r.style.display='block';  
+      r.innerHTML=`<div class="mission-complete blue-mc"><div class="mc-head blue">🔍 Snort Rule Active — IDS Monitoring Enabled</div>  
+      <p>Snort is now logging and alerting on any source sending more than 1,000 SYN packets per second to port 80. This gives your security team visibility — even if an attack bypasses the rate limit rule, Snort will alert immediately. The combination of iptables (prevention) + Snort (detection) is a layered defence. One stops the flood, the other tells you it happened.</p></div>`;  
+      r.scrollIntoView({behavior:'smooth',block:'center'});  
+      const br=document.getElementById('blue-result');  
+      br.style.display='block';  
+      br.innerHTML=`<div class="mission-complete blue-mc" style="margin-top:1.2rem"><div class="mc-head blue">✓ Blue Team Complete — Defence Fully Deployed</div>  
+      <p>Both layers are active. You've successfully defended against the exact attack you launched in Red Team. This is what a real incident response looks like: understand the attack pattern, write targeted rules, deploy them, verify the metrics recover. The server is back online. Proceed to the final assessment.</p></div>`;  
+      setTimeout(()=>br.scrollIntoView({behavior:'smooth',block:'center'}),400);  
+      document.getElementById('statLab').textContent='2/2';  
+      updateProgress();
+    }
+    // ═══ QUIZ ═══
+    const quizData=[  
+      {q:'A SYN flood sends millions of packets with spoofed (random) source IPs. Why does this specific technique make simple IP-based firewall blocking completely ineffective as a defence?',   
+       opts:['Spoofed packets bypass firewall rules entirely due to a kernel vulnerability','With 4.3 billion possible IPv4 source addresses, a firewall that blocks individual IPs can never keep up — a new "source" appears with every packet','Firewalls cannot read the source IP field in SYN packets','Spoofed packets are indistinguishable from legitimate traffic at the firewall'],   
+       correct:1,explain:'A SYN flood randomises the source IP in every packet. Since there are ~4.3 billion possible IPv4 addresses, any rule that blocks specific source IPs becomes a futile game of whack-a-mole — each new packet comes from a "new" IP that hasn\'t been blocked yet. Effective defence must target the pattern (the SYN flag rate) rather than the source address, using tools like iptables rate limiting or SYN cookies.'},  
+      {q:'What is a "Memcached amplification attack" and why is its amplification factor of ~51,200x so catastrophically dangerous compared to other DDoS methods?',   
+       opts:['Memcached exploits a buffer overflow to crash servers — 51,200x refers to memory pages corrupted','An attacker sends a 15-byte UDP request spoofed to appear from the victim — the Memcached server responds with up to 750KB to the victim\'s address, amplifying 1 Gbps of attacker bandwidth into 51.2 Tbps of victim-directed traffic','Memcached installs malware that replicates 51,200 times across the network','Memcached floods DNS servers which then amplify the traffic by forwarding it'],   
+       correct:1,explain:'Memcached amplification exploits the asymmetry between request and response size. A 15-byte crafted UDP query to a misconfigured Memcached server returns up to 750,000 bytes. With the source IP spoofed to the victim\'s address, all that traffic goes to the victim. With a 1 Gbps upstream link, an attacker can direct 51.2 Tbps at a target — enough to overwhelm even major hosting providers. This is why Memcached (port 11211) should never be exposed to the public internet.'},  
+      {q:'A stateless firewall has a rule: "ALLOW TCP inbound port 80." Why is this rule unable to stop a SYN flood, and what does a stateful firewall do differently?',   
+       opts:['A stateless firewall cannot read TCP flags, so it allows all TCP traffic regardless of rules','A stateless firewall has no memory of connections — it cannot distinguish between the 1st SYN and the 1,000,000th, so all pass. A stateful firewall tracks connection state and can limit half-open connections per second or per source IP','A stateful firewall uses encryption to verify legitimate packets','A stateless firewall applies rules in the wrong order, so port 80 rules never execute'],   
+       correct:1,explain:'A stateless (packet filter) firewall examines each packet in complete isolation. Its rule "ALLOW TCP port 80 inbound with SYN flag" is satisfied by every single SYN flood packet — there is no context, no memory, no awareness that this is the millionth SYN from the same source in one second. A stateful firewall maintains a connection state table and can detect anomalies: too many half-open connections, too many SYNs per second from one source, no ACKs completing. It can rate-limit, implement SYN cookies, and drop flood traffic while allowing legitimate connections.'},  
+      {q:'What is the purpose of a DMZ (Demilitarised Zone) in network architecture, and why does it prevent a compromised web server from becoming a full network breach?',   
+       opts:['A DMZ stores backup copies of all servers so compromised systems can be restored instantly','A DMZ isolates public-facing servers so that even if compromised, they cannot initiate connections to the internal network — an internal firewall blocks inbound connections from the DMZ, containing the blast radius','A DMZ is a separate physical data centre that absorbs DDoS attacks before they reach internal servers','A DMZ encrypts all traffic between the internet and internal servers'],   
+       correct:1,explain:'The DMZ principle is containment. Public-facing servers (web, mail, DNS) must be reachable from the internet — that\'s unavoidable. But placing them in a DMZ means an internal firewall sits between them and the corporate network. This firewall blocks all connections initiated from the DMZ toward the internal network. An attacker who compromises the web server is trapped: they cannot reach internal databases, workstations, or management systems. The breach is real but contained — the attacker has gained a foothold in a dead end.'},  
+      {q:'You deploy both an iptables rate-limiting rule AND a Snort IDS rule against a SYN flood. Why is using both together better than using either one alone?',   
+       opts:['They are redundant — one is sufficient; using both wastes CPU cycles','iptables (prevention) stops the flood at the kernel level before it reaches the application, while Snort (detection) provides logging and alerting for security analysis — one stops the damage, the other provides visibility and evidence for future incidents','Snort rules must be deployed before iptables rules or neither works','iptables works on TCP and Snort works on UDP — together they cover all protocols'],   
+       correct:1,explain:'Prevention and detection serve different purposes and neither is complete alone. An iptables rate-limit rule stops the immediate damage at the kernel level — packets are dropped before consuming application resources. But it provides no visibility: you don\'t know when you\'re being attacked, how often, from what patterns, or whether the rule is actually working. Snort logs every event, generates alerts for your SIEM, and provides forensic evidence. Together they form a layered defence: iptables stops the flood, Snort tells you it happened, how bad it was, and when it ends.'}
+    ];
+    function renderQuiz(){  
+      document.getElementById('quizQuestions').innerHTML=quizData.map((q,qi)=>`    
+        <div class="quiz-q" id="qq-${qi}">      
+          <div class="quiz-q-text">${qi+1}. ${q.q}</div>      
+          <div class="quiz-options">${q.opts.map((o,oi)=>`        
+            <div class="quiz-option" id="qo-${qi}-${oi}" onclick="answerQuiz(${qi},${oi})">          
+              <div class="quiz-opt-key">${'ABCD'[oi]}</div>${o}</div>`).join('')}      
+          </div>      
+          <div class="quiz-explain" id="qe-${qi}">${q.explain}</div>    
+        </div>`).join('');
+    }
+    function answerQuiz(qi,oi){  
+      if(quizCorrect.has(qi)) return;  
+      const q=quizData[qi];  
+      document.querySelectorAll(`[id^="qo-${qi}-"]`).forEach(el=>el.style.pointerEvents='none');  
+      document.getElementById(`qo-${qi}-${oi}`).classList.add(oi===q.correct?'correct':'wrong');  
+      document.getElementById(`qo-${qi}-${q.correct}`).classList.add('correct');  
+      document.getElementById(`qe-${qi}`).classList.add('show');  
+      if(oi===q.correct){quizCorrect.add(qi);updateQuizScore();}
+    }
+    function updateQuizScore(){  
+      document.getElementById('quizScore').textContent=`${quizCorrect.size} / 5 correct`;  
+      if(quizCorrect.size===5) setTimeout(showCompletion,600);
+    }
+    function showCompletion(){  
+      const mins=Math.max(1,Math.round((Date.now()-startTime)/60000));  
+      document.getElementById('statTime').textContent=mins;  
+      const c=document.getElementById('completion');  
+      c.style.display='flex';  
+      setTimeout(()=>c.classList.add('visible'),50);  
+      document.getElementById('navFill').style.width='100%';  
+      document.getElementById('navPct').textContent='100%';  
+      setTimeout(() => {
+        const flagCard = c.querySelector('.futuristic-flag-card');
+        if (flagCard) {
+          flagCard.scrollIntoView({behavior:'smooth',block:'center'});
+        } else {
+          c.scrollIntoView({behavior:'smooth',block:'start'});
+        }
+      }, 300);
+    }
+    function updateProgress(){  
+      const qPct=quizCorrect.size/5;  
+      const lPct=labPhasesDone/2;  
+      const pct=Math.round(Math.max(qPct,lPct)*100);  
+      document.getElementById('navFill').style.width=pct+'%';  
+      document.getElementById('navPct').textContent=pct+'%';
+    }
+    renderQuiz();
+  </script>
+</body>
+</html>
